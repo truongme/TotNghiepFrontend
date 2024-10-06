@@ -1,0 +1,72 @@
+@import '../../assets/styles/variables.scss';
+
+.banner-container{
+    width: 100%;
+    margin-top: 60px;
+    img{
+        width: 100%;
+        object-fit: cover;
+    }
+}
+
+.new-arrival-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: $primary-font;
+
+    .new-arrival-category{
+        padding: 4px 20px;
+        border-radius: 50px;
+        border: 1px solid $black-color;
+        text-transform: uppercase;
+        cursor: pointer;
+        margin-left: 10px;
+        font-weight: 500;
+    }
+}
+
+
+.new-arrival{
+    background-color: $gray-color;
+    font-family: $primary-font;
+    display: flex;
+    .new-arrival-banner {
+        width: 50%;
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+    .new-arrival-card{
+        width: 50%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding:  15px;
+    }
+}
+
+.top-sale{
+    .top-sale-card{
+        width: 20vw;
+    }
+}
+
+.title-folder-home{
+    font-family: $primary-font;
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.collection-container{
+    display: flex;
+    .collection-banner{
+        width: 45%;
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+}

@@ -1,0 +1,50 @@
+@import '../../assets/styles/style.scss';
+@import '../../assets/styles/variables.scss';
+
+.header-container {
+    background-color: $white-color;
+
+    .header-logo {
+        font-size: 60px;
+        color:$black-color;
+    }
+
+    .header-icon-cotainer{
+        margin-right: 20px;
+
+        .header-icon {
+            color:$black-color;
+            font-size: 20px;
+        }
+    }
+
+    .header-nav-container{
+        display: flex;
+        font-size: 17px;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-left: 30px;
+
+        a {
+            padding: 15px 18px;
+            position: relative;
+    
+            &::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                width: 0;
+                height: 2px;
+                background-color: $black-color;
+            }
+        
+            &:hover {
+    
+                &::after {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
