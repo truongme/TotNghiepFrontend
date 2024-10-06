@@ -11,12 +11,15 @@ function App() {
       <div className='header-fixed'>
         <Header/>
       </div>
-      <Routes>
-        {router.map((router, index) => (
-          <Route key={index} path={router.path} element={router.element}/>
-        ))}
-      </Routes>
-      <Footer/>
+      <div style={{marginTop:'60px'}}>
+        <Routes>
+          {router.map((router, index) => (
+            <Route key={index} path={router.path} element={router.element}/>
+          ))}
+        </Routes>
+        <Footer/>
+      </div>
+      
     </div>
   );
 }

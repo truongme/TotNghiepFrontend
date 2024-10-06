@@ -12,6 +12,9 @@ const Card = () => {
         <div className='card-title'>
           MLB - Giày sneakers unisex cổ thấp Chunky Classic Base Heel Monogram
         </div>
+        <span className='card-price'>
+          1,690,000 đ
+        </span>
       </div>
     </div>
   )

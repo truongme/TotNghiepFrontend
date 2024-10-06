@@ -1,0 +1,44 @@
+@import '../../assets/styles/variables.scss';
+
+.collections-title{
+    font-family: $primary-font;
+    padding: 25px;
+    font-size: 32px ;
+    font-weight:bold;
+}
+
+.collections-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0px;
+    
+    .collections-breadcrumb{
+        display: flex;
+        align-items: center;
+        text-transform: uppercase;
+        font-size: 13px;
+        font-weight: 600;
+        .collections-breadcrumb-item{
+            margin-right: 5px;
+        }
+        p{
+            margin-right: 5px;
+        }
+        .collections-breadcrumb-active{
+            color: $primary-color;
+        }
+    }
+
+    .collections-actions-sort{
+        display: flex;
+        align-items: center;
+
+        .collections-sort-btn{
+            padding: 5px 10px;
+            border: 2px solid $black-color;
+            margin-left: 10px;
+            border-radius: 50px;
+        }
+    }
+}

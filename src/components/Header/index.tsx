@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 const Header = () => {
 
   const arrNavBar = [
-    {name: 'Quần áo', link:'/login'},
+    {name: 'Quần áo', link:'/collections/ao-polo'},
     {name: 'Giày dép', link:'/'},
     {name: 'Mũ nón', link:'/login'},
     {name: 'Phụ kiện', link:'/login'},
@@ -24,9 +24,21 @@ const Header = () => {
             </Link>
             <div className='header-nav-container'>
               {arrNavBar.map(e => (
-                <Link key={e.name} to={e.link} className='link-style'>
-                  <div>{e.name}</div>
-                </Link>
+                <>
+                  <>
+                    <Link key={e.name} to={e.link} className='link-style header-link'>
+                      <div>{e.name}</div>
+                    </Link>
+                  </>
+                  <div className="header-nav-item-hover">
+                    <div className='container pt-3 pb-3'>
+                      <div className='row'>
+                        <div className='col-8'>{e.name}</div>
+                        <div className='col-4'>{e.name}</div>
+                      </div>
+                    </div>
+                  </div>
+                </>
               ))}
             </div>
           </div>
