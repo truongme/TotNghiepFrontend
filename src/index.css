@@ -31,5 +31,6 @@ code {
 
 
 *{
+  box-sizing: border-box;
   font-family: 'Product sans', sans-serif !important;
 }
