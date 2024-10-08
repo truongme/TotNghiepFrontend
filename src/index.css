@@ -28,3 +28,8 @@ code {
   z-index: 1000;
   width: 100% !important;
 }
+
+
+*{
+  font-family: 'Product sans', sans-serif !important;
+}
