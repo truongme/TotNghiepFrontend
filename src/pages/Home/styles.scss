@@ -26,7 +26,6 @@
     cursor: pointer;
     margin-left: 10px;
     font-weight: 500;
-    // color: #348315;
   }
 }
 
@@ -35,143 +34,129 @@
   font-family: $primary-font;
   display: flex;
 
-.new-arrival-banner {
+  .new-arrival-banner {
     width: 50%;
     img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
-}
+  }
 
-.new-arrival-card {
+  .new-arrival-card {
     width: 50%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     padding: 15px;
-    gap: 10px; /* Khoảng cách giữa các thẻ Card */
+    gap: 10px;
   }
-  
 }
 
-
+// Hàng Bán Chạy
 .top-sale .slick-slide {
-    padding: 0 5px; /* Tạo khoảng cách giữa các thẻ Card */
-    // border: 1px solid #54df35; /* Màu và độ dày của đường viền */
-    // border-radius: 40px solid #6c6c6c; /* Tùy chọn: bo tròn góc */
-    // padding: 10px; /* Tùy chọn: tạo khoảng cách giữa nội dung và viền */
-    // transition: box-shadow 0.3s ease; /* Tạo hiệu ứng khi hover */
-    &:hover {
-      transform: scale(1.03); // Phóng to nhẹ khi hover
-    }
+  padding: 0 5px;
+  &:hover {
+    transform: scale(1.03);
   }
-  
-/////
+}
+
+// Arrow Styles
 .custom-arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px; /* Điều chỉnh kích thước nếu cần */
-    height: 40px;
-    border-radius: 50%; /* Tạo hình tròn cho nền */
-    background-color: #797878; /* Màu nền xám */
-    position: absolute;
-    top: 35%;
-    transform: translateY(-50%);
-    z-index: 10;
-    cursor: pointer;
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.8); // Đổi màu khi hover
-    }
-  }
-  
-  // Mũi tên
-  .line-arrow {
-    display: block;
-    width: 15px; /* Chiều dài của đường thẳng */
-    height: 15px; /* Chiều cao của đường thẳng */
-    border-right: 2px solid white; /* Độ dày và màu của đường thẳng */
-    border-bottom: 2px solid white; /* Độ dày và màu của đường thẳng */
-    transform: rotate(45deg); /* Quay để tạo góc */
-    position: absolute; /* Đặt vị trí */
-    top: 50%; /* Đặt ở giữa chiều cao */
-    left: 50%; /* Đặt ở giữa chiều ngang */
-    transform: translate(-50%, -50%) rotate(45deg); /* Căn giữa */
-  }
-  
-  // Điều chỉnh vị trí cho nút
-  .next-arrow {
-    right: 10px; /* Điều chỉnh vị trí */
-  }
-  
-  .prev-arrow {
-    left: 10px; /* Điều chỉnh vị trí */
-  }
-// BỘ SƯU TẬP
-.collection-container {
-  position: relative;
-  // color: white;
-  padding: 20px 0;
-  // height: 700px; // Đảm bảo chiều cao đủ để hiển thị
-
-  .collection-slider {
-    padding: 20px; // Tạo khoảng cách xung quanh slider
-  }
-
-  h1, h2 {
-    text-align: left; // Căn trái
-    margin: 0; // Xóa khoảng cách mặc định
-    letter-spacing: 1.5px;
-    padding-left: 10px;
-  }
-
-  h1 {
-    font-size: 24px; // Tăng kích thước chữ
-    color: #000000; // Màu nhạt hơn cho dòng phụ
-    text-transform: uppercase;
-    margin-top: 10px; // Khoảng cách từ trên xuống
-  }
-
-  h2 {
-    font-size: 36px; // Tăng kích thước chữ
-    color: #000000; // Màu nhạt hơn cho dòng phụ
-  }
-
-  // Để Card lớn hơn
-  .collection-slider .slick-slide {
-    padding: 10px; // Tạo khoảng cách giữa các Card
-    .card { // Chỉnh sửa kích thước thẻ Card
-      transform: scale(1.1); // Tăng kích thước của Card
-    }
-  }
-}
-
-
-.collection-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #797878;
   position: absolute;
-  bottom: 20px;
-  left: 20px;
-  text-align: left;
+  top: 35%;
+  z-index: 10;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
 
-  .collection-button {
-    background-color: #000;
-    color: #ffffff;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      background-color: #555; // Thay đổi màu khi hover
-    }
+  .line-arrow-next {
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-right: 2px solid white;
+    border-bottom: 2px solid white;
+    // transform: translate( -105%, -60%);
+    transform: translate(-20%, 0%) rotate(-45deg);
+  }
+  .line-arrow-prev {
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-right: 2px solid white;
+    border-bottom: 2px solid white;
+    // transform: translate( -105%, -60%);
+    transform: translate(20%, 0%) rotate(135deg);
   }
 }
-.collection-slider {
-  .slick-slide {
-    padding: 10px; // Khoảng cách giữa các slide
+
+.next-arrow {
+  right: 10px;
+  // transform: translate( -105%, -60%);
+  // transform: translate(-45%, -45%);
+  // transform: rotate(-45deg);
+
+
+}
+
+.prev-arrow {
+  left: 10px;
+  // transform: rotate(135deg);
+
+}
+
+// Bộ Sưu Tập
+.collection-container {
+  background-image: url('../../assets/images/bgcollection.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 700px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .collection-background {
+    width: 40%;
   }
 
-  .slick-list {
-    margin: -10px; // Điều chỉnh để các slide không bị thụt vào
+  .collection-content {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+
+    .collection-text {
+      margin-bottom: 20px;
+
+      h1 {
+        padding-top: 20px;
+        font-size: 24px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+      }
+
+      h2 {
+        font-size: 36px;
+      }
+    }
+
+    .collection-slider {
+      padding: 20px;
+    }
+
+    .slick-slide {
+      padding: 10px;
+      .card {
+        transform: scale(1.1);
+      }
+    }
   }
 }

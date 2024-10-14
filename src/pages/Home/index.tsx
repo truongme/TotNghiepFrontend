@@ -2,10 +2,9 @@ import React from 'react';
 import './styles.scss';
 import imageBanner from '../../assets/images/banner.webp';
 import imgNewArrival from '../../assets/images/new-arrival.jpg';
-import imgBackground from '../../assets/images/card.webp'; 
+// import imgBackground from '../../assets/images/bgcollection.jpg'; 
 import Card from '../../components/Card';
 import Slider from 'react-slick';
-// import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const Home = () => {
   const arrCategory = [
@@ -22,26 +21,28 @@ const Home = () => {
     dots: false,
     infinite: true,
     speed: 500,
-    cssEase: 'ease-in-out',  // Hiệu ứng chuyển đổi mượt mà
+    cssEase: 'ease-in-out',
     slidesToShow: 5,
     slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
   };
+  
   const settings2 = {
-      dots: false,
-      infinite: true,
-      speed: 500,
-      cssEase: 'ease-in-out',  // Hiệu ứng chuyển đổi mượt mà
-      slidesToShow: 2.5, // Hiển thị 2 thẻ và một nửa thẻ tiếp theo
-      slidesToScroll: 1,
-      nextArrow: <NextArrow />,
-      prevArrow: <PrevArrow />,
+    dots: false,
+    infinite: true,
+    speed: 500,
+    cssEase: 'ease-in-out',
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
   };
+
   return (
     <div>
       <div className='banner-container'>
-        <img src={imageBanner} alt="image banner" style={{ width: '100%', objectFit: 'cover' }} />
+        <img src={imageBanner} alt="image banner" />
       </div>
 
       {/* Phần Hàng Mới Về */}
@@ -56,9 +57,9 @@ const Home = () => {
         </div>
         <div className='new-arrival'>
           <div className='new-arrival-banner'>
-            <img src={imgNewArrival} alt="new-arrival" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src={imgNewArrival} alt="new-arrival" />
           </div>
-          <div className='new-arrival-card' style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', padding: '15px' }}>
+          <div className='new-arrival-card'>
             <div className='p-2'><Card /></div>
             <div className='p-2'><Card /></div>
             <div className='p-2'><Card /></div>
@@ -79,27 +80,13 @@ const Home = () => {
 
       {/* Phần Bộ Sưu Tập */}
       <div className='container mt-5'>
-        <div className='collection-container' 
-             style={{ 
-               backgroundImage: `url(${imgBackground})`, 
-               backgroundSize: 'cover', 
-               backgroundPosition: 'center', 
-               height: '700px', 
-               display: 'flex',
-               justifyContent: 'space-between',
-               alignItems: 'center',
-             }}>
-          {/* Chia ảnh nền thành 40% bên trái và 60% bên phải */}
-          <div style={{ width: '40%' }}></div> {/* Phần ảnh nền trống 40% bên trái */}
-
-          <div style={{ width: '60%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            {/* Nội dung text */}
-            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <div className='collection-container'>
+          <div className='collection-background'></div>
+          <div className='collection-content'>
+            <div className='collection-text'>
               <h1>YOUNG & HIP</h1>
               <h2>#Varsity Collection</h2>
             </div>
-
-            {/* Slider cho phần Bộ Sưu Tập */}
             <div className='collection-slider'>
               <Slider {...settings2}>
                 {collectionCardArray}
@@ -117,7 +104,7 @@ const NextArrow = (props: any) => {
   const { onClick } = props;
   return (
     <div className="custom-arrow next-arrow" onClick={onClick}>
-      <div className="line-arrow" style={{ transform: 'translate(-75%, -50%) rotate(-45deg)' }}></div>
+      <div className="line-arrow-next"></div>
     </div>
   );
 };
@@ -127,7 +114,7 @@ const PrevArrow = (props: any) => {
   const { onClick } = props;
   return (
     <div className="custom-arrow prev-arrow" onClick={onClick}>
-      <div className="line-arrow" style={{ transform: 'translate(-25%, -50%) rotate(135deg)' }}></div>
+      <div className="line-arrow-prev"></div>
     </div>
   );
 };
