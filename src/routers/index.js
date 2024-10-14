@@ -3,7 +3,7 @@ import Collections from "../pages/Collections";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import News from "../pages/News";
-import Pay from "../pages/Pay";
+import Order from "../pages/Order";
 import Product from "../pages/Product";
 
 export const router = [
@@ -13,5 +13,5 @@ export const router = [
   { path: "/collections/:item", element: <Collections /> },
   { path: "/product/:item", element: <Product /> },
   { path: "/cart", element: <Cart /> },
-  { path: "/pay", element: <Pay /> },
+  { path: "/pay", element: <Order /> },
 ];
