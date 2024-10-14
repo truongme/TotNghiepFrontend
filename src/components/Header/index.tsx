@@ -49,7 +49,7 @@ const Header = () => {
               </Link>
             </div>
             <div className='header-icon-cotainer'>
-              <Link to={"/new"} className='link-style'>
+              <Link to={"/cart"} className='link-style'>
                 <FaShoppingCart className='header-icon'/>
               </Link>
             </div>
