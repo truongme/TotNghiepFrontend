@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import Slider from "react-slick";
 import './styles.scss'; // Import the appropriate CSS file
-import imgProduct1 from '../../assets/images/card.webp';
-import imgProduct2 from '../../assets/images/card.webp';
-import imgProduct3 from '../../assets/images/card.webp';
-import imgProduct4 from '../../assets/images/card.webp';
-import imgProduct5 from '../../assets/images/card.webp';
-import imgProduct6 from '../../assets/images/card.webp';
+import imgProduct1 from '../../assets/images/anh1-1.webp';
+import imgProduct2 from '../../assets/images/anh1-2.webp';
+import imgProduct3 from '../../assets/images/anh2-1.webp';
+import imgProduct4 from '../../assets/images/anh2-2.jpg';
+import imgProduct5 from '../../assets/images/anh3-1.webp';
+import imgProduct6 from '../../assets/images/anh3-2.jpg';
 import imgProduct7 from '../../assets/images/card.webp';
 import Card from '../../components/Card';
 // Nút Previous
