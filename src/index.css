@@ -34,3 +34,11 @@ code {
   box-sizing: border-box;
   font-family: 'Product sans', sans-serif !important;
 }
+
+ul{
+  margin: 0 !important;
+  padding: 0 !important; 
+}
+li{
+  list-style: none;
+}

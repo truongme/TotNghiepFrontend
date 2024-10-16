@@ -5,6 +5,7 @@ import Login from "../pages/Login";
 import News from "../pages/News";
 import Order from "../pages/Order";
 import Product from "../pages/Product";
+import User from "../pages/User";
 
 export const router = [
   { path: "/", element: <Home /> },
@@ -14,4 +15,5 @@ export const router = [
   { path: "/product/:item", element: <Product /> },
   { path: "/cart", element: <Cart /> },
   { path: "/pay", element: <Order /> },
+  { path: "/user", element: <User /> },
 ];
