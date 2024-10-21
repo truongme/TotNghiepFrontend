@@ -1,9 +1,10 @@
-import React from 'react'
-import './styles.scss'
+import React, { useEffect, useState } from 'react';
+import './styles.scss';
 import { Controller, useForm } from 'react-hook-form';
 import ButtonCustom from '../../components/ButtonCustom';
 import ImageLogin from '../../assets/images/image-login.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 interface LoginForm {
   email: string;
@@ -11,11 +12,41 @@ interface LoginForm {
 }
 
 const Login = () => {
+  
+
+  const navigate = useNavigate()
+
+  const [loginFail, setLoginFail] = useState<boolean>(false)
 
   const { handleSubmit, control, formState: { errors } } = useForm<LoginForm>();
 
+  const postLogin = async (data: LoginForm) => {
+
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/auth/sign-in`, {
+        email: data.email,
+        password: data.password,
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'skip-browser-warning'
+        }
+      });
+
+      const { accessToken, role } = response.data;
+
+      localStorage.setItem('token', accessToken);
+      localStorage.setItem('role', role);
+
+      navigate('/')
+      
+    } catch (error) {
+      console.error('Unexpected Error:', error);
+    }
+  };
+
+
   const onSubmit = (data: LoginForm) => {
-    console.log('Login Data:', data);
+    postLogin(data); 
   };
 
   return (
@@ -35,18 +66,18 @@ const Login = () => {
                   name="email"
                   control={control}
                   defaultValue=""
-                  rules={{ required: 'Email is required' }}
+                  rules={{ required: '* Email is required' }}
                   render={({ field }) => (
                     <input
                       id="email"
-                      type="text"
+                      type="email"
                       placeholder="Email"
                       className='form-login-input'
                       {...field}
                     />
                   )}
                 />
-                {errors.email && <p className="error">{errors.email.message}</p>}
+                {errors.email && <div className="error">{errors.email.message}</div>}
               </div>
               <div>
                 <label className='form-login-label'>Password</label>
@@ -54,7 +85,7 @@ const Login = () => {
                   name="password"
                   control={control}
                   defaultValue=""
-                  rules={{ required: 'Password is required' }}
+                  rules={{ required: '* Password is required' }}
                   render={({ field }) => (
                     <input
                       id="password"
@@ -65,8 +96,11 @@ const Login = () => {
                     />
                   )}
                 />
-                {errors.password && <p className="error">{errors.password.message}</p>}
+                {errors.password && <div className="error">{errors.password.message}</div>}
               </div>
+              {loginFail && (
+                <div className="error-login-fail">Tài khoản hoặc mật khẩu không chính xác!</div>
+              )}
               <div className='mt-3 mb-3'>
                 <ButtonCustom label='Đăng nhập'/>
               </div>
@@ -91,7 +125,7 @@ const Login = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

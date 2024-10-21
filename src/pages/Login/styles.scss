@@ -35,11 +35,22 @@
 
 .form-action{
     font-size: 14px;
-    font-weight: 600;
 }
 
 .item-form-action{
     &:hover{
-        color: blue;
+        color: $primary-color;
     }
+}
+
+.error{
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.error-login-fail{
+    color: red;
+    font-size: 14px;
+    margin-top: 20px;
 }

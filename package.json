@@ -49,5 +49,6 @@
   },
   "devDependencies": {
     "@types/react-slick": "^0.23.13"
-  }
+  },
+  "proxy": "https://139b-14-191-163-38.ngrok-free.app"
 }

@@ -7,7 +7,9 @@ import Order from "../pages/Order";
 import Product from "../pages/Product";
 import User from "../pages/User";
 
-export const router = [
+const role = localStorage.getItem("role");
+
+export const adminRoutes = [
   { path: "/", element: <Home /> },
   { path: "/news", element: <News /> },
   { path: "/login", element: <Login /> },
@@ -17,3 +19,15 @@ export const router = [
   { path: "/pay", element: <Order /> },
   { path: "/user", element: <User /> },
 ];
+
+export const userRoutes = [
+  { path: "/", element: <Home /> },
+  { path: "/news", element: <News /> },
+  { path: "/login", element: <Login /> },
+  { path: "/collections/:item", element: <Collections /> },
+  { path: "/product/:item", element: <Product /> },
+  { path: "/cart", element: <Cart /> },
+  { path: "/pay", element: <Order /> },
+];
+
+export const router = role === "CUSTOMER" ? userRoutes : adminRoutes;
