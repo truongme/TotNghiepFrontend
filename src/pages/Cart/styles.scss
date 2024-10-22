@@ -1,17 +1,21 @@
 .cart-container {
     padding: 20px;
-  
+    
     .cart-breadcrumb {
       display: flex;
       align-items: center;
       margin-bottom: 20px;
-  
+      
+      font-size: 20px;
+      font-weight: 600;
       .cart-breadcrumb-item {
         margin-right: 5px;
+        
       }
   
       .cart-breadcrumb-active {
         font-weight: bold;
+        color: #ff048a;
       }
     }
   
@@ -24,17 +28,20 @@
     .cart-table {
       flex: 2; /* Chiếm nhiều không gian hơn phần thông tin đơn hàng */
       margin-right: 20px;
-  
+      
       .cart-header {
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1.5px solid #717171;
         padding-bottom: 10px;
         margin-bottom: 20px;
         font-weight: bold;
+        padding-left: 20px;
+        color: #ff048a;
       }
   
       .cart-item {
         padding: 20px 0;
-        border-bottom: 1px solid #eee;
+        padding-left: 20px;
+        border-bottom: 1px solid #b3b3b3;
   
         .cart-item-product {
           display: flex;
@@ -98,7 +105,9 @@
   
     .cart-summary {
       text-align: right;
+      
       h5{
+        color: #ff048a;
         display: flex; /* Căn ngang icon và chữ */
         align-items: center; /* Đảm bảo icon và chữ căn giữa theo trục dọc */
         margin-bottom: 10px; /* Thêm khoảng cách dưới label nếu cần */
@@ -150,7 +159,8 @@
   
         .cart-discount {
           margin-top: 20px;
-        
+          color: #ff048a;
+
           label{
             display: flex; /* Căn ngang icon và chữ */
             align-items: center; /* Đảm bảo icon và chữ căn giữa theo trục dọc */

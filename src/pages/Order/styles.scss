@@ -3,12 +3,13 @@
 .order-breadcrumb {
     display: flex;
     align-items: center;
-    text-transform: uppercase;
-    font-size: 13px;
+    // text-transform: uppercase;
+    font-size: 20px;
     font-weight: 600;
 
     .order-breadcrumb-item {
         margin-right: 5px;
+        
     }
 
     p {
@@ -16,38 +17,96 @@
     }
 
     .order-breadcrumb-active {
-        color: $primary-color;
+        color: #ff048a;
     }
 }
 
-.order-user{
-    .order-infor-user{
+.order-user {
+    // background-color: rgb(0, 217, 255);
+
+    .order-infor-user {
         display: flex;
         align-items: center;
         margin: 15px 0px;
+        border-bottom: 1px solid #979797;
+        padding-left: 10px;
 
-        .order-avatar-user{
+        // Thông tin user
+        h6{
+            font-size: 18px;
+            font-weight: 600;
+            color: #0015ff;
+            
+        }
+        .order-avatar-user {
             width: 100px;
             height: 100px;
             overflow: hidden;
-            border-radius: 50px;
+            border-radius: 50%;
             margin-right: 15px;
-            img{
+            margin-bottom: 15px;
+            
+            img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
-            }    
+            }
         }
+        
     }
+    // THÔng tin người nhận
+    label{
+        display: flex; /* Căn ngang icon và chữ */
+        align-items: center; /* Đảm bảo icon và chữ căn giữa theo trục dọc */
+        margin-bottom: 10px; /* Thêm khoảng cách dưới label nếu cần */
+        
+        svg {
+          margin-right: 8px; /* Khoảng cách giữa icon và chữ */
+        }
+      }
 
-    .order-input-text{
+      ///
+    .order-input-text {
         margin: 8px 0px;
-        label{
+
+        label {
             text-transform: uppercase;
             margin-bottom: 8px;
+            font-weight: 600;
         }
-        input {
+
+        input, select {
             width: 100%;
+            padding: 8px;
+            border: 1px solid rgb(128, 128, 128); /* Thay đổi thành RGB */
+            border-radius: 4px;
+            background-color: rgb(255, 255, 255);
+            font-size: 14px;
+        }
+
+        select {
+            appearance: none;
+            background: rgb(255, 255, 255) right;
+            background-size: 16px;
+            padding-right: 30px; /* to make space for arrow */
+        }
+
+        input::placeholder {
+            color: rgb(153, 153, 153); /* Thay đổi thành RGB */
+        }
+
+        select {
+            color: rgb(153, 153, 153); /* Thay đổi thành RGB */
+            &.selected {
+                color: rgb(0, 0, 0); /* Màu đen khi đã chọn */
+            }
+        }
+        
+        select:focus, input:focus {
+            border-color: rgb(0, 123, 255); /* Thay đổi thành màu RGB tương ứng với $primary-color */
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            color: rgb(0, 0, 0);
         }
     }
 }
@@ -56,21 +115,134 @@
     text-transform: uppercase;
     font-size: 18px;
     font-weight: 600;
+    label{
+        color: #ff048a;
+        display: flex; /* Căn ngang icon và chữ */
+        align-items: center; /* Đảm bảo icon và chữ căn giữa theo trục dọc */
+        margin-bottom: 10px; /* Thêm khoảng cách dưới label nếu cần */
+        
+        svg {
+          margin-right: 8px; /* Khoảng cách giữa icon và chữ */
+        }
+    }
 }
 
-.order-items{
-    background-color: $gray-color;
+.order-items {
+    background-color: rgb(240, 240, 240); /* Thay đổi thành RGB tương ứng với $gray-color */
     padding: 15px;
-
-    .order-cart-item{
+    font-size: 16px;
+    font-weight: 600;
+    .order-cart-item {
         display: flex;
         align-items: center;
-        margin: 5px 0px;
-        .order-cart-item-img{
+        margin: 5px 5px;
+        border-bottom: 1px solid #a9a6a6;
+        .order-cart-item-img {
             margin: 0;
+
             img {
-                width: 100%;
-                object-fit: cover;
+                width: 100px; /* Chỉnh lại kích thước theo ý bạn */
+                height: 150px; /* Đảm bảo tỉ lệ ảnh hợp lý */
+                object-fit: cover; /* Đảm bảo ảnh không bị biến dạng */
+            }
+        }
+
+        h6 {
+            // font-size: 16px;
+            // font-weight: 600;
+            svg {
+                margin-right: 8px; /* Khoảng cách giữa icon và chữ */
+              }
+        }
+
+        p {
+            margin: 0;
+            font-size: 14px;
+        }
+    }
+
+    hr {
+        border-top: 1px solid rgb(200, 200, 200); /* Thay đổi thành màu RGB */
+        margin: 10px 0;
+    }
+    label[for="total-amount"]{
+        display: flex; /* Căn ngang icon và chữ */
+        align-items: center; /* Đảm bảo icon và chữ căn giữa theo trục dọc */
+        margin-bottom: 10px; /* Thêm khoảng cách dưới label nếu cần */
+        font-size: 18px;
+        font-weight: 600;
+        color: #000000;
+        svg {
+          margin-right: 8px; /* Khoảng cách giữa icon và chữ */
+        }
+      }
+      label[for="total-amount1"]{
+        font-size: 18px;
+        font-weight: 600;
+        color: #0015ff;
+      }
+      
+    // .back-btn, .checkout-btn {
+    //     background-color: rgb(0, 123, 255); /* Thay đổi thành màu RGB tương ứng với $primary-color */
+    //     color: rgb(255, 255, 255);
+    //     padding: 10px 20px;
+    //     border: none;
+    //     border-radius: 4px;
+    //     text-transform: uppercase;
+    //     font-weight: 600;
+    //     cursor: pointer;
+    // }
+    .order-checkout {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+
+        .back-btn {
+            flex: 1;
+            // text-decoration: none !important; /* Bỏ gạch chân */
+            color: white; /* Đảm bảo màu chữ là trắng */
+            background-color: rgb(255, 0, 0);
+            padding: 10px 20px;
+            text-align: center;
+            margin-top: 20px;
+            margin-right: 75px;
+            display: block;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none; /* Loại bỏ viền của nút */
+            outline: none; /* Loại bỏ viền khi nhấn vào */
+            border-radius: 20px;
+    
+            &:hover {
+                background-color: #000000;
+            }
+              
+        }
+    
+        // .confirm-btn {
+        //     background-color: rgb(0, 123, 255); /* Thay đổi thành màu RGB tương ứng với $primary-color */
+        //     color: rgb(255, 255, 255);
+        // }
+        .checkout-btn {
+            margin-left: 15px;
+            flex: 1;
+            text-decoration: none; /* Bỏ gạch chân */
+            color: white; /* Đảm bảo màu chữ là trắng */
+            background-color: rgb(255, 0, 0);
+            padding: 10px 20px;
+            text-align: center;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none; /* Loại bỏ viền của nút */
+            outline: none; /* Loại bỏ viền khi nhấn vào */
+            border-radius: 20px;
+    
+            &:hover {
+              background-color: #000000;
             }
         }
     }

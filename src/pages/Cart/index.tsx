@@ -2,33 +2,42 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './styles.scss'; // Import file CSS
 import img from '../../assets/images/card.webp'; // Import ảnh mẫu
-import { RiDeleteBin2Fill } from "react-icons/ri"; // Icon delete (nếu cần dùng)
-import ButtonCustom from '../../components/ButtonCustom'; // Nếu bạn có button custom
+// import { RiDeleteBin2Fill } from "react-icons/ri"; // Icon delete (nếu cần dùng)
 import { MdDiscount } from "react-icons/md";
 import { FaJediOrder } from "react-icons/fa6";
+import { MdDeleteOutline } from "react-icons/md";
 
 const Cart = () => {
-  // State quản lý số lượng và giá cho từng sản phẩm
-  const [quantity1, setQuantity1] = useState(1); // Sản phẩm 1
-  const [quantity2, setQuantity2] = useState(3); // Sản phẩm 2
+  // State quản lý danh sách sản phẩm
+  const [cartItems, setCartItems] = useState([
+    { id: 1, name: 'T-Shirt Retro Vibes AT.129', color: 'Xanh Dương', size: 'L', price: 189000, quantity: 1, image: img },
+    { id: 2, name: 'T-Shirt Retro Vibes AT.129', color: 'Tím', size: 'M', price: 189000, quantity: 3, image: img }
+  ]);
 
-  // Giá của mỗi sản phẩm
-  const price1 = 189000;
-  const price2 = 189000;
-
-  // Tính tổng giá tạm tính cho mỗi sản phẩm dựa trên số lượng
-  const total1 = quantity1 * price1;
-  const total2 = quantity2 * price2;
-  const totalPrice = total1 + total2; // Tổng giá tạm tính cho tất cả sản phẩm
-
-  // Hàm tăng/giảm số lượng
-  const increaseQuantity = (quantity: number, setQuantity: React.Dispatch<React.SetStateAction<number>>) => {
-    setQuantity(quantity + 1);
+  // Hàm tăng/giảm số lượng sản phẩm
+  const increaseQuantity = (itemId: number) => {
+    setCartItems(prevItems =>
+      prevItems.map(item =>
+        item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
   };
 
-  const decreaseQuantity = (quantity: number, setQuantity: React.Dispatch<React.SetStateAction<number>>) => {
-    if (quantity > 1) setQuantity(quantity - 1); // Số lượng không được nhỏ hơn 1
+  const decreaseQuantity = (itemId: number) => {
+    setCartItems(prevItems =>
+      prevItems.map(item =>
+        item.id === itemId && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
+      )
+    );
   };
+
+  // Hàm xóa sản phẩm khỏi giỏ hàng
+  const removeItem = (itemId: number) => {
+    setCartItems(prevItems => prevItems.filter(item => item.id !== itemId));
+  };
+
+  // Tính tổng giá tạm tính cho tất cả sản phẩm
+  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
   return (
     <div className="cart-container container">
@@ -45,70 +54,52 @@ const Cart = () => {
         <div className='cart-table'>
           <div className='cart-header'>
             <div className='row'>
-              <div className='col-6'>Sản phẩm</div>
+              <div className='col-5'>Sản phẩm</div>
               <div className='col-2'>Giá</div>
               <div className='col-2'>Số lượng</div>
               <div className='col-2'>Tạm tính</div>
+              <div className='col-1'></div> {/* Thêm khoảng trống cho nút Xóa */}
             </div>
           </div>
 
-          {/* Cart Item 1 */}
-          <div className='cart-item'>
-            <div className='row align-items-center'>
-              <div className='col-6 cart-item-product d-flex'>
-                <img src={img} alt="product" className='cart-item-img' />
-                <div className='cart-item-details'>
-                  <div className='cart-item-title'>T-Shirt Retro Vibes AT.129</div>
-                  <div className='cart-item-meta'>
-                    <span>Màu: Xanh Dương</span>
-                    <span>Size: L</span>
+          {/* Hiển thị danh sách sản phẩm */}
+          {cartItems.map(item => (
+            <div className='cart-item' key={item.id}>
+              <div className='row align-items-center'>
+                <div className='col-5 cart-item-product d-flex'>
+                  <img src={item.image} alt="product" className='cart-item-img' />
+                  <div className='cart-item-details'>
+                    <div className='cart-item-title'>{item.name}</div>
+                    <div className='cart-item-meta'>
+                      <span>Màu: {item.color}</span>
+                      <span>Size: {item.size}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className='col-2 cart-item-price'>
-                <span>{price1.toLocaleString()}₫</span>
-              </div>
-              <div className='col-2 cart-item-quantity'>
-                <div className="quantity-controls">
-                  <button className='quantity-btn' onClick={() => decreaseQuantity(quantity1, setQuantity1)}>-</button>
-                  <input type='number' className='quantity-input' value={quantity1} readOnly />
-                  <button className='quantity-btn' onClick={() => increaseQuantity(quantity1, setQuantity1)}>+</button>
+                <div className='col-2 cart-item-price'>
+                  <span>{item.price.toLocaleString()}₫</span>
                 </div>
-              </div>
-              <div className='col-2 cart-item-total'>
-                <span>{total1.toLocaleString()}₫</span>
-              </div>
-            </div>
-          </div>
+                <div className='col-2 cart-item-quantity'>
+                  <div className="quantity-controls">
+                    <button className='quantity-btn' onClick={() => decreaseQuantity(item.id)}>-</button>
+                    <input type='number' className='quantity-input' value={item.quantity} readOnly />
+                    <button className='quantity-btn' onClick={() => increaseQuantity(item.id)}>+</button>
+                  </div>
+                </div>
+                <div className='col-2 cart-item-total'>
+                  <span>{(item.price * item.quantity).toLocaleString()}₫</span>
+                </div>
+                {/* Nút Xóa sản phẩm */}
+                <div className='col-1'>
+                  <button className='delete-btn' onClick={() => removeItem(item.id)}>
+                    {/* <RiDeleteBin2Fill /> */}
+                    <MdDeleteOutline />
 
-          {/* Cart Item 2 */}
-          <div className='cart-item'>
-            <div className='row align-items-center'>
-              <div className='col-6 cart-item-product d-flex'>
-                <img src={img} alt="product" className='cart-item-img' />
-                <div className='cart-item-details'>
-                  <div className='cart-item-title'>T-Shirt Retro Vibes AT.129</div>
-                  <div className='cart-item-meta'>
-                    <span>Màu: Tím</span>
-                    <span>Size: M</span>
-                  </div>
+                  </button>
                 </div>
-              </div>
-              <div className='col-2 cart-item-price'>
-                <span>{price2.toLocaleString()}₫</span>
-              </div>
-              <div className='col-2 cart-item-quantity'>
-                <div className="quantity-controls">
-                  <button className='quantity-btn' onClick={() => decreaseQuantity(quantity2, setQuantity2)}>-</button>
-                  <input type='number' className='quantity-input' value={quantity2} readOnly />
-                  <button className='quantity-btn' onClick={() => increaseQuantity(quantity2, setQuantity2)}>+</button>
-                </div>
-              </div>
-              <div className='col-2 cart-item-total'>
-                <span>{total2.toLocaleString()}₫</span>
               </div>
             </div>
-          </div>
+          ))}
         </div>
 
         {/* Phần Thông tin đơn hàng */}
