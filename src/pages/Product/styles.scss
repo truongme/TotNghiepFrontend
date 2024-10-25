@@ -1,3 +1,5 @@
+@import '../../assets/styles/variables.scss';
+
 .product-container {
     padding: 20px;
   
@@ -113,6 +115,32 @@
         margin-top: 15px;
         margin-bottom: 10px;
       }
+
+      .product-color {
+        display: flex;
+        gap: 10px;
+
+        .color-option-border{
+          border: 2px solid $gray-color;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .color-option{
+            width: 30px;
+            height: 30px;
+            margin: 3px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+          }
+        }
+        .selected {
+          border: 2px solid $primary-color !important;
+      
+        }
+      }
   
       .product-sizes {
         .product-size {
@@ -127,13 +155,18 @@
           }
       
           &.selected {
-            background-color: #000;  // Màu nền khi size được chọn
-            color: #fff;             // Màu chữ khi size được chọn
-            border-color: #000;      // Đổi màu viền khi size được chọn
+            background-color: $primary-color;  
+            color: #fff; 
+            border-color: $primary-color;
           }
         }
       }
       
+      .error-message{
+        color: $red-color;
+        padding-top: 10px;
+        font-size: 12px;
+      }
   
       /* Buttons Styling */
       .product-order-btn {
