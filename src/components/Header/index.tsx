@@ -3,9 +3,11 @@ import './styles.scss';
 import { FaUser, FaShoppingCart } from "react-icons/fa";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { SiNike } from "react-icons/si";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
+
+  const role = localStorage.getItem("role");
 
   const arrNavBar = [
     {name: 'Quần áo', link:'/collections/ao-polo'},
@@ -13,6 +15,14 @@ const Header = () => {
     {name: 'Mũ nón', link:'/login'},
     {name: 'Phụ kiện', link:'/login'},
   ]
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    navigate('/login');
+  };
 
   return (
     <div className='header-container'>
@@ -54,7 +64,7 @@ const Header = () => {
               </Link>
             </div>
             <div className='header-icon-cotainer'>
-              <Link to={"/login"} className='link-style'>
+              <Link to={role ? "/user" : "/login"} className='link-style'>
                 <FaUser className='header-icon'/>
               </Link>      
             </div>

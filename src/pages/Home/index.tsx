@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles.scss';
 import imageBanner from '../../assets/images/banner.webp';
 import imgNewArrival from '../../assets/images/new-arrival.jpg';
 // import imgBackground from '../../assets/images/bgcollection.jpg'; 
 import Card from '../../components/Card';
 import Slider from 'react-slick';
+import axios from 'axios';
+import { formatPrice } from '../../helpers';
+
+export interface CardProps {
+  id: string;
+  img: string;
+  name: string;
+  price: string;
+  rank: number
+}
 
 const Home = () => {
+
+  const [listTopSell, setListTopSell] = useState<CardProps[]>([])
   const arrCategory = [
     { name: 'Quần áo', link: '/login' },
     { name: 'Giày dép', link: '/' },
@@ -14,12 +26,10 @@ const Home = () => {
     { name: 'Phụ kiện', link: '/login' },
   ];
   
-  const cardArray = Array.from({ length: 10 }, (_, i) => <Card key={i} />);
-  const collectionCardArray = Array.from({ length: 5 }, (_, i) => <Card key={i} />);
 
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
     cssEase: 'ease-in-out',
     slidesToShow: 5,
@@ -38,6 +48,34 @@ const Home = () => {
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
   };
+
+  const getTopSell = async () => {
+    try{
+      const response = await axios.get(`https://2564-14-191-163-70.ngrok-free.app/api/v1/products/top-selling?limit=10`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'skip-browser-warning'
+        }
+      }) 
+      
+      const data: CardProps[] = response.data.data.map((e: any, index: number) => ({
+        id: e.productId,  
+        img: e.images?.[0],  
+        name: e.name,
+        price: formatPrice(e.price),
+        rank: index+1,
+      }));
+
+      setListTopSell(data)
+
+    } catch (error) {
+      console.error('Error get top sell:', error);
+    }
+  }
+
+  useEffect(() => {
+    getTopSell()
+  },[])
 
   return (
     <div>
@@ -60,10 +98,10 @@ const Home = () => {
             <img src={imgNewArrival} alt="new-arrival" />
           </div>
           <div className='new-arrival-card'>
+            {/* <div className='p-2'><Card /></div>
             <div className='p-2'><Card /></div>
             <div className='p-2'><Card /></div>
-            <div className='p-2'><Card /></div>
-            <div className='p-2'><Card /></div>
+            <div className='p-2'><Card /></div> */}
           </div>
         </div>
       </div>
@@ -73,7 +111,9 @@ const Home = () => {
         <div className='title-folder-home'>HÀNG BÁN CHẠY</div>
         <div className='top-sale'>
           <Slider {...settings}>
-            {cardArray}
+            {listTopSell.map((e: CardProps) => (
+              <Card data={e}/>
+            ))}
           </Slider>
         </div>
       </div>
@@ -88,9 +128,9 @@ const Home = () => {
               <h2>#Varsity Collection</h2>
             </div>
             <div className='collection-slider'>
-              <Slider {...settings2}>
+              {/* <Slider {...settings2}>
                 {collectionCardArray}
-              </Slider>
+              </Slider> */}
             </div>
           </div>
         </div>

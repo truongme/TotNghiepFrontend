@@ -62,7 +62,7 @@ const Collections = () => {
                     </div>
                 </div>
                 <div className='col-9 colections-items'>
-                    <div className='p-2'>
+                    {/* <div className='p-2'>
                         <Card/>
                     </div>
                     <div className='p-2'>
@@ -76,7 +76,7 @@ const Collections = () => {
                     </div>
                     <div className='p-2'>
                         <Card/>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

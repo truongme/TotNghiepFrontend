@@ -12,7 +12,6 @@ interface LoginForm {
 }
 
 const Login = () => {
-  
 
   const navigate = useNavigate()
 
@@ -23,7 +22,7 @@ const Login = () => {
   const postLogin = async (data: LoginForm) => {
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/auth/sign-in`, {
+      const response = await axios.post(`https://c3ff-14-191-163-75.ngrok-free.app/api/v1/auth/sign-in`, {
         email: data.email,
         password: data.password,
         headers: {
@@ -36,10 +35,10 @@ const Login = () => {
 
       localStorage.setItem('token', accessToken);
       localStorage.setItem('role', role);
-
       navigate('/')
       
     } catch (error) {
+      setLoginFail(true)
       console.error('Unexpected Error:', error);
     }
   };

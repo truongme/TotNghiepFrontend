@@ -10,14 +10,13 @@ import User from "../pages/User";
 const role = localStorage.getItem("role");
 
 export const adminRoutes = [
-  { path: "/", element: <Home /> },
+  { path: "/", element: <Cart /> },
   { path: "/news", element: <News /> },
   { path: "/login", element: <Login /> },
   { path: "/collections/:item", element: <Collections /> },
   { path: "/product/:item", element: <Product /> },
   { path: "/cart", element: <Cart /> },
   { path: "/pay", element: <Order /> },
-  { path: "/user", element: <User /> },
 ];
 
 export const userRoutes = [
@@ -25,9 +24,10 @@ export const userRoutes = [
   { path: "/news", element: <News /> },
   { path: "/login", element: <Login /> },
   { path: "/collections/:item", element: <Collections /> },
-  { path: "/product/:item", element: <Product /> },
+  { path: "/product/:id", element: <Product /> },
   { path: "/cart", element: <Cart /> },
   { path: "/pay", element: <Order /> },
+  { path: "/user", element: <User /> },
 ];
 
-export const router = role === "CUSTOMER" ? userRoutes : adminRoutes;
+export const router = role === "ADMIN" ? adminRoutes : userRoutes;

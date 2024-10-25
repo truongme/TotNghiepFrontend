@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './styles.scss'
 import avatar from '../../assets/images/avatar.jpg'
 import { FaUser } from 'react-icons/fa'
@@ -7,10 +7,46 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Adress from './Address/Address';
 import Information from './Information/Information';
+import axios from 'axios';
+
+export interface User {
+  avatar: string | null;
+  email: string | null;
+  firstName: string | null;
+  gender: string | null;
+  lastName: string | null;
+  phoneNumber: string | null;
+}
 
 const User = () => {
 
     const [itemActive, setItemActive] = useState<string>('infor');
+
+    const token = localStorage.getItem("token");
+
+    const [profileUser, setProfileUser] = useState<User>()
+
+    const getProfile = async () => {
+        try {
+
+        const response = await axios.get(`https://c3ff-14-191-163-75.ngrok-free.app/api/v1/users/profile`, {
+            headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'skip-browser-warning',
+            'Authorization': `Bearer ${token}`, 
+            }
+        });
+
+        setProfileUser(response.data)
+
+        } catch (error) {
+        console.error('Unexpected Error:', error);
+        }
+    }
+
+    useEffect(() => {
+        getProfile();
+    }, []);
 
   return (
     <div className='container d-flex justify-content-between pt-3'>
@@ -21,7 +57,7 @@ const User = () => {
               </div>
               <div>
                 <h6>Ngô Quang Trường</h6>
-                <p>truongme2k2@gmail.com</p>
+                <p>{profileUser?.email}</p>
               </div>
             </div>
             <hr />

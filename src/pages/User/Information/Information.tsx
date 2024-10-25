@@ -1,8 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './styles.scss'
 import img from '../../../assets/images/avatar.jpg'
+import axios from 'axios'
+import { User } from '..'
 
 const Information = () => {
+
+  const token = localStorage.getItem("token");
+
+  const [profileUser, setProfileUser] = useState<User>()
+
+  const getProfile = async () => {
+    try {
+
+      const response = await axios.get(`https://c3ff-14-191-163-75.ngrok-free.app/api/v1/users/profile`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'skip-browser-warning',
+          'Authorization': `Bearer ${token}`, 
+        }
+      });
+
+      setProfileUser(response.data)
+
+    } catch (error) {
+      console.error('Unexpected Error:', error);
+    }
+  }
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
   return (
     <div className='w-100'>
       <div>Hồ sơ của tôi</div>
@@ -22,9 +51,9 @@ const Information = () => {
           <ul>
             <li>truongmedn</li>
             <li>Tên</li>
-            <li>tr*********@gmail.com</li>
-            <li>*********43</li>
-            <li>Giới tính</li>
+            <li>{profileUser?.email || ""}</li>
+            <li>{profileUser?.phoneNumber || ""}</li>
+            <li>{profileUser?.gender || ""}</li>
             <li>**/04/20**</li>
           </ul>
           <button>Lưu</button>

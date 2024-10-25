@@ -2,8 +2,13 @@ import React from 'react'
 import './styles.scss'
 import img from '../../assets/images/card.webp'
 import { useNavigate } from 'react-router-dom'
+import { CardProps } from '../../pages/Home'
 
-const Card = () => {
+interface ICardProps{
+  data: CardProps
+}
+
+const Card: React.FC<ICardProps> = ({data}) => {
 
   const navigate = useNavigate()
 
@@ -14,15 +19,18 @@ const Card = () => {
   return (
     <div className='card-cotainer'>
       <div className='card-img'>
-        <img src={img} alt="" onClick={e => handleOnClick('ao-polo')}/>
+        <img src={data.img} alt="" onClick={e => handleOnClick(data.id)}/>
       </div>
       <div className='card-content'>
-        <div className='card-title' onClick={e => handleOnClick('ao-polo')}>
-          MLB - Giày sneakers unisex cổ thấp Chunky Classic Base Heel Monogram
+        <div className='card-title' onClick={e => handleOnClick(data.id)}>
+          {data.name}
         </div>
         <span className='card-price'>
-          1,690,000 đ
+          {data.price}
         </span>
+      </div>
+      <div className='card-index-rank'>
+        {data.rank}
       </div>
     </div>
   )

@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from "react-slick";
 import './styles.scss'; // Import the appropriate CSS file
-import imgProduct1 from '../../assets/images/anh1-1.webp';
-import imgProduct2 from '../../assets/images/anh1-2.webp';
-import imgProduct3 from '../../assets/images/anh2-1.webp';
-import imgProduct4 from '../../assets/images/anh2-2.jpg';
-import imgProduct5 from '../../assets/images/anh3-1.webp';
-import imgProduct6 from '../../assets/images/anh3-2.jpg';
-import imgProduct7 from '../../assets/images/card.webp';
 import Card from '../../components/Card';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { formatPrice } from '../../helpers';
+
+interface ProductProps {
+  id: string;
+  images: string[];
+  name: string;
+  price: string;
+  description:string;
+}
+
+interface ProductVariants {
+  id:string;
+  color: string[];
+  size: string;
+  stock: string;
+}
 // Nút Previous
 const PrevButton = ({ onClick }: { onClick: React.MouseEventHandler<HTMLButtonElement> }) => (
   <button className='prev-btn custom-arrow' onClick={onClick}>
@@ -24,38 +35,81 @@ const NextButton = ({ onClick }: { onClick: React.MouseEventHandler<HTMLButtonEl
 );
 
 const Product = () => {
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0); // Quản lý chỉ số hình ảnh hiện tại
-  const [selectedSize, setSelectedSize] = useState(''); // Quản lý trạng thái size được chọn
-  const [activeTab, setActiveTab] = useState('info'); // Quản lý tab đang hoạt động, khởi tạo với tab 'info'
-  const productImages = [imgProduct1, imgProduct2, imgProduct3, imgProduct4, imgProduct5, imgProduct6,imgProduct7];
-  const cardArray = Array.from({ length: 10 }, (_, i) => <Card key={i} />);
 
-  // Cấu hình slider
+  const { id } = useParams<{ id: string }>();
+  const [productDetail, setProductDetail] = useState<ProductProps>()
+   const [projectVariants, setProductVariants] = useState<ProductVariants[]>([])
+
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0); 
+  const [selectedSize, setSelectedSize] = useState(''); 
+  const [activeTab, setActiveTab] = useState('info');
+
+
   const settings = {
-    dots: false, // Ẩn dots mặc định
+    dots: false, 
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: true, // Hiển thị nút điều hướng
+    arrows: true, 
     nextArrow: <NextButton onClick={() => {}} />,
     prevArrow: <PrevButton onClick={() => {}} />,
-    beforeChange: (current: number, next: number) => setSelectedImageIndex(next), // Cập nhật thumbnail được chọn
+    beforeChange: (current: number, next: number) => setSelectedImageIndex(next), 
   };
   const settings2 = {
     dots: false,
     infinite: true,
     speed: 500,
-    cssEase: 'ease-in-out',  // Hiệu ứng chuyển đổi mượt mà
+    cssEase: 'ease-in-out',  
     slidesToShow: 5,
     slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
-    // beforeChange: (current: number, next: number) => setSelectedImageIndex(next), // Cập nhật thumbnail được chọn
+    
   };
 
-  // Danh sách kích thước
+
   const sizes = ['XS', 'S', 'M', 'L', 'XL'];
+
+  const getProductDetails = async () => {
+    try {
+      const response = await axios.get(`https://2564-14-191-163-70.ngrok-free.app/api/v1/products/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'skip-browser-warning'
+        }
+      })
+
+      const result = response.data
+
+      const product: ProductProps = {
+        id: result.productId,
+        name: result.name,
+        price: formatPrice(result.price),
+        description: result.description,
+        images: result.images,
+      };
+
+      const variants: ProductVariants[] = response.data.productVariants.map((e: any) => ({
+        id: e.productVariantId,
+        color:e.color.hexCode,
+        size: e.size.sizeType,
+        stock: e.stock
+      }))
+
+      console.log(variants)
+
+      setProductVariants(variants)
+      setProductDetail(product)
+    } catch (error) {
+      console.error("Error get product details", error)
+    }
+    
+  }
+
+  useEffect(() => {
+    getProductDetails()
+  },[]);
 
   return (
     <div className='container product-container'>
@@ -65,7 +119,7 @@ const Product = () => {
           <div className='product-images'>
             {/* Slider Component */}
             <Slider {...settings}>
-              {productImages.map((img, index) => (
+              {productDetail?.images.map((img, index) => (
                 <div key={index}>
                   <img src={img} alt={`Product ${index}`} className='slick-image' />
                 </div>
@@ -74,7 +128,7 @@ const Product = () => {
 
             {/* Thumbnail List */}
             <div className='product-thumbnails'>
-              {productImages.map((img, index) => (
+              {productDetail?.images.map((img, index) => (
                 <img
                   key={index}
                   src={img}
@@ -91,21 +145,23 @@ const Product = () => {
         <div className='col-md-6'>
           <div className='product-order'>
             <div className='product-name'>
-              MLB - Quần jeans nam ống rộng Basic Small Logo
+              {productDetail?.name}
             </div>
-            <div className='product-price'>4,290,000đ</div>
+            <div className='product-size-title'>{productDetail?.description}</div>
+            <div className='product-price'>{productDetail?.price}</div>
 
             {/* Select Size */}
             <div className='product-size-title'>Chọn kích thước</div>
             <div className='d-flex product-sizes'>
               {sizes.map((size) => (
-                <div
+                <button
                   key={size}
-                  className={`product-size ${selectedSize === size ? 'selected' : ''}`} // Áp dụng class 'selected' cho size được chọn
-                  onClick={() => setSelectedSize(size)} // Cập nhật size được chọn khi click
+                  className={`product-size ${selectedSize === size ? 'selected' : ''}`} 
+                  onClick={() => setSelectedSize(size)} 
+                  disabled={!projectVariants.some(e => e.size === size)}
                 >
                   {size}
-                </div>
+                </button>
               ))}
             </div>
 
@@ -210,7 +266,7 @@ const Product = () => {
         <div className='top-sale'>
             {/* Slider Component */}
             <Slider {...settings2}>
-            {cardArray}
+            {/* {cardArray} */}
           </Slider>
         </div>
       </div>
@@ -221,7 +277,7 @@ const Product = () => {
         <div className='top-sale'>
             {/* Slider Component */}
             <Slider {...settings2}>
-            {cardArray}
+            {/* {cardArray} */}
           </Slider>
         </div>
       </div>
