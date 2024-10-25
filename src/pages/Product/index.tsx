@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Slider from "react-slick";
-import './styles.scss'; // Import the appropriate CSS file
+import './styles.scss';
 import Card from '../../components/Card';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -16,34 +16,42 @@ interface ProductProps {
 
 interface ProductVariants {
   id:string;
-  color: string[];
+  color: string;
   size: string;
   stock: string;
 }
-// Nút Previous
+
 const PrevButton = ({ onClick }: { onClick: React.MouseEventHandler<HTMLButtonElement> }) => (
   <button className='prev-btn custom-arrow' onClick={onClick}>
     ❮
   </button>
 );
 
-// Nút Next
 const NextButton = ({ onClick }: { onClick: React.MouseEventHandler<HTMLButtonElement> }) => (
   <button className='next-btn custom-arrow' onClick={onClick}>
     ❯
   </button>
 );
 
+const NextArrow = (props: any) => {
+  const { onClick } = props;
+  return (
+    <div className="custom-arrow next-arrow" onClick={onClick}>
+      <div className="line-arrow" style={{ transform: 'translate(-75%, -50%) rotate(-45deg)' }}></div>
+    </div>
+  );
+};
+
+const PrevArrow = (props: any) => {
+  const { onClick } = props;
+  return (
+    <div className="custom-arrow prev-arrow" onClick={onClick}>
+      <div className="line-arrow" style={{ transform: 'translate(-25%, -50%) rotate(135deg)' }}></div>
+    </div>
+  );
+};
+
 const Product = () => {
-
-  const { id } = useParams<{ id: string }>();
-  const [productDetail, setProductDetail] = useState<ProductProps>()
-   const [projectVariants, setProductVariants] = useState<ProductVariants[]>([])
-
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0); 
-  const [selectedSize, setSelectedSize] = useState(''); 
-  const [activeTab, setActiveTab] = useState('info');
-
 
   const settings = {
     dots: false, 
@@ -65,15 +73,49 @@ const Product = () => {
     slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
-    
   };
 
+  const sizeOrder = ['S', 'M', 'L', 'XL'];
+  const { id } = useParams<{ id: string }>();
+  const [productDetail, setProductDetail] = useState<ProductProps>()
+  const [projectVariants, setProjectVariants] = useState<ProductVariants[]>([])
+  const [projectVariantsColor, setProjectVariantsColor] = useState<any[]>([])
+  const [projectVariantsSize, setProjectVariantsSize] = useState<any[]>([])
+  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0); 
+  const [activeTab, setActiveTab] = useState('info');
+  const [errorMessage, setErrorMessage] = useState<boolean>(false)
+  
+  const getValidColors = (size: string) => {
+    return projectVariants.filter(item => item.size === size).map(item => item.color);
+  };
 
-  const sizes = ['XS', 'S', 'M', 'L', 'XL'];
+  const getValidSizes = (color: string) => {
+    return projectVariants.filter(item => item.color === color).map(item => item.size);
+  };
+
+  const handleColorSelect = (color: string) => {
+    selectedColor === color ? setSelectedColor('') : setSelectedColor(color);
+  };
+
+  const handleSizeSelect = (size: string) => {
+    selectedSize === size ? setSelectedSize('') : setSelectedSize(size);
+  };
+
+  const handleAddToCart = async () => {
+    if(!selectedColor || !selectedSize) {
+      setErrorMessage(true)
+    } else {
+      const product = projectVariants.find(x => x.color === selectedColor && x.size === selectedSize)
+      console.log(product)
+    }
+  }
+
 
   const getProductDetails = async () => {
     try {
-      const response = await axios.get(`https://2564-14-191-163-70.ngrok-free.app/api/v1/products/${id}`, {
+      const response = await axios.get(`https://c7c3-14-191-163-33.ngrok-free.app/api/v1/products/${id}`, {
         headers: {
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'skip-browser-warning'
@@ -90,21 +132,28 @@ const Product = () => {
         images: result.images,
       };
 
-      const variants: ProductVariants[] = response.data.productVariants.map((e: any) => ({
+      const variants: ProductVariants[] = response.data.map((e: any) => ({
         id: e.productVariantId,
-        color:e.color.hexCode,
+        color:e.color.hexCode[0],
         size: e.size.sizeType,
         stock: e.stock
       }))
 
-      console.log(variants)
+      const color = Array.from(new Set(variants.map(item => item.color)));
+      const size = Array.from(new Set(variants.map(item => item.size)));
+      
+      const sortedSizes = size.sort((a, b) => {
+        return sizeOrder.indexOf(a) - sizeOrder.indexOf(b);
+      });
 
-      setProductVariants(variants)
+
+      setProjectVariants(variants)
+      setProjectVariantsColor(color)
+      setProjectVariantsSize(sortedSizes)
       setProductDetail(product)
     } catch (error) {
       console.error("Error get product details", error)
     }
-    
   }
 
   useEffect(() => {
@@ -114,10 +163,8 @@ const Product = () => {
   return (
     <div className='container product-container'>
       <div className='row'>
-        {/* Left side - Product Images */}
         <div className='col-md-6'>
           <div className='product-images'>
-            {/* Slider Component */}
             <Slider {...settings}>
               {productDetail?.images.map((img, index) => (
                 <div key={index}>
@@ -125,8 +172,6 @@ const Product = () => {
                 </div>
               ))}
             </Slider>
-
-            {/* Thumbnail List */}
             <div className='product-thumbnails'>
               {productDetail?.images.map((img, index) => (
                 <img
@@ -134,14 +179,12 @@ const Product = () => {
                   src={img}
                   alt={`Thumbnail ${index}`}
                   className={`thumbnail ${selectedImageIndex === index ? 'active' : ''}`}
-                  onClick={() => setSelectedImageIndex(index)} // Đổi ảnh khi click vào thumbnail
+                  onClick={() => setSelectedImageIndex(index)} 
                 />
               ))}
             </div>
           </div>
         </div>
-
-        {/* Right side - Product Details */}
         <div className='col-md-6'>
           <div className='product-order'>
             <div className='product-name'>
@@ -149,29 +192,41 @@ const Product = () => {
             </div>
             <div className='product-size-title'>{productDetail?.description}</div>
             <div className='product-price'>{productDetail?.price}</div>
-
-            {/* Select Size */}
+            <div className='product-size-title'>Chọn màu sắc</div>
+            <div className='product-color'>
+              {projectVariantsColor.map((color: any) =>(
+                <div className={`color-option-border ${selectedColor === color ? 'selected' : ''}`}>
+                  <button
+                    key={color}
+                    onClick={() => handleColorSelect(color)}
+                    disabled={selectedSize ? !getValidSizes(color).includes(selectedSize):false}
+                    className={`color-option `} 
+                    style={{background:color}}
+                  >
+                  </button>
+                </div>
+              ))}
+            </div>
             <div className='product-size-title'>Chọn kích thước</div>
             <div className='d-flex product-sizes'>
-              {sizes.map((size) => (
+              {projectVariantsSize.map((size) => (
                 <button
                   key={size}
+                  onClick={() => handleSizeSelect(size)}
                   className={`product-size ${selectedSize === size ? 'selected' : ''}`} 
-                  onClick={() => setSelectedSize(size)} 
-                  disabled={!projectVariants.some(e => e.size === size)}
+                  disabled={selectedColor ? !getValidColors(size).includes(selectedColor) : false}
                 >
                   {size}
                 </button>
               ))}
             </div>
-
-            {/* Buttons */}
+            {errorMessage && (
+              <div className='error-message'>Vui lòng chọn màu sắc và size cho sản phẩm!</div>
+            )}
             <div className='product-order-btn'>
-              <div className='btn-add-cart'>Thêm vào giỏ hàng</div>
+              <button className='btn-add-cart' onClick={e => handleAddToCart()}>Thêm vào giỏ hàng</button>
               <div className='btn-order'>Mua ngay</div>
             </div>
-
-            {/* Promotion Info */}
             <div className='product-promotion'>
               <h5>MLB Chào bạn mới</h5>
               <p>Nhận ngay ưu đãi 5% khi đăng ký thành viên và mua đơn hàng nguyên giá đầu tiên tại website*</p>
@@ -180,8 +235,6 @@ const Product = () => {
           </div>
         </div>
       </div>
-
-      {/* Tabs for Product Description, Care Instructions, Return Policy, and Store Info */}
       <div className='row product-tabs'>
         <div className='col-3 tab' onClick={() => setActiveTab('info')}>
           <h3 className={activeTab === 'info' ? 'active' : ''}>THÔNG TIN SẢN PHẨM</h3>
@@ -196,8 +249,6 @@ const Product = () => {
           <h3 className={activeTab === 'store' ? 'active' : ''}>Tìm tại cửa hàng</h3>
         </div>
       </div>
-
-      {/* Tab Content */}
       <div className='tab-content'>
         {activeTab === 'info' && (
           <div className='product-info'>
@@ -258,26 +309,17 @@ const Product = () => {
           </div>
         )}
       </div>
-
-      {  /* Có thể bạn cũng thích*/}
       <div className='container mt-5'>
-        {/* Left side - Product Images */}
         <div className='title-folder-home'>Có thể bạn cũng thích</div>
         <div className='top-sale'>
-            {/* Slider Component */}
-            <Slider {...settings2}>
-            {/* {cardArray} */}
+          <Slider {...settings2}>
           </Slider>
         </div>
       </div>
-
       <div className='container mt-5'>
-        {/* Left side - Product Images */}
         <div className='title-folder-home'>Sản phẩm đã xem</div>
         <div className='top-sale'>
-            {/* Slider Component */}
-            <Slider {...settings2}>
-            {/* {cardArray} */}
+          <Slider {...settings2}>
           </Slider>
         </div>
       </div>
@@ -285,24 +327,4 @@ const Product = () => {
   );
 };
 
-
-
-const NextArrow = (props: any) => {
-  const { onClick } = props;
-  return (
-    <div className="custom-arrow next-arrow" onClick={onClick}>
-      <div className="line-arrow" style={{ transform: 'translate(-75%, -50%) rotate(-45deg)' }}></div>
-    </div>
-  );
-};
-
-// Nút "Previous"
-const PrevArrow = (props: any) => {
-  const { onClick } = props;
-  return (
-    <div className="custom-arrow prev-arrow" onClick={onClick}>
-      <div className="line-arrow" style={{ transform: 'translate(-25%, -50%) rotate(135deg)' }}></div>
-    </div>
-  );
-};
 export default Product;
