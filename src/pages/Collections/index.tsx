@@ -13,7 +13,7 @@ const Collections = () => {
 
     const getProduct = async () => {
         try {
-            const response = await axios.get(`https://83e1-14-191-162-216.ngrok-free.app/api/v1/products/all`, {
+            const response = await axios.get(`https://f6c4-14-191-163-38.ngrok-free.app/api/v1/products/all`, {
                 params: {
                     categoryId,
                 },

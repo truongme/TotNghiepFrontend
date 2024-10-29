@@ -17,12 +17,12 @@
   
     .cart-content {
       display: flex;
-      justify-content: space-between; /* Căn giữa 2 phần */
-      align-items: flex-start; /* Canh đầu trên của cả 2 phần */
+      justify-content: space-between; 
+      align-items: flex-start;
     }
   
     .cart-table {
-      flex: 2; /* Chiếm nhiều không gian hơn phần thông tin đơn hàng */
+      flex: 2; 
       margin-right: 20px;
   
       .cart-header {
@@ -46,7 +46,9 @@
           }
   
           .cart-item-details {
+            width: 100%;
             .cart-item-title {
+              width: 100%;
               font-size: 16px;
               font-weight: bold;
             }
@@ -81,6 +83,7 @@
             }
   
             .quantity-input {
+              border: none;
               width: 40px;
               text-align: center;
             }
@@ -90,7 +93,7 @@
     }
   
     .cart-summary-container {
-      flex: 1; /* Chiếm không gian nhỏ hơn */
+      flex: 1;
       border: 1px solid #eee;
       padding: 20px;
       background-color: #f9f9f9;
@@ -99,12 +102,12 @@
     .cart-summary {
       text-align: right;
       h5{
-        display: flex; /* Căn ngang icon và chữ */
-        align-items: center; /* Đảm bảo icon và chữ căn giữa theo trục dọc */
-        margin-bottom: 10px; /* Thêm khoảng cách dưới label nếu cần */
+        display: flex; 
+        align-items: center;
+        margin-bottom: 10px; 
         
         svg {
-          margin-right: 8px; /* Khoảng cách giữa icon và chữ */
+          margin-right: 8px; 
         }
       }
       .cart-summary-item {
@@ -113,8 +116,8 @@
         margin-bottom: 10px;
       }
       .checkout-btn {
-        text-decoration: none; /* Bỏ gạch chân */
-        color: white; /* Đảm bảo màu chữ là trắng */
+        text-decoration: none; 
+        color: white; 
         background-color: rgb(255, 0, 0);
         padding: 10px 20px;
         text-align: center;
@@ -123,8 +126,8 @@
         width: 100%;
         cursor: pointer;
         transition: background-color 0.3s ease;
-        border: none; /* Loại bỏ viền của nút */
-        outline: none; /* Loại bỏ viền khi nhấn vào */
+        border: none; 
+        outline: none; 
         border-radius: 20px;
 
         &:hover {
@@ -152,23 +155,23 @@
           margin-top: 20px;
         
           label{
-            display: flex; /* Căn ngang icon và chữ */
-            align-items: center; /* Đảm bảo icon và chữ căn giữa theo trục dọc */
-            margin-bottom: 10px; /* Thêm khoảng cách dưới label nếu cần */
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 10px;
             
             svg {
-              margin-right: 8px; /* Khoảng cách giữa icon và chữ */
+              margin-right: 8px; 
             }
           }
         
           .discount-input-group {
-            display: flex; /* Đặt input và button trong cùng một hàng */
+            display: flex;
             align-items: center;
         
             input {
               padding: 8px;
-              flex: 2; /* Để input chiếm nhiều không gian hơn */
-              margin-right: 10px; /* Khoảng cách giữa input và nút button */
+              flex: 2; 
+              margin-right: 10px; 
               border-radius: 20px;
               border: 1px solid #000000;
             }
@@ -180,8 +183,7 @@
               border: 1px solid #000000;
               padding: 8px;
               cursor: pointer;
-              // border: none; /* Loại bỏ viền của nút */
-              outline: none; /* Loại bỏ viền khi nhấn vào */
+              outline: none; 
               transition: background-color 0.3s;
               border-radius: 20px;
               &:hover {
