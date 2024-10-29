@@ -1,11 +1,45 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './styles.scss'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import Card from '../../components/Card';
 import { TiFilter } from "react-icons/ti";
+import axios from 'axios';
+import { CardProps } from '../Home';
 
 const Collections = () => {
-    const { item } = useParams();
+   const { categoryId } = useParams();
+
+    const [listProduct, setListProduct] = useState<any[]>([])
+
+    const getProduct = async () => {
+        try {
+            const response = await axios.get(`https://83e1-14-191-162-216.ngrok-free.app/api/v1/products/all`, {
+                params: {
+                    categoryId,
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'skip-browser-warning',
+                },
+            });
+            const data = response.data.data.map((e: any) => ({
+                id: e.productId,
+                name: e.name,
+                price: e.price,
+                img: e.images[0],
+            }));
+            setListProduct(data);
+        } catch (error) {
+            console.error("Failed to fetch products:", error);
+        }
+    };
+
+
+    useEffect(() => {
+        getProduct();
+    }, []);
+
+
     return (
         <div className='container'>
             <div className='text-center'>
@@ -28,7 +62,7 @@ const Collections = () => {
                     <button className='collections-sort-btn'>Giảm dần</button>
                 </div>
             </div>
-            <div className='row'>
+            <div className='row mb-3'>
                 <div className='col-3'>
                     <div className='filter-container mt-2'>
                         <div className='filter-header'>
@@ -62,9 +96,12 @@ const Collections = () => {
                     </div>
                 </div>
                 <div className='col-9 colections-items'>
-                    {/* <div className='p-2'>
-                        <Card/>
-                    </div>
+                    {listProduct.map((e: CardProps) => (
+                        <div className='p-2'>
+                            <Card data={e}/>
+                        </div>
+                    ))}
+                    {/* 
                     <div className='p-2'>
                         <Card/>
                     </div>

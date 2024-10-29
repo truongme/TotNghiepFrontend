@@ -23,7 +23,7 @@ export const userRoutes = [
   { path: "/", element: <Home /> },
   { path: "/news", element: <News /> },
   { path: "/login", element: <Login /> },
-  { path: "/collections/:item", element: <Collections /> },
+  { path: "/collections/:categoryId", element: <Collections /> },
   { path: "/product/:id", element: <Product /> },
   { path: "/cart", element: <Cart /> },
   { path: "/pay", element: <Order /> },

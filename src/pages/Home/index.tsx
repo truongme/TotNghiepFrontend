@@ -13,7 +13,7 @@ export interface CardProps {
   img: string;
   name: string;
   price: string;
-  rank: number
+  rank?: number
 }
 
 const Home = () => {
@@ -51,7 +51,7 @@ const Home = () => {
 
   const getTopSell = async () => {
     try{
-      const response = await axios.get(`https://c7c3-14-191-163-33.ngrok-free.app/api/v1/products/top-selling?limit=10`, {
+      const response = await axios.get(`https://d8a6-14-191-162-216.ngrok-free.app/api/v1/products/top-selling?limit=10`, {
         headers: {
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'skip-browser-warning'

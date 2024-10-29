@@ -29,9 +29,12 @@ const Card: React.FC<ICardProps> = ({data}) => {
           {data.price}
         </span>
       </div>
-      <div className='card-index-rank'>
-        {data.rank}
-      </div>
+      {data.rank&&(
+        <div className='card-index-rank'>
+          {data.rank}
+        </div>
+      )}
+      
     </div>
   )
 }

@@ -13,7 +13,7 @@ const Information = () => {
   const getProfile = async () => {
     try {
 
-      const response = await axios.get(`https://c3ff-14-191-163-75.ngrok-free.app/api/v1/users/profile`, {
+      const response = await axios.get(`https://d8a6-14-191-162-216.ngrok-free.app/api/v1/users/profile`, {
         headers: {
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'skip-browser-warning',

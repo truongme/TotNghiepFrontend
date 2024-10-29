@@ -115,7 +115,7 @@ const Product = () => {
 
   const getProductDetails = async () => {
     try {
-      const response = await axios.get(`https://c7c3-14-191-163-33.ngrok-free.app/api/v1/products/${id}`, {
+      const response = await axios.get(`https://d8a6-14-191-162-216.ngrok-free.app/api/v1/products/${id}`, {
         headers: {
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'skip-browser-warning'
@@ -132,7 +132,9 @@ const Product = () => {
         images: result.images,
       };
 
-      const variants: ProductVariants[] = response.data.map((e: any) => ({
+      console.log('response.data',response.data)
+
+      const variants: ProductVariants[] = response.data.productVariants.map((e: any) => ({
         id: e.productVariantId,
         color:e.color.hexCode[0],
         size: e.size.sizeType,
