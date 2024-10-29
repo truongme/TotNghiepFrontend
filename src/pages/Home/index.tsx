@@ -51,7 +51,7 @@ const Home = () => {
 
   const getTopSell = async () => {
     try{
-      const response = await axios.get(`https://d8a6-14-191-162-216.ngrok-free.app/api/v1/products/top-selling?limit=10`, {
+      const response = await axios.get(`https://f6c4-14-191-163-38.ngrok-free.app/api/v1/products/top-selling?limit=10`, {
         headers: {
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'skip-browser-warning'

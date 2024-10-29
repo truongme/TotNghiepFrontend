@@ -3,8 +3,9 @@ import Slider from "react-slick";
 import './styles.scss';
 import Card from '../../components/Card';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { formatPrice } from '../../helpers';
+import { error } from 'console';
 
 interface ProductProps {
   id: string;
@@ -75,6 +76,7 @@ const Product = () => {
     prevArrow: <PrevArrow />,
   };
 
+  const navigate = useNavigate()
   const sizeOrder = ['S', 'M', 'L', 'XL'];
   const { id } = useParams<{ id: string }>();
   const [productDetail, setProductDetail] = useState<ProductProps>()
@@ -85,6 +87,7 @@ const Product = () => {
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); 
   const [activeTab, setActiveTab] = useState('info');
+  const [quantity, setQuantity] = useState<number>(1);
   const [errorMessage, setErrorMessage] = useState<boolean>(false)
   
   const getValidColors = (size: string) => {
@@ -108,14 +111,28 @@ const Product = () => {
       setErrorMessage(true)
     } else {
       const product = projectVariants.find(x => x.color === selectedColor && x.size === selectedSize)
-      console.log(product)
+      try {
+        await axios.post(`https://f6c4-14-191-163-38.ngrok-free.app/order-item`,{
+          quantity : quantity,
+          productVariantId: product?.id,
+          orderId: "cm2j3ulc80003149t44ho5fbv",
+          userId: "cm2j3ulbc0001149t20ex8xiq",
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'skip-browser-warning'
+          }
+        })
+        alert("Thêm giỏ hàng thành công")
+        navigate('/cart')
+      } catch (error) {
+        console.error("Error post item cart", error)
+      }
     }
   }
 
-
   const getProductDetails = async () => {
     try {
-      const response = await axios.get(`https://d8a6-14-191-162-216.ngrok-free.app/api/v1/products/${id}`, {
+      const response = await axios.get(`https://f6c4-14-191-163-38.ngrok-free.app/api/v1/products/${id}`, {
         headers: {
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'skip-browser-warning'
@@ -132,8 +149,6 @@ const Product = () => {
         images: result.images,
       };
 
-      console.log('response.data',response.data)
-
       const variants: ProductVariants[] = response.data.productVariants.map((e: any) => ({
         id: e.productVariantId,
         color:e.color.hexCode[0],
@@ -147,7 +162,6 @@ const Product = () => {
       const sortedSizes = size.sort((a, b) => {
         return sizeOrder.indexOf(a) - sizeOrder.indexOf(b);
       });
-
 
       setProjectVariants(variants)
       setProjectVariantsColor(color)
@@ -222,6 +236,14 @@ const Product = () => {
                 </button>
               ))}
             </div>
+            <div className='product-size-title'>Số lượng</div>
+            <input
+              type='number'
+              value={quantity}
+              min='1'
+              onChange={(e) => setQuantity(Number(e.target.value))}
+              className='quantity-input'
+            />
             {errorMessage && (
               <div className='error-message'>Vui lòng chọn màu sắc và size cho sản phẩm!</div>
             )}
