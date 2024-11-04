@@ -7,7 +7,7 @@ import Order from "../pages/Order";
 import Product from "../pages/Product";
 import User from "../pages/User";
 
-const role = localStorage.getItem("role");
+const role = sessionStorage.getItem("role");
 
 export const adminRoutes = [
   { path: "/", element: <Cart /> },

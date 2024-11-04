@@ -5,6 +5,7 @@ import ButtonCustom from '../../components/ButtonCustom';
 import ImageLogin from '../../assets/images/image-login.png';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { WebUrl } from '../../constants';
 
 interface LoginForm {
   email: string;
@@ -22,7 +23,7 @@ const Login = () => {
   const postLogin = async (data: LoginForm) => {
 
     try {
-      const response = await axios.post(`https://d8a6-14-191-162-216.ngrok-free.app/api/v1/auth/sign-in`, {
+      const response = await axios.post(`${WebUrl}/api/v1/auth/sign-in`, {
         email: data.email,
         password: data.password,
         headers: {
@@ -33,8 +34,8 @@ const Login = () => {
 
       const { accessToken, role } = response.data;
 
-      localStorage.setItem('token', accessToken);
-      localStorage.setItem('role', role);
+      sessionStorage.setItem('token', accessToken);
+      sessionStorage.setItem('role', role);
       navigate('/')
       
     } catch (error) {

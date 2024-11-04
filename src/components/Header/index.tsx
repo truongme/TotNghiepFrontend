@@ -1,20 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './styles.scss';
 import { FaUser, FaShoppingCart } from "react-icons/fa";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { SiNike } from "react-icons/si";
 import { Link, useNavigate } from 'react-router-dom';
-import image from '../../assets/images/image-login.png'
+import imageTop from '../../assets/images/category-top.jpg'
+import imageBottom from '../../assets/images/category-bottom.webp'
+import imageWomen from '../../assets/images/category-women.jpg'
+import imageCoat from '../../assets/images/category-coat.jpg'
+import { MdCancel } from "react-icons/md";
 
 const Header = () => {
-
-  const role = localStorage.getItem("role");
 
   const arrNavBar = [
     {
       name: 'Áo', 
       id:'tops001',
-      img:'',
+      img:imageTop,
       list: [
         {
           title: 'áo thun', 
@@ -38,6 +40,7 @@ const Header = () => {
     {
       name: 'Quần', 
       id:'bottoms001',
+      img: imageBottom,
       list: [
         {
           title: 'Quần dài', 
@@ -58,8 +61,9 @@ const Header = () => {
       ]
     },
     {
-      name: 'Giày dép', 
+      name: 'Áo khoác', 
       id:'accessories001',
+      img: imageCoat,
       list: [
         {
           title: 'Giày', 
@@ -81,30 +85,9 @@ const Header = () => {
       ]
     },
     {
-      name: 'Mũ nón', 
-      id:'bags001',
-      list: [
-        {
-          title: 'Nón thời trang', 
-          item: [
-            {name: 'Nón lưỡi trai', link:''},
-            {name: 'Nón snapback', link:''},
-            {name: 'Nón fedora', link:''},
-          ]
-        },
-        {
-          title: 'Mũ mùa đông', 
-          item: [
-            {name: 'Mũ len', link:''},
-            {name: 'Mũ beanie', link:''},
-            {name: 'Mũ tai bèo', link:''},
-          ]
-        },
-      ]
-    },
-    {
-      name: 'Phụ kiện', 
+      name: 'Thời trang nữ', 
       id:'womenswear001',
+      img:imageWomen,
       list: [
         {
           title: 'Phụ kiện thời trang', 
@@ -126,7 +109,13 @@ const Header = () => {
     },
   ];
 
+  const role = sessionStorage.getItem("role");
   const navigate = useNavigate();
+  const [hiddenSeacrh , setHiddenSearch] = useState<Boolean>(false)
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className='header-container'>
@@ -157,7 +146,7 @@ const Header = () => {
                         </div>
                         <div className='col-4'>
                           <div className='header-category-img'>
-                            <img src={image} alt="" />
+                            <img src={e.img} alt="" />
                           </div>
                         </div>
                       </div>
@@ -169,14 +158,13 @@ const Header = () => {
           </div>
           <div className="d-flex">
             <div className='header-icon-cotainer'>
-              <Link to={"/login"} className='link-style'>
-                <FaMagnifyingGlass className='header-icon'/>
-              </Link>
+                <FaMagnifyingGlass className='header-icon' onClick={() => setHiddenSearch(!hiddenSeacrh)}/>
             </div>
-            <div className='header-icon-cotainer'>
+            <div className='header-icon-cotainer header-cart'>
               <Link to={"/cart"} className='link-style'>
                 <FaShoppingCart className='header-icon'/>
               </Link>
+              <div className='header-cart-count'>3</div>
             </div>
             <div className='header-icon-cotainer'>
               <Link to={role ? "/user" : "/login"} className='link-style'>
@@ -186,6 +174,17 @@ const Header = () => {
           </div>
         </div>
       </div>
+      {hiddenSeacrh && (
+        <div className='header-search-ctn'>
+          <div className='container'>
+            <div className='header-search'>
+              <input type="text" /> 
+              <button>tim kiem</button>
+              <MdCancel onClick={() => setHiddenSearch(!hiddenSeacrh)}/>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

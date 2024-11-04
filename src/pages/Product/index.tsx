@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { formatPrice } from '../../helpers';
 import { error } from 'console';
+import { WebUrl } from '../../constants';
 
 interface ProductProps {
   id: string;
@@ -112,7 +113,7 @@ const Product = () => {
     } else {
       const product = projectVariants.find(x => x.color === selectedColor && x.size === selectedSize)
       try {
-        await axios.post(`https://f6c4-14-191-163-38.ngrok-free.app/order-item`,{
+        await axios.post(`${WebUrl}/order-item`,{
           quantity : quantity,
           productVariantId: product?.id,
           orderId: "cm2j3ulc80003149t44ho5fbv",
@@ -132,7 +133,7 @@ const Product = () => {
 
   const getProductDetails = async () => {
     try {
-      const response = await axios.get(`https://f6c4-14-191-163-38.ngrok-free.app/api/v1/products/${id}`, {
+      const response = await axios.get(`${WebUrl}/api/v1/products/${id}`, {
         headers: {
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'skip-browser-warning'
@@ -333,7 +334,7 @@ const Product = () => {
           </div>
         )}
       </div>
-      <div className='container mt-5'>
+      {/* <div className='container mt-5'>
         <div className='title-folder-home'>Có thể bạn cũng thích</div>
         <div className='top-sale'>
           <Slider {...settings2}>
@@ -346,7 +347,7 @@ const Product = () => {
           <Slider {...settings2}>
           </Slider>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

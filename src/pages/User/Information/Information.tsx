@@ -3,17 +3,18 @@ import './styles.scss'
 import img from '../../../assets/images/avatar.jpg'
 import axios from 'axios'
 import { User } from '..'
+import { WebUrl } from '../../../constants'
 
 const Information = () => {
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   const [profileUser, setProfileUser] = useState<User>()
 
   const getProfile = async () => {
     try {
 
-      const response = await axios.get(`https://d8a6-14-191-162-216.ngrok-free.app/api/v1/users/profile`, {
+      const response = await axios.get(`${WebUrl}/api/v1/users/profile`, {
         headers: {
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'skip-browser-warning',

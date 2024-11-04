@@ -5,6 +5,7 @@ import Card from '../../components/Card';
 import { TiFilter } from "react-icons/ti";
 import axios from 'axios';
 import { CardProps } from '../Home';
+import { WebUrl } from '../../constants';
 
 const Collections = () => {
    const { categoryId } = useParams();
@@ -13,7 +14,7 @@ const Collections = () => {
 
     const getProduct = async () => {
         try {
-            const response = await axios.get(`https://f6c4-14-191-163-38.ngrok-free.app/api/v1/products/all`, {
+            const response = await axios.get(`${WebUrl}/api/v1/products/all`, {
                 params: {
                     categoryId,
                 },

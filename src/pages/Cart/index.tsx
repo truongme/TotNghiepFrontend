@@ -8,6 +8,7 @@ import { MdDiscount } from "react-icons/md";
 import { FaJediOrder } from "react-icons/fa6";
 import axios from 'axios';
 import { formatPrice, hexToColorName } from '../../helpers';
+import { WebUrl } from '../../constants';
 
 interface CartProps{
   id: string,
@@ -24,11 +25,12 @@ const Cart = () => {
 
   const [orderArr, setOrderArr] = useState<CartProps[]>([])
   const [totalOrder, setTotalOrder] = useState<Number>(0)
+  const [countItem, setCountItem] = useState<Boolean>(false)
 
   const fetchData = async () => {
     try {
       const id = 'cm2j3ulbc0001149t20ex8xiq'
-      const response = await axios.get(`https://f6c4-14-191-163-38.ngrok-free.app/api/v1/orders/in-cart/${id}`,{
+      const response = await axios.get(`${WebUrl}/api/v1/orders/in-cart/${id}`,{
         headers: {
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'skip-browser-warning'
@@ -44,6 +46,7 @@ const Cart = () => {
         quantity: e.quantity,
         total: e.total,
       }))
+      if(data) setCountItem(true)
       const totalOrderAmount = data.reduce((sum, item) => sum + item.total, 0);
       setTotalOrder(totalOrderAmount)
       setOrderArr(data)
@@ -74,38 +77,43 @@ const Cart = () => {
               <div className='col-1'></div> {/* Thêm khoảng trống cho nút Xóa */}
             </div>
           </div>
-          {orderArr.map((e: CartProps) => (
-            <div className='cart-item'>
-              <div className='row align-items-center'>
-                <div className='col-6 cart-item-product d-flex'>
-                  <img src={e.img} alt="product" className='cart-item-img' />
-                  <div className='cart-item-details'>
-                    <div className='cart-item-title'>{e.name}</div>
-                    <div className='cart-item-meta'>
-                      <span>Màu: {hexToColorName(e.color)}</span>
-                      <span>Size: {e.size}</span>
+          {countItem ? (
+            <>
+              {orderArr.map((e: CartProps) => (
+                <div className='cart-item'>
+                  <div className='row align-items-center'>
+                    <div className='col-6 cart-item-product d-flex'>
+                      <img src={e.img} alt="product" className='cart-item-img' />
+                      <div className='cart-item-details'>
+                        <div className='cart-item-title'>{e.name}</div>
+                        <div className='cart-item-meta'>
+                          <span>Màu: {hexToColorName(e.color)}</span>
+                          <span>Size: {e.size}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className='col-2 cart-item-price'>
+                      <span>{formatPrice(e.price)}</span>
+                    </div>
+                    <div className='col-2 cart-item-quantity'>
+                      <div className="quantity-controls">
+                        <div className='quantity-input'>{e.quantity}</div>
+                      </div>
+                    </div>
+                    <div className='col-2 cart-item-total'>
+                      <span>{formatPrice(e.total)}</span>
                     </div>
                   </div>
                 </div>
-                <div className='col-2 cart-item-price'>
-                  <span>{formatPrice(e.price)}</span>
-                </div>
-                <div className='col-2 cart-item-quantity'>
-                  <div className="quantity-controls">
-                    <div className='quantity-input'>{e.quantity}</div>
-                  </div>
-                </div>
-                <div className='col-2 cart-item-total'>
-                  <span>{formatPrice(e.total)}</span>
-                </div>
-              </div>
-            </div>
-          ))}
+              ))}
+            </>
+          ) : (
+            <div>Không có sản phẩm nào trong giỏ hàng</div>
+          )}
         </div>
         <div className="cart-summary-container">
           <div className="cart-summary">
-            <h5>
-              <FaJediOrder />
+            <h5>              
               Thông tin đơn hàng
             </h5>
             <div className="cart-summary-item">

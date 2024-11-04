@@ -71,9 +71,10 @@
                 text-align: right;
                 border-left: 2px $gray-color solid;
                 padding: 0px 15px;
+                overflow: hidden;
                 img{
-                    width: 60%;
-                    height: auto;
+                    width: 309px;
+                    height: 309px;
                     object-fit: cover;
                 }
             }
@@ -86,5 +87,37 @@
             display: block;
         }
 
+    }
+}
+
+.header-cart{
+    position: relative;
+    cursor: pointer;
+    .header-cart-count{
+        position: absolute;
+        top: 0;
+        right: -10px;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background-color: $primary-color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+        font-weight: bold;
+        color: $white-color;
+    }
+}
+
+.header-search-ctn{
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    left: 0;
+    background-color: $white-color;
+    border-top: 2px solid $gray-color;
+    .header-search{
+        padding: 15px 0px;
     }
 }

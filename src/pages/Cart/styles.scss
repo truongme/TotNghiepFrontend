@@ -1,3 +1,4 @@
+@import '../../assets/styles/variables.scss';
 .cart-container {
     padding: 20px;
     
@@ -15,7 +16,7 @@
   
       .cart-breadcrumb-active {
         font-weight: bold;
-        color: #ff048a;
+        color: $primary-color;
       }
     }
   
@@ -35,7 +36,6 @@
         margin-bottom: 20px;
         font-weight: bold;
         padding-left: 20px;
-        color: #ff048a;
       }
   
       .cart-item {
@@ -126,7 +126,7 @@
       .checkout-btn {
         text-decoration: none; 
         color: white; 
-        background-color: rgb(255, 0, 0);
+        background-color: $primary-color;
         padding: 10px 20px;
         text-align: center;
         margin-top: 20px;
@@ -161,7 +161,6 @@
   
         .cart-discount {
           margin-top: 20px;
-          color: #ff048a;
 
           label{
             display: flex; 

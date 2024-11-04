@@ -17,7 +17,7 @@
     }
 
     .order-breadcrumb-active {
-        color: #ff048a;
+        color: $primary-color;
     }
 }
 
@@ -116,7 +116,6 @@
     font-size: 18px;
     font-weight: 600;
     label{
-        color: #ff048a;
         display: flex; /* Căn ngang icon và chữ */
         align-items: center; /* Đảm bảo icon và chữ căn giữa theo trục dọc */
         margin-bottom: 10px; /* Thêm khoảng cách dưới label nếu cần */
@@ -136,7 +135,7 @@
         display: flex;
         align-items: center;
         margin: 5px 5px;
-        border-bottom: 1px solid #a9a6a6;
+        // border-bottom: 1px solid #a9a6a6;
         .order-cart-item-img {
             margin: 0;
 
@@ -201,7 +200,7 @@
             flex: 1;
             // text-decoration: none !important; /* Bỏ gạch chân */
             color: white; /* Đảm bảo màu chữ là trắng */
-            background-color: rgb(255, 0, 0);
+            background-color: $red-color;
             padding: 10px 20px;
             text-align: center;
             margin-top: 20px;
@@ -229,7 +228,7 @@
             flex: 1;
             text-decoration: none; /* Bỏ gạch chân */
             color: white; /* Đảm bảo màu chữ là trắng */
-            background-color: rgb(255, 0, 0);
+            background-color: $primary-color;
             padding: 10px 20px;
             text-align: center;
             margin-top: 20px;

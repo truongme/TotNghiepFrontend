@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles.scss';
 import avatar from '../../assets/images/avatar.jpg';
 import { Link } from 'react-router-dom';
@@ -6,6 +6,17 @@ import cart from '../../assets/images/card.webp';
 import { CiMoneyBill } from "react-icons/ci";
 import { HiIdentification } from "react-icons/hi2";
 import { FaJediOrder } from "react-icons/fa6";
+import axios from 'axios';
+import { WebUrl } from '../../constants';
+
+export interface User {
+  avatar: string | null;
+  email: string | null;
+  firstName: string | null;
+  gender: string | null;
+  lastName: string | null;
+  phoneNumber: string | null;
+}
 
 // Define types for Province, District, and Ward
 type Province = {
@@ -86,6 +97,9 @@ const cartItems: CartItem[] = [
 ];
 
 const Order = () => {
+
+  const token = sessionStorage.getItem("token");
+  const [profileUser, setProfileUser] = useState<User>()
   // State để lưu tỉnh/thành, quận/huyện, phường/xã được chọn
   const [selectedProvince, setSelectedProvince] = useState<number | ''>('');
   const [selectedDistrict, setSelectedDistrict] = useState<number | ''>('');
@@ -117,6 +131,28 @@ const Order = () => {
   // Tính tổng số tiền từ các sản phẩm trong giỏ hàng
   const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
+   const getProfile = async () => {
+        try {
+
+        const response = await axios.get(`${WebUrl}/api/v1/users/profile`, {
+            headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'skip-browser-warning',
+            'Authorization': `Bearer ${token}`, 
+            }
+        });
+
+        setProfileUser(response.data)
+
+        } catch (error) {
+        console.error('Unexpected Error:', error);
+        }
+    }
+
+    useEffect(() => {
+        getProfile();
+    }, []);
+
   return (
     <div className='container mb-5'>
       {/* Breadcrumb navigation */}
@@ -143,11 +179,11 @@ const Order = () => {
             </h6>
             <div className='order-infor-user'>
               <div className='order-avatar-user'>
-                <img src={avatar} alt="User Avatar" />
+                <img src={profileUser?.avatar || avatar} alt="User Avatar" />
               </div>
               <div>
                 <h6>Ngô Quang Trường</h6>
-                <p>truongme2k2@gmail.com</p>
+                <p>{profileUser?.email}</p>
               </div>
             </div>
 
@@ -233,7 +269,6 @@ const Order = () => {
         <div className='col-5'>
           <h6 className='order-user-title'>
             <label htmlFor="">
-              <FaJediOrder />
               Đơn hàng
             </label>
             

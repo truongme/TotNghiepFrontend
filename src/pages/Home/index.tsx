@@ -7,6 +7,7 @@ import Card from '../../components/Card';
 import Slider from 'react-slick';
 import axios from 'axios';
 import { formatPrice } from '../../helpers';
+import { WebUrl } from '../../constants';
 
 export interface CardProps {
   id: string;
@@ -51,7 +52,7 @@ const Home = () => {
 
   const getTopSell = async () => {
     try{
-      const response = await axios.get(`https://f6c4-14-191-163-38.ngrok-free.app/api/v1/products/top-selling?limit=10`, {
+      const response = await axios.get(`${WebUrl}/api/v1/products/top-selling?limit=10`, {
         headers: {
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'skip-browser-warning'
@@ -119,7 +120,7 @@ const Home = () => {
       </div>
 
       {/* Phần Bộ Sưu Tập */}
-      <div className='container mt-5'>
+      <div className='container mt-5 mb-5'>
         <div className='collection-container'>
           <div className='collection-background'></div>
           <div className='collection-content'>
