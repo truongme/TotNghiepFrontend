@@ -1,0 +1,35 @@
+@import '../../../assets/styles/variables.scss';
+
+.title-report-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    .title-report{
+        font-weight: 600;
+        font-size: 20px;
+        text-transform: uppercase;
+        padding: 10px 0px;
+    }
+}
+
+.table-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .table-icon-sort{
+        cursor: pointer;
+        &:hover{
+            color: $primary-color;
+        }
+    }
+}
+
+.report-filter{
+    background-color: $gray-color;
+    padding: 10px 8px;
+    margin-bottom: 20px;
+}
+
+

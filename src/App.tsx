@@ -4,11 +4,12 @@ import { Route, Routes } from 'react-router-dom';
 import { router } from './routers';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Admin from './pages/Admin';
 
 function App() {
   return (
     <div>
-      <div className='header-fixed'>
+      {/* <div className='header-fixed'>
         <Header/>
       </div>
       <div style={{marginTop:'60px'}}>
@@ -18,8 +19,8 @@ function App() {
           ))}
         </Routes>
         <Footer/>
-      </div>
-      
+      </div> */}
+      <Admin/>
     </div>
   );
 }

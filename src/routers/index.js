@@ -1,3 +1,4 @@
+import Admin from "../pages/Admin";
 import Cart from "../pages/Cart";
 import Collections from "../pages/Collections";
 import Home from "../pages/Home";
@@ -28,6 +29,7 @@ export const userRoutes = [
   { path: "/cart", element: <Cart /> },
   { path: "/pay", element: <Order /> },
   { path: "/user", element: <User /> },
+  { path: "/admin", element: <Admin /> },
 ];
 
 export const router = role === "ADMIN" ? adminRoutes : userRoutes;
