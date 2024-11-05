@@ -27,7 +27,7 @@ const Collections = () => {
                 id: e.productId,
                 name: e.name,
                 price: e.price,
-                img: e.images[0],
+                img: e.images[0].imageURL,
             }));
             setListProduct(data);
         } catch (error) {

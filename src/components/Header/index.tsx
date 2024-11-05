@@ -15,13 +15,13 @@ const Header = () => {
   const arrNavBar = [
     {
       name: 'Áo', 
-      id:'tops001',
+      id:'tops',
       img:imageTop,
       list: [
         {
           title: 'áo thun', 
           item: [
-            {name: 'Áo thun', link:'sub-tops-001'},
+            {name: 'Áo thun', link:'tops-t-shirts'},
             {name: 'Áo polo', link:'sub-tops-002'},
             {name: 'Áo sơ mi', link:''},
             {name: 'Áo Hoodie', link:''},

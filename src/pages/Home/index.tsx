@@ -61,7 +61,7 @@ const Home = () => {
       
       const data: CardProps[] = response.data.data.map((e: any, index: number) => ({
         id: e.productId,  
-        img: e.images?.[0],  
+        img: e.images?.[0].imageURL,  
         name: e.name,
         price: formatPrice(e.price),
         rank: index+1,

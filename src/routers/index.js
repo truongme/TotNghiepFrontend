@@ -1,5 +1,6 @@
 import Cart from "../pages/Cart";
 import Collections from "../pages/Collections";
+import Create from "../pages/Create";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import News from "../pages/News";
@@ -11,7 +12,7 @@ const role = sessionStorage.getItem("role");
 
 export const adminRoutes = [
   { path: "/", element: <Cart /> },
-  { path: "/news", element: <News /> },
+  { path: "/create", element: <Create /> },
   { path: "/login", element: <Login /> },
   { path: "/collections/:item", element: <Collections /> },
   { path: "/product/:item", element: <Product /> },
@@ -21,7 +22,7 @@ export const adminRoutes = [
 
 export const userRoutes = [
   { path: "/", element: <Home /> },
-  { path: "/news", element: <News /> },
+  { path: "/create", element: <Create /> },
   { path: "/login", element: <Login /> },
   { path: "/collections/:categoryId", element: <Collections /> },
   { path: "/product/:id", element: <Product /> },

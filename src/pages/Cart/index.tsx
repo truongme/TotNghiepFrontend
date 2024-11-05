@@ -25,28 +25,28 @@ const Cart = () => {
 
   const [orderArr, setOrderArr] = useState<CartProps[]>([])
   const [totalOrder, setTotalOrder] = useState<Number>(0)
-  const [countItem, setCountItem] = useState<Boolean>(false)
+  const token = sessionStorage.getItem("token");
 
   const fetchData = async () => {
     try {
-      const id = 'cm2j3ulbc0001149t20ex8xiq'
-      const response = await axios.get(`${WebUrl}/api/v1/orders/in-cart/${id}`,{
+      const response = await axios.get(`${WebUrl}/api/v1/orders/in-cart`,{
         headers: {
           'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'skip-browser-warning'
+          'ngrok-skip-browser-warning': 'skip-browser-warning',
+          'Authorization': `Bearer ${token}`, 
         }
       })
       const data: CartProps[] = response.data.orderItems.map((e: any) => ({
         id: e.orderItemId,
         name: e.name,
-        img: e.images[0],
-        color: e.color[0],
+        img: e.imageURL,
+        color: e.color,
         size: e.size,
         price: e.price,
         quantity: e.quantity,
         total: e.total,
       }))
-      if(data) setCountItem(true)
+
       const totalOrderAmount = data.reduce((sum, item) => sum + item.total, 0);
       setTotalOrder(totalOrderAmount)
       setOrderArr(data)
@@ -74,42 +74,38 @@ const Cart = () => {
               <div className='col-2'>Giá</div>
               <div className='col-2'>Số lượng</div>
               <div className='col-2'>Tạm tính</div>
-              <div className='col-1'></div> {/* Thêm khoảng trống cho nút Xóa */}
+              <div className='col-1'></div>
             </div>
           </div>
-          {countItem ? (
-            <>
-              {orderArr.map((e: CartProps) => (
-                <div className='cart-item'>
-                  <div className='row align-items-center'>
-                    <div className='col-6 cart-item-product d-flex'>
-                      <img src={e.img} alt="product" className='cart-item-img' />
-                      <div className='cart-item-details'>
-                        <div className='cart-item-title'>{e.name}</div>
-                        <div className='cart-item-meta'>
-                          <span>Màu: {hexToColorName(e.color)}</span>
-                          <span>Size: {e.size}</span>
-                        </div>
+          <>
+            {orderArr.map((e: CartProps) => (
+              <div className='cart-item'>
+                <div className='row align-items-center'>
+                  <div className='col-6 cart-item-product d-flex'>
+                    <img src={e.img} alt="product" className='cart-item-img' />
+                    <div className='cart-item-details'>
+                      <div className='cart-item-title'>{e.name}</div>
+                      <div className='cart-item-meta'>
+                        <span>Màu: {e.color}</span>
+                        <span>Size: {e.size}</span>
                       </div>
-                    </div>
-                    <div className='col-2 cart-item-price'>
-                      <span>{formatPrice(e.price)}</span>
-                    </div>
-                    <div className='col-2 cart-item-quantity'>
-                      <div className="quantity-controls">
-                        <div className='quantity-input'>{e.quantity}</div>
-                      </div>
-                    </div>
-                    <div className='col-2 cart-item-total'>
-                      <span>{formatPrice(e.total)}</span>
                     </div>
                   </div>
+                  <div className='col-2 cart-item-price'>
+                    <span>{formatPrice(e.price)}</span>
+                  </div>
+                  <div className='col-2 cart-item-quantity'>
+                    <div className="quantity-controls">
+                      <div className='quantity-input'>{e.quantity}</div>
+                    </div>
+                  </div>
+                  <div className='col-2 cart-item-total'>
+                    <span>{formatPrice(e.total)}</span>
+                  </div>
                 </div>
-              ))}
-            </>
-          ) : (
-            <div>Không có sản phẩm nào trong giỏ hàng</div>
-          )}
+              </div>
+            ))}
+          </>
         </div>
         <div className="cart-summary-container">
           <div className="cart-summary">

@@ -8,6 +8,8 @@ import { HiIdentification } from "react-icons/hi2";
 import { FaJediOrder } from "react-icons/fa6";
 import axios from 'axios';
 import { WebUrl } from '../../constants';
+import { formatPrice } from '../../helpers';
+import { Controller, useForm } from 'react-hook-form';
 
 export interface User {
   avatar: string | null;
@@ -17,304 +19,244 @@ export interface User {
   lastName: string | null;
   phoneNumber: string | null;
 }
-
-// Define types for Province, District, and Ward
-type Province = {
-  id: number;
-  name: string;
-};
-
-type District = {
-  id: number;
-  name: string;
-};
-
-type Ward = {
-  id: number;
-  name: string;
-};
-
-// Define type for Cart Item
-type CartItem = {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-};
-
-// Dữ liệu giả cho tỉnh/thành, quận/huyện, phường/xã
-const provinces: Province[] = [
-  { id: 1, name: 'Hà Nội' },
-  { id: 2, name: 'Hồ Chí Minh' }
-];
-
-const districts: Record<number, District[]> = {
-  1: [
-    { id: 1, name: 'Ba Đình' },
-    { id: 2, name: 'Hoàn Kiếm' }
-  ],
-  2: [
-    { id: 1, name: 'Quận 1' },
-    { id: 2, name: 'Quận 3' }
-  ]
-};
-
-const wards: Record<number, Ward[]> = {
-  1: [
-    { id: 1, name: 'Phường 1' },
-    { id: 2, name: 'Phường 2' }
-  ],
-  2: [
-    { id: 1, name: 'Phường 3' },
-    { id: 2, name: 'Phường 4' }
-  ]
-};
-
-// Dữ liệu giả cho sản phẩm trong giỏ hàng
-const cartItems: CartItem[] = [
-  {
-    id: 1,
-    name: 'Áo thun unisex cổ tròn tay ngắn Checkerboard Big Lux',
-    price: 189000,
-    quantity: 3,
-    image: cart
-  },
-  {
-    id: 2,
-    name: 'Áo thun unisex cổ tròn tay ngắn Checkerboard Big Lux',
-    price: 189000,
-    quantity: 5,
-    image: cart
-  },
-  {
-    id: 3,
-    name: 'Áo thun unisex cổ tròn tay ngắn Checkerboard Big Lux',
-    price: 189000,
-    quantity: 5,
-    image: cart
-  }
-];
+interface CartProps{
+  id: string,
+  name: string,
+  img: string,
+  color:string,
+  size: string,
+  price: number,
+  quantity: number,
+  total: number,
+}
+interface OrderForm {
+  addressDetail: string;
+  city: string;
+  district: string;
+  ward: string;
+  shipmentMethod: string;
+  paymentId: string;
+}
 
 const Order = () => {
 
   const token = sessionStorage.getItem("token");
   const [profileUser, setProfileUser] = useState<User>()
-  // State để lưu tỉnh/thành, quận/huyện, phường/xã được chọn
-  const [selectedProvince, setSelectedProvince] = useState<number | ''>('');
-  const [selectedDistrict, setSelectedDistrict] = useState<number | ''>('');
-  const [selectedWard, setSelectedWard] = useState<number | ''>('');
-  const [availableDistricts, setAvailableDistricts] = useState<District[]>([]);
-  const [availableWards, setAvailableWards] = useState<Ward[]>([]);
+  const [orderArr, setOrderArr] = useState<CartProps[]>([])
+  const [totalOrder, setTotalOrder] = useState<Number>(0)
+  const { handleSubmit, control } = useForm<OrderForm>();
 
-  // Cập nhật danh sách quận/huyện khi chọn tỉnh/thành
-  const handleProvinceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const provinceId = parseInt(event.target.value, 10);
-    setSelectedProvince(provinceId);
-    setAvailableDistricts(districts[provinceId] || []);
-    setSelectedDistrict(''); // Reset quận/huyện khi thay đổi tỉnh/thành
-    setAvailableWards([]); // Reset phường/xã khi thay đổi tỉnh/thành
-  };
-
-  // Cập nhật danh sách phường/xã khi chọn quận/huyện
-  const handleDistrictChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const districtId = parseInt(event.target.value, 10);
-    setSelectedDistrict(districtId);
-    setAvailableWards(wards[districtId] || []);
-  };
-
-  const handleWardChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const wardId = parseInt(event.target.value, 10);
-    setSelectedWard(wardId);
-  };
-
-  // Tính tổng số tiền từ các sản phẩm trong giỏ hàng
-  const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-
-   const getProfile = async () => {
-        try {
-
-        const response = await axios.get(`${WebUrl}/api/v1/users/profile`, {
-            headers: {
-            'Content-Type': 'application/json',
-            'ngrok-skip-browser-warning': 'skip-browser-warning',
-            'Authorization': `Bearer ${token}`, 
-            }
-        });
-
-        setProfileUser(response.data)
-
-        } catch (error) {
-        console.error('Unexpected Error:', error);
+  const onSubmit = async (data: OrderForm) => {
+    try {
+      await axios.put(`${WebUrl}/api/v1/orders/complete-order`, {
+        addressDetail: data.addressDetail,
+        city: data.city,
+        district: data.district,
+        ward: data.ward,
+        shipmentMethod:  'EXPRESS',
+        paymentId: "1",
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'skip-browser-warning',
+          'Authorization': `Bearer ${token}`, 
         }
+      });
+      alert("Mua hàng thành công")
+    } catch (error) {
+      console.error("Error post item cart", error)
     }
+  };
+
+  const getProfile = async () => {
+    try {
+      const response = await axios.get(`${WebUrl}/api/v1/users/profile`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'skip-browser-warning',
+          'Authorization': `Bearer ${token}`, 
+        }
+      });
+      setProfileUser(response.data)
+    } catch (error) {
+      console.error('Unexpected Error:', error);
+    }
+  }
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${WebUrl}/api/v1/orders/in-cart`,{
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'skip-browser-warning',
+          'Authorization': `Bearer ${token}`, 
+        }
+      })
+      const data: CartProps[] = response.data.orderItems.map((e: any) => ({
+        id: e.orderItemId,
+        name: e.name,
+        img: e.imageURL,
+        color: e.color,
+        size: e.size,
+        price: e.price,
+        quantity: e.quantity,
+        total: e.total,
+      }))
+
+      const totalOrderAmount = data.reduce((sum, item) => sum + item.total, 0);
+      setTotalOrder(totalOrderAmount)
+      setOrderArr(data)
+    } catch (error) {
+      console.error("Error get Order item", error)
+    }
+  }
 
     useEffect(() => {
-        getProfile();
+      getProfile();
+      fetchData()
     }, []);
 
   return (
     <div className='container mb-5'>
-      {/* Breadcrumb navigation */}
-      <div className='order-breadcrumb'>
-        <Link to={'/'} className='link-style order-breadcrumb-item'>Trang chủ</Link>
-        <div className='order-breadcrumb-item'>/</div>
-        <Link to={'/cart'} className='link-style order-breadcrumb-item'>Giỏ hàng</Link>
-        <div className='order-breadcrumb-item'>/</div>
-        <div className='order-breadcrumb-active'>Đơn hàng</div>
-      </div>
-
-      {/* Main content */}
-      <div className='row' style={{ marginTop: '15px' }}>
-        {/* Left side - user information */}
-        <div className='col-7'>
-          <div className='order-user'>
-
-            <h6 className='order-user-title'>
-              <label>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className='order-breadcrumb'>
+          <Link to={'/'} className='link-style order-breadcrumb-item'>Trang chủ</Link>
+          <div className='order-breadcrumb-item'>/</div>
+          <Link to={'/cart'} className='link-style order-breadcrumb-item'>Giỏ hàng</Link>
+          <div className='order-breadcrumb-item'>/</div>
+          <div className='order-breadcrumb-active'>Đơn hàng</div>
+        </div>
+        <div className='row' style={{ marginTop: '15px' }}>
+          <div className='col-7'>
+            <div className='order-user'>
+              <div className='order-user-title'>
                 <HiIdentification />
                 Thông tin người nhận
-              </label>
-              
-            </h6>
-            <div className='order-infor-user'>
-              <div className='order-avatar-user'>
-                <img src={profileUser?.avatar || avatar} alt="User Avatar" />
               </div>
-              <div>
-                <h6>Ngô Quang Trường</h6>
-                <p>{profileUser?.email}</p>
+              <div className='order-infor-user'>
+                <div className='order-avatar-user'>
+                  <img src={profileUser?.avatar || avatar} alt="User Avatar" />
+                </div>
+                <div>
+                  <h6>{profileUser?.firstName} {profileUser?.lastName}</h6>
+                  <p>{profileUser?.email}</p>
+                </div>
               </div>
-            </div>
+              <div className='row'>
+                <div className="mb-3 col-6">
+                  <label className="form-label">Địa chỉ</label>
+                  <Controller
+                    name="addressDetail"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <input {...field} className="form-control" placeholder="Nhập địa chỉ cụ thể" />
+                    )}
+                  />
+                </div>
 
-            {/* Input fields for user information */}
-            <div className='row order-input-text'>
-              <div className='col-6'>
-                <label>Họ và tên</label>
-                <input type="text" placeholder="Nhập họ và tên" />
-              </div>
-              <div className='col-6'>
-                <label>Số điện thoại</label>
-                <input type="text" placeholder="Nhập số điện thoại" />
-              </div>
-            </div>
+                <div className="mb-3 col-6">
+                  <label className="form-label">Thành phố / Tỉnh</label>
+                  <Controller
+                    name="city"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <input {...field} className="form-control" placeholder="Nhập tên thành phố / tỉnh" />
+                    )}
+                  />
+                </div>
 
-            {/* Dropdown for province */}
-            <div className='row order-input-text'>
-              <div className='col-6'>
-                <label>Tỉnh / thành</label>
-                <select className={selectedProvince ? 'selected' : ''}
-                        onChange={handleProvinceChange}
-                >
-                  <option value=''>Chọn tỉnh/thành</option>
-                  {provinces.map((province) => (
-                    <option key={province.id} value={province.id}>
-                      {province.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                <div className="mb-3 col-6">
+                  <label className="form-label">Quận / Huyện</label>
+                  <Controller
+                    name="district"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <input {...field} className="form-control" placeholder="Nhập tên quận / huyện" />
+                    )}
+                  />
+                </div>
 
-              {/* Dropdown for district */}
-              <div className='col-6'>
-                <label>Quận / huyện</label>
-                <select 
-                  className={selectedDistrict ? 'selected' : ''} 
-                  onChange={handleDistrictChange} 
-                  disabled={!selectedProvince}
-                >
-                  <option value=''>Chọn quận/huyện</option>
-                  {availableDistricts.map((district) => (
-                    <option key={district.id} value={district.id}>
-                      {district.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+                <div className="mb-3 col-6">
+                  <label className="form-label">Phường / Xã</label>
+                  <Controller
+                    name="ward"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <input {...field} className="form-control" placeholder="Nhập tên phường / xã" />
+                    )}
+                  />
+                </div>
 
-            {/* Dropdown for ward */}
-            <div className='row order-input-text'>
-              <div className='col-6'>
-                <label>Phường / xã</label>
-                <select 
-                  className={selectedWard ? 'selected' : ''} 
-                  onChange={handleWardChange} 
-                  disabled={!selectedDistrict}
-                >
-                  <option value=''>Chọn phường/xã</option>
-                  {availableWards.map((ward) => (
-                    <option key={ward.id} value={ward.id}>
-                      {ward.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className='col-6'>
-                <label>Địa chỉ</label>
-                <input type="text" placeholder="Nhập địa chỉ" />
-              </div>
-            </div>
+                <div className="mb-3 col-6">
+                  <label className="form-label">Shipment</label>
+                  <Controller
+                    name="shipmentMethod"
+                    control={control}
+                    defaultValue="EXPRESS"
+                    render={({ field }) => (
+                      <select {...field} className="form-select">
+                        <option value="EXPRESS">Express</option>
+                        <option value="STANDARD">Standard</option>
+                      </select>
+                    )}
+                  />
+                </div>
 
-            <div className='row order-input-text'>
-              <div className='col'>
-                <label>Ghi chú</label>
-                <input type="text" placeholder="Nhập ghi chú nếu có" />
+                <div className="mb-3 col-6">
+                  <label className="form-label">Payment</label>
+                  <Controller
+                    name="paymentId"
+                    control={control}
+                    defaultValue={'1'}
+                    disabled
+                    render={({ field }) => (
+                      <input {...field} className="form-control" placeholder="Payment ID" type="number" />
+                    )}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Right side - order summary */}
-        <div className='col-5'>
-          <h6 className='order-user-title'>
-            <label htmlFor="">
-              Đơn hàng
-            </label>
-            
-          </h6>
-          <div className='order-items'>
-            {/* Loop through each item in the cart */}
-            {cartItems.map((item) => (
-              <div className='order-cart-item row' key={item.id}>
-                <div className='col-4 order-cart-item-img'>
-                  <img src={item.image} alt={item.name} />
-                </div>
-                <div className='col-8'>
-                  <h6>{item.name}</h6>
-                  <div className='d-flex justify-content-between'>
-                    <p>{item.price.toLocaleString('vi-VN')}đ</p>
-                    <p>Số lượng: {item.quantity}</p>
+          <div className='col-5'>
+            <h6 className='order-user-title'>Đơn hàng</h6>
+            <div className='order-items'>
+              {orderArr.map((item) => (
+                <div className='order-cart-item row' key={item.id}>
+                  <div className='col-4 order-cart-item-img'>
+                    <img src={item.img} alt={item.name} />
+                  </div>
+                  <div className='col-8'>
+                    <h6>{item.name}</h6>
+                    <div className='d-flex justify-content-between'>
+                      <p>{item.price.toLocaleString('vi-VN')}đ</p>
+                      <p>Số lượng: {item.quantity}</p>
+                    </div>
                   </div>
                 </div>
+              ))}
+              <hr />
+              <div className='d-flex justify-content-between'>
+                <div >
+                  <CiMoneyBill />
+                  Thành tiền
+                </div>
+                <p className='m-0 p-0'>{formatPrice(totalOrder)}</p>
               </div>
-            ))}
-
-            <hr />
-            {/* Display total amount */}
-            <div className='d-flex justify-content-between'>
-              <label htmlFor="total-amount">
-                <CiMoneyBill />
-                Thành tiền
-                
-              </label>
-              <label htmlFor="total-amount1">
-                <div>{totalAmount.toLocaleString('vi-VN')}đ</div>
-
-              </label>
-            </div>
-            <hr />
-
-            {/* Action buttons */}
-            <div className='d-flex justify-content-between order-checkout'>
-              <Link to='/cart' style={{ textDecoration: 'none' }}>
-                <button className='back-btn'>Quay lại giỏ hàng</button>
-              </Link>
-              <button className='checkout-btn'>Xác nhận đặt hàng</button>
+              <hr />
+              <div className='d-flex justify-content-between order-checkout'>
+                <Link to='/cart' style={{ textDecoration: 'none' }}>
+                  <div className='back-btn'>Quay lại giỏ hàng</div>
+                </Link>
+                <button type="submit" className='checkout-btn'>Xác nhận đặt hàng</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

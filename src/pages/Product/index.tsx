@@ -78,7 +78,7 @@ const Product = () => {
   };
 
   const navigate = useNavigate()
-  const sizeOrder = ['S', 'M', 'L', 'XL'];
+  const sizeOrder = ['XS','S', 'M', 'L', 'XL','XXL'];
   const { id } = useParams<{ id: string }>();
   const [productDetail, setProductDetail] = useState<ProductProps>()
   const [projectVariants, setProjectVariants] = useState<ProductVariants[]>([])
@@ -90,6 +90,7 @@ const Product = () => {
   const [activeTab, setActiveTab] = useState('info');
   const [quantity, setQuantity] = useState<number>(1);
   const [errorMessage, setErrorMessage] = useState<boolean>(false)
+  const token = sessionStorage.getItem("token");
   
   const getValidColors = (size: string) => {
     return projectVariants.filter(item => item.size === size).map(item => item.color);
@@ -113,16 +114,16 @@ const Product = () => {
     } else {
       const product = projectVariants.find(x => x.color === selectedColor && x.size === selectedSize)
       try {
-        await axios.post(`${WebUrl}/order-item`,{
-          quantity : quantity,
+        await axios.post(`${WebUrl}/order-item`, {
+          quantity: quantity,
           productVariantId: product?.id,
-          orderId: "cm2j3ulc80003149t44ho5fbv",
-          userId: "cm2j3ulbc0001149t20ex8xiq",
+        }, {
           headers: {
             'Content-Type': 'application/json',
-            'ngrok-skip-browser-warning': 'skip-browser-warning'
+            'ngrok-skip-browser-warning': 'skip-browser-warning',
+            'Authorization': `Bearer ${token}`, 
           }
-        })
+        });
         alert("Thêm giỏ hàng thành công")
         navigate('/cart')
       } catch (error) {
@@ -147,7 +148,7 @@ const Product = () => {
         name: result.name,
         price: formatPrice(result.price),
         description: result.description,
-        images: result.images,
+        images: result.images.map((e : any) => e.imageURL),
       };
 
       const variants: ProductVariants[] = response.data.productVariants.map((e: any) => ({
