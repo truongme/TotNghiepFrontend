@@ -1,37 +1,37 @@
-import React, { useState } from 'react';
-import './styles.scss';
-import ProductManagement from './ProductManagement';
-import OrderManagement from './OrderManagement';
-import ReportManagement from './ReportManagement';
+import React, { useState } from 'react'
+import './styles.scss'
+import ProductManagement from './ProductManagement'
+import OrderManagement from './OrderManagement'
+import ReportManagement from './ReportManagement'
 import { FiLogOut } from "react-icons/fi";
 
-const TABS = [
-  { id: 'order', label: 'Quản lý đơn hàng', component: <OrderManagement /> },
-  { id: 'product', label: 'Quản lý sản phẩm', component: <ProductManagement /> },
-  { id: 'revenue', label: 'Thống kê doanh thu', component: <ReportManagement /> },
-];
-
 const Admin = () => {
-  const [selectTab, setSelectTab] = useState<string>('order');
+  const [selectTab, setSelectTab] = useState<string>("order")
 
   return (
     <div className='admin-container'>
       <div className='admin-header'>
-        {TABS.map((tab) => (
-          <div
-            key={tab.id}
-            className={`admin-header-item ${selectTab === tab.id ? 'active' : ''}`}
-            onClick={() => setSelectTab(tab.id)}
-          >
-            {tab.label}
-          </div>
-        ))}
+        <div className={`admin-header-item ${selectTab === "order" ? 'active' : ''}`} onClick={() => setSelectTab("order")}>Quản lý đơn hàng</div>
+        <div className={`admin-header-item ${selectTab === "product" ? 'active' : ''}`} onClick={() => setSelectTab("product")}>Quản lý sản phẩm</div>
+        <div className={`admin-header-item ${selectTab === "revenue" ? 'active' : ''}`} onClick={() => setSelectTab("revenue")}>Thống kê doanh thu</div>
+        <div className={`admin-header-item ${selectTab === "revenue" ? 'active' : ''}`} onClick={() => setSelectTab("revenue")}>
+          <FiLogOut />
+          <div className='admin-header-item-icon'>Đăng xuất</div>
+        </div>
       </div>
       <div className='admin-content'>
-        {TABS.find(tab => tab.id === selectTab)?.component}
+        {selectTab === "order" && (
+          <OrderManagement/>
+        )}
+        {selectTab === "product" && (
+          <ProductManagement />
+        )}
+        {selectTab === "revenue" && (
+          <ReportManagement />
+        )}
       </div>
     </div>
-  );
+  )
 }
 
-export default Admin;
+export default Admin

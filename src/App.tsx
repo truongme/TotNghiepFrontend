@@ -9,7 +9,7 @@ import Admin from './pages/Admin';
 function App() {
   return (
     <div>
-      {/* <div className='header-fixed'>
+      <div className='header-fixed'>
         <Header/>
       </div>
       <div style={{marginTop:'60px'}}>
@@ -19,8 +19,8 @@ function App() {
           ))}
         </Routes>
         <Footer/>
-      </div> */}
-      <Admin/>
+      </div>
+
     </div>
   );
 }
