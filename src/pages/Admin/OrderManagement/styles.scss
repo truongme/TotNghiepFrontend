@@ -1,0 +1,26 @@
+@import '../../../assets/styles/variables.scss';
+
+.order-header{
+    background-color: $gray-color;
+   
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+
+    .order-header-item{
+        text-align: center;
+        width: 100%;
+        padding: 10px 0px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        &:hover{
+            color: $primary-color;
+        }
+    }
+
+    .active{
+        background-color: $primary-color !important;
+        color: $white-color !important;
+    }
+}
