@@ -1,15 +1,22 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './styles.scss'
 import { Controller, useForm, useFieldArray } from 'react-hook-form';
 import { colorSystem } from '../../helpers';
+import { MdCancel } from "react-icons/md";
+import axios from 'axios';
+import { WebUrl } from '../../constants';
+import { IoMdAdd } from "react-icons/io";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 interface NewProductForm {
-  name: string;
-  description: string;
-  category: string;
-  subCategory: string;
-  price: number;
-  variants: NewProductVariants[];
+    name: string;
+    images: File[];
+    description: string;
+    category: string;
+    subCategory: string;
+    price: number;
+    variants: NewProductVariants[];
 }
 
 interface NewProductVariants {
@@ -19,20 +26,60 @@ interface NewProductVariants {
 }
 
 const Create = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm<NewProductForm>({
-    defaultValues: {
-      variants: [], 
+
+    const [previews, setPreviews] = useState<string[]>([]);
+    const [arrCategory, setArrCategory] = useState<any[]>([]);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm<NewProductForm>({
+        defaultValues: {
+            variants: [{ size: "", color: "", quantity: 1 }]
+        }
+    });
+
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "variants",
+    });
+    
+    const handlePreview = (files: FileList) => {
+        const fileArray = Array.from(files);
+        const newPreviews = fileArray.map(file => URL.createObjectURL(file));
+        setPreviews(prev => [...prev, ...newPreviews]);
+        const newArrImages = [...watch("images"), ...fileArray]
+        setValue("images", newArrImages);
+    };
+
+    const handleDeleteImage = (index: number) => {
+        setPreviews(prev => prev.filter((_, i) => i !== index));
+        setValue("images", watch("images").filter((_, i) => i !== index));
     }
-  });
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "variants",
-  });
+    const onSubmit = (data: NewProductForm) => {
+        console.log("New Product Data:", data);
+    };
+    const handleAddClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
 
-  const onSubmit = (data: NewProductForm) => {
-    console.log("New Product Data:", data);
-  };
+    const fetchAllCategories = async () =>{
+        try {
+            const reponse = await axios.get(`${WebUrl}/api/v1/categories/all?limit=6`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'skip-browser-warning'
+                }
+            }) 
+            setArrCategory(reponse.data.data)
+        } catch (error) {
+            console.error("Error get category", error)
+        }
+    }
+
+    useEffect(() => {
+        fetchAllCategories()
+    },[])
 
   return (
     <div className='container'>
@@ -57,22 +104,72 @@ const Create = () => {
                     control={control}
                     rules={{ required: "Price is required" }}
                     render={({ field }) => 
-                        <input {...field} className='input-new-product form-control' placeholder='Nhập giá của sản phẩm...'/>
+                        <input {...field} 
+                            className='input-new-product form-control' 
+                            placeholder='Nhập giá của sản phẩm...'
+                            onChange={(event) => {
+                                const onlyNumbers = event.target.value.replace(/[^0-9]/g, '');
+                                field.onChange(onlyNumbers);
+                            }}
+                        />
                     }
                 />
                 {errors.price && <p className='error'>{errors.price.message}</p>}
             </div>
+            <div className='col-12 mb-3'>
+                <label className='label-new-product'>Hình ảnh sản phẩm</label>
+                <div className='input-img-ctn'>
+                    <div className="input-img-import" onClick={handleAddClick}>
+                        <IoMdAdd  />
+                    </div>
+                    {previews.map((preview, index) => (
+                        <div key={index} className="input-img-item">
+                            <img src={preview} alt={`Preview ${index}`} />
+                            <div className='input-img-btn' onClick={() => handleDeleteImage(index)}>
+                                <MdCancel />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
             <div className='col-12'>
-                <label className='label-new-product'>Description</label>
                 <Controller
-                    name="description"
+                    name="images"
                     control={control}
-                    defaultValue=""
-                    rules={{ required: "Description is required" }}
-                    render={({ field }) => 
-                        <textarea {...field} className='input-new-product form-control' placeholder='Nhập mô tả cho sản phẩm...' ></textarea>
+                    defaultValue={[] as any}
+                    render={({ field }) =>
+                        <input
+                            className="form-control"
+                            ref={fileInputRef}
+                            type="file"
+                            multiple
+                            style={{display:'none'}}
+                            accept="image/*"
+                            onChange={(e) => {
+                                const files = e.target.files as FileList;
+                                handlePreview(files); 
+                            }}
+                        />
                     }
                 />
+            </div>
+            <div className='col-12'>
+                <label className='label-new-product'>Description</label>
+                    <Controller
+                        name="description"
+                        control={control}
+                        defaultValue=""
+                        rules={{ required: "Description is required" }}
+                        render={({ field }) =>
+                            <ReactQuill
+                                {...field}
+                                theme="snow"
+                                className='input-new-product'
+                                placeholder='Nhập mô tả cho sản phẩm...'
+                                onChange={field.onChange} 
+                            />
+                        }
+                    />
                 {errors.description && <p className='error'>{errors.description.message}</p>}
             </div>
             <div className='col-6'>
@@ -83,12 +180,11 @@ const Create = () => {
                     defaultValue=""
                     rules={{ required: "Category is required" }}
                     render={({ field }) => (
-                        <select {...field} className='input-new-product form-select'>
-                        <option value="">Select category</option>
-                        <option value="shirt">Shirt</option>
-                        <option value="pants">Pants</option>
-                        <option value="jacket">Jacket</option>
-                        <option value="dress">Dress</option>
+                        <select {...field} className='input-new-product form-select text-capitalize'>
+                            <option value="">Select category</option>
+                            {arrCategory?.map((item: any) => (
+                                <option className='text-capitalize' value={item.categoryId}>{item.name}</option>
+                            ))}
                         </select>
                     )}
                 />
@@ -102,14 +198,22 @@ const Create = () => {
                     control={control}
                     defaultValue=""
                     rules={{ required: "Sub Category is required" }}
-                    render={({ field }) => (
-                        <select {...field} className='input-new-product form-select'>
-                        <option value="">Select sub-category</option>
-                        <option value="casual">Casual</option>
-                        <option value="formal">Formal</option>
-                        <option value="sport">Sport</option>
-                        </select>
-                    )}
+                    render={({ field }) => {
+                        const categoriesSelected = watch("category")
+                        const subCategory: any = arrCategory.find((e: any) => e.categoryId === categoriesSelected)
+                        const arrSubCategory = subCategory?.subCategories
+                        return (
+                            <select 
+                                {...field} 
+                                className='input-new-product form-select text-capitalize'
+                                disabled={!categoriesSelected} 
+                            >
+                                <option value="">Select sub-category</option>
+                                {arrSubCategory?.map((e: any) => (
+                                    <option className='text-capitalize' value={e.subCategoryId}>{e.name}</option>
+                                ))}
+                            </select>
+                    )}}
                 />
                 {errors.subCategory && <p className='error'>{errors.subCategory.message}</p>}
             </div>
@@ -143,6 +247,9 @@ const Create = () => {
                                         </select>
                                         )}
                                     />
+                                    {errors?.variants?.[index]?.size?.message && (
+                                        <p className='error'>{errors.variants[index]?.size?.message}</p>
+                                    )}
                                 </td>
                                 <td>
                                     <Controller
@@ -161,6 +268,9 @@ const Create = () => {
                                         </select>
                                         )}
                                     />
+                                    {errors?.variants?.[index]?.color?.message && (
+                                        <p className='error'>{errors.variants[index]?.color?.message}</p>
+                                    )}
                                 </td>
                                 <td>
                                     <Controller
@@ -183,7 +293,7 @@ const Create = () => {
                                     />
                                 </td>
                                 <td>
-                                    <button type="button" className="btn btn-danger" onClick={() => remove(index)}>Remove</button>
+                                    <button type="button" className="btn btn-danger" onClick={() => remove(index)} disabled={fields.length === 1}>Remove</button>
                                 </td>
                             </tr>
                         ))}
