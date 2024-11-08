@@ -44,7 +44,10 @@ const Order = () => {
   const [profileUser, setProfileUser] = useState<User>()
   const [orderArr, setOrderArr] = useState<CartProps[]>([])
   const [totalOrder, setTotalOrder] = useState<Number>(0)
-  const { handleSubmit, control } = useForm<OrderForm>();
+  const [arrCity, setArrCity] = useState<any>([])
+  const [arrDistricts, setArrDistricts] = useState<any>([])
+  const [arrWard, setArrWard] = useState<any>([])
+  const { handleSubmit, control, watch } = useForm<OrderForm>();
 
   const onSubmit = async (data: OrderForm) => {
     try {
@@ -111,10 +114,38 @@ const Order = () => {
     }
   }
 
-    useEffect(() => {
-      getProfile();
-      fetchData()
-    }, []);
+  const fetchAddress = async () => {
+    try {
+      const response = await axios.get('https://open.oapi.vn/location/provinces?size=1000')
+      setArrCity(response.data.data)
+    } catch (error) {
+      console.error("Error fecth adress", error)
+    }
+  }
+
+  const fetchDistricts = async (id: number) => {
+    try {
+      const response = await axios.get(`https://open.oapi.vn/location/districts/${id}?size=1000`)
+      setArrDistricts(response.data.data)
+    } catch (error) {
+      console.error("Error fecth adress", error)
+    }
+  }
+
+  const fetchWard = async (id: number) => {
+    try {
+      const response = await axios.get(`https://open.oapi.vn/location/wards/${id}?size=1000`)
+      setArrWard(response.data.data)
+    } catch (error) {
+      console.error("Error fecth adress", error)
+    }
+  }
+
+  useEffect(() => {
+    getProfile();
+    fetchData();
+    fetchAddress()
+  }, []);
 
   return (
     <div className='container mb-5'>
@@ -162,7 +193,20 @@ const Order = () => {
                     control={control}
                     defaultValue=""
                     render={({ field }) => (
-                      <input {...field} className="form-control" placeholder="Nhập tên thành phố / tỉnh" />
+                      <select 
+                        {...field} 
+                        className="form-select" 
+                        aria-label="Chọn thành phố / tỉnh"
+                        onChange={(e) => {
+                          field.onChange(e);
+                          fetchDistricts(Number(e.target.value));
+                        }}
+                      >
+                        <option selected>Chọn thành phố / tỉnh</option>
+                        {arrCity?.map((item: any) => (
+                          <option value={item.id}>{item.name}</option>
+                        ))}
+                      </select>
                     )}
                   />
                 </div>
@@ -173,8 +217,22 @@ const Order = () => {
                     name="district"
                     control={control}
                     defaultValue=""
+                    disabled={!watch("city")} 
                     render={({ field }) => (
-                      <input {...field} className="form-control" placeholder="Nhập tên quận / huyện" />
+                      <select 
+                        {...field} 
+                        className="form-select" 
+                        aria-label="Chọn quận / huyện" 
+                        onChange={(e) => {
+                          field.onChange(e);
+                          fetchWard(Number(e.target.value));
+                        }}
+                      >
+                        <option selected>Chọn quận / huyện</option>
+                        {arrDistricts?.map((item: any) => (
+                          <option value={item.id}>{item.name}</option>
+                        ))}
+                      </select>
                     )}
                   />
                 </div>
@@ -184,9 +242,19 @@ const Order = () => {
                   <Controller
                     name="ward"
                     control={control}
+                    disabled={!watch("district")} 
                     defaultValue=""
                     render={({ field }) => (
-                      <input {...field} className="form-control" placeholder="Nhập tên phường / xã" />
+                      <select 
+                        {...field} 
+                        className="form-select" 
+                        aria-label="Chọn tên phường / xã" 
+                      >
+                        <option selected>Chọn tên phường / xã</option>
+                        {arrWard?.map((item: any) => (
+                          <option value={item.id}>{item.name}</option>
+                        ))}
+                      </select>
                     )}
                   />
                 </div>
