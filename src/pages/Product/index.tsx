@@ -66,16 +66,6 @@ const Product = () => {
     prevArrow: <PrevButton onClick={() => {}} />,
     beforeChange: (current: number, next: number) => setSelectedImageIndex(next), 
   };
-  const settings2 = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    cssEase: 'ease-in-out',  
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-  };
 
   const navigate = useNavigate()
   const sizeOrder = ['XS','S', 'M', 'L', 'XL','XXL'];
@@ -89,7 +79,7 @@ const Product = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); 
   const [activeTab, setActiveTab] = useState('info');
   const [quantity, setQuantity] = useState<number>(1);
-  const [errorMessage, setErrorMessage] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const token = sessionStorage.getItem("token");
   
   const getValidColors = (size: string) => {
@@ -109,8 +99,10 @@ const Product = () => {
   };
 
   const handleAddToCart = async () => {
-    if(!selectedColor || !selectedSize) {
-      setErrorMessage(true)
+    if(!selectedColor || !selectedSize || !quantity) {
+      setErrorMessage('Vui lòng chọn màu sắc và size cho sản phẩm!')
+    } else if(!token) {
+      setErrorMessage('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!')
     } else {
       const product = projectVariants.find(x => x.color === selectedColor && x.size === selectedSize)
       try {
@@ -125,7 +117,6 @@ const Product = () => {
           }
         });
         alert("Thêm giỏ hàng thành công")
-        navigate('/cart')
       } catch (error) {
         console.error("Error post item cart", error)
       }
@@ -175,6 +166,7 @@ const Product = () => {
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     getProductDetails()
   },[]);
 
@@ -209,9 +201,9 @@ const Product = () => {
               {productDetail?.name}
             </div>
             <div className='product-size-title'>{productDetail?.description}</div>
-            <div className='product-price'>{productDetail?.price}</div>
-            <div className='product-size-title'>Chọn màu sắc</div>
-            <div className='product-color'>
+            <div className='product-price  pb-1'>{productDetail?.price}</div>
+            <div className='product-size-title pb-1'>Chọn màu sắc</div>
+            <div className='product-color  pb-1'>
               {projectVariantsColor.map((color: any) =>(
                 <div className={`color-option-border ${selectedColor === color ? 'selected' : ''}`}>
                   <button
@@ -225,8 +217,8 @@ const Product = () => {
                 </div>
               ))}
             </div>
-            <div className='product-size-title'>Chọn kích thước</div>
-            <div className='d-flex product-sizes'>
+            <div className='product-size-title  pb-1'>Chọn kích thước</div>
+            <div className='d-flex product-sizes  pb-1'>
               {projectVariantsSize.map((size) => (
                 <button
                   key={size}
@@ -238,20 +230,27 @@ const Product = () => {
                 </button>
               ))}
             </div>
-            <div className='product-size-title'>Số lượng</div>
-            <input
-              type='number'
-              value={quantity}
-              min='1'
-              onChange={(e) => setQuantity(Number(e.target.value))}
-              className='quantity-input'
-            />
+            <div className='d-flex pb-1 pt-1 align-items-center'>
+              <div className='product-size-title'>Số lượng</div>
+              <div className="quantity-input-container">
+                <button onClick={() => quantity>=2 && setQuantity(prevQuantity => prevQuantity - 1)} className="quantity-btn">-</button>
+                <input
+                  value={quantity}
+                  onChange={(e: any) => {
+                    const onlyNumbers = e.target.value.replace(/[^0-9]/g, '');
+                    setQuantity(onlyNumbers)
+                  }}
+                  className="product-quantity"
+                />
+                <button onClick={() => setQuantity(prevQuantity => prevQuantity + 1)} className="quantity-btn">+</button>
+              </div>
+            </div>
             {errorMessage && (
-              <div className='error-message'>Vui lòng chọn màu sắc và size cho sản phẩm!</div>
+              <div className='error-message'>{errorMessage}</div>
             )}
             <div className='product-order-btn'>
               <button className='btn-add-cart' onClick={e => handleAddToCart()}>Thêm vào giỏ hàng</button>
-              <div className='btn-order'>Mua ngay</div>
+              <button className='btn-order'>Mua ngay</button>
             </div>
             <div className='product-promotion'>
               <h5>MLB Chào bạn mới</h5>
@@ -272,7 +271,7 @@ const Product = () => {
           <h3 className={activeTab === 'return' ? 'active' : ''}>CHÍNH SÁCH ĐỔI TRẢ</h3>
         </div>
         <div className='col-3 tab' onClick={() => setActiveTab('store')}>
-          <h3 className={activeTab === 'store' ? 'active' : ''}>Tìm tại cửa hàng</h3>
+          <h3 className={activeTab === 'store' ? 'active' : ''}>TÌM CỬA HÀNG</h3>
         </div>
       </div>
       <div className='tab-content'>

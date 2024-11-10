@@ -61,7 +61,7 @@ const Cart = () => {
 
   return (
     <div className="cart-container container">
-      <div className='cart-breadcrumb'>
+      <div className='cart-breadcrumb mb-3'>
         <Link to={'/'} className='link-style cart-breadcrumb-item'>Trang chủ</Link>
         <div className='cart-breadcrumb-item'>/</div>
         <div className='cart-breadcrumb-active'>Giỏ hàng</div>
@@ -70,11 +70,10 @@ const Cart = () => {
         <div className='cart-table'>
           <div className='cart-header'>
             <div className='row'>
-              <div className='col-5'>Sản phẩm</div>
+              <div className='col-6'>Sản phẩm</div>
               <div className='col-2'>Giá</div>
               <div className='col-2'>Số lượng</div>
               <div className='col-2'>Tạm tính</div>
-              <div className='col-1'></div>
             </div>
           </div>
           <>
@@ -115,10 +114,6 @@ const Cart = () => {
             <div className="cart-summary-item">
               <span>Tạm tính</span>
               <span>{formatPrice(totalOrder)}</span>
-            </div>
-            <div className="cart-summary-item">
-              <span>Giao hàng</span>
-              <span>Giao hàng miễn phí</span>
             </div>
             <div className="cart-summary-item">
               <span>Tổng</span>

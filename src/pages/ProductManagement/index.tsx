@@ -1,6 +1,6 @@
 import React from 'react'
-import { formatPrice } from '../../../helpers';
-import { useNavigate } from 'react-router-dom';
+import { formatPrice } from '../../helpers';
+import { Link, useNavigate } from 'react-router-dom';
 import { MdModeEdit } from "react-icons/md";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import './styles.scss'
@@ -84,7 +84,7 @@ const ProductManagement = () => {
         {
             id: "9",
             name: "Shorts",
-            price: 25,
+            price: 2500000,
             quantity: 90,
             category: "Clothing",
             subCategory: "Bottoms",
@@ -99,38 +99,39 @@ const ProductManagement = () => {
         },
     ];
 
-    const navigate = useNavigate()
-
     return (
-        <div className='text-center mt-3 mb-3'>
-            <table className="table table-bordered table-striped">
+        <div className='w-100 p-3'>
+            <h4>Danh sách sản phẩm</h4>
+            <table className="table table-bordered table-striped w-100 text-center">
                 <thead className="table-primary">
                     <tr>
-                        <th scope="col">STT</th>
-                        <th scope="col">Sản phẩm</th>
-                        <th scope="col">Hình ảnh</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Sub Category</th>
-                        <th scope="col">Giá</th>
-                        <th scope="col">Số lượng</th>
-                        <th scope="col">Action</th>
+                        <th>STT</th>
+                        <th>Hình ảnh</th>
+                        <th>Sản phẩm</th>
+                        <th>Category</th>
+                        <th>Sub Category</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {tableProducts.map((e: TableProduct, index: number) => (
                         <tr>
                             <th>{index+1}</th>
-                            <td>{e.name}</td>
                             <th>Hình ảnh</th>
+                            <td>{e.name}</td>
                             <td>{e.category}</td>
                             <td>{e.subCategory}</td>
                             <td>{formatPrice(e.price)}</td>
                             <td>{e.quantity}</td>
                             <td className='col-1'>
                                 <div className='d-flex justify-content-around'>
-                                    <div className='icon-product edit'>
-                                        <MdModeEdit/>
-                                    </div>
+                                    <Link to={`/product/${e.id}`}>
+                                        <div className='icon-product edit' >
+                                            <MdModeEdit/>
+                                        </div>
+                                    </Link>
                                     <div className='icon-product delete'>
                                         <RiDeleteBin2Fill  />
                                     </div>
@@ -141,7 +142,10 @@ const ProductManagement = () => {
                     ))}
                 </tbody>
             </table>
-            <button type="button" className="btn btn btn-success w-100">Thêm sản phẩm</button>
+            <Link to={'/product/new'}>
+                <button type="button" className="btn btn btn-success w-100">Thêm sản phẩm</button>
+            </Link>
+            
         </div>
     )
 }

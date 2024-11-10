@@ -9,6 +9,8 @@ import imageBottom from '../../assets/images/category-bottom.webp'
 import imageWomen from '../../assets/images/category-women.jpg'
 import imageCoat from '../../assets/images/category-coat.jpg'
 import { MdCancel } from "react-icons/md";
+import axios from 'axios';
+import { WebUrl } from '../../constants';
 
 const Header = () => {
 
@@ -19,20 +21,13 @@ const Header = () => {
       img:imageTop,
       list: [
         {
-          title: 'áo thun', 
+          title: 'áo', 
           item: [
-            {name: 'Áo thun', link:'tops-t-shirts'},
-            {name: 'Áo polo', link:'sub-tops-002'},
-            {name: 'Áo sơ mi', link:''},
-            {name: 'Áo Hoodie', link:''},
-          ]
-        },
-        {
-          title: 'áo khoác', 
-          item: [
-            {name: 'Áo khoác phao', link:''},
-            {name: 'Áo khoác cardigan', link:''},
-            {name: 'Áo khoác lông', link:''},
+            {name: 'Áo T-shirts', link:'tops-t-shirts'},
+            {name: 'Áo Polo', link:'tops-polo-shirts'},
+            {name: 'Áo Shirts', link:'tops-shirts'},
+            {name: 'Áo Sweatshirts', link:'tops-sweatshirts'},
+            {name: 'Áo Hoodies', link:'tops-hoodies'},
           ]
         },
       ]
@@ -110,12 +105,30 @@ const Header = () => {
   ];
 
   const role = sessionStorage.getItem("role");
+  const token = sessionStorage.getItem("token");
   const navigate = useNavigate();
   const [hiddenSeacrh , setHiddenSearch] = useState<Boolean>(false)
+  const [itemsOrderCount , setItemsOrderCount] = useState<number>(0)
+
+    const fetchData = async () => {
+    try {
+      const response = await axios.get(`${WebUrl}/api/v1/orders/in-cart`,{
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'skip-browser-warning',
+          'Authorization': `Bearer ${token}`, 
+        }
+      })
+      const count = response.data.orderItems.lenght
+      setItemsOrderCount(count)
+    } catch (error) {
+      console.error("Error get Order item", error)
+    }
+  }
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    fetchData()
+  }, [role, token]);
 
   return (
     <div className='header-container'>
@@ -164,7 +177,9 @@ const Header = () => {
               <Link to={"/cart"} className='link-style'>
                 <FaShoppingCart className='header-icon'/>
               </Link>
-              <div className='header-cart-count'>3</div>
+              {role && itemsOrderCount>0 && 
+                <div className='header-cart-count'>{itemsOrderCount}</div>
+              }
             </div>
             <div className='header-icon-cotainer'>
               <Link to={role ? "/user" : "/login"} className='link-style'>

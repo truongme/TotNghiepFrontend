@@ -3,6 +3,7 @@ import './styles.scss'
 import img from '../../assets/images/card.webp'
 import { useNavigate } from 'react-router-dom'
 import { CardProps } from '../../pages/Home'
+import { formatPrice } from '../../helpers'
 
 interface ICardProps{
   data: CardProps
@@ -26,7 +27,7 @@ const Card: React.FC<ICardProps> = ({data}) => {
           {data.name}
         </div>
         <span className='card-price'>
-          {data.price}
+          {formatPrice(data.price)}
         </span>
       </div>
       {data.rank&&(

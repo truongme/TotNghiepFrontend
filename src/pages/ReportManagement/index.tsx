@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { BiSort } from "react-icons/bi";
 import './styles.scss'
-import { formatPrice } from '../../../helpers';
+import { formatPrice } from '../../helpers';
 
 interface Table {
     name: string;

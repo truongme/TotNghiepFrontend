@@ -3,6 +3,7 @@
 .card-cotainer{
     font-family: $primary-font;
     position: relative;
+    border: 1px solid #ddd;
     
     .card-img{
         width: 100%;
@@ -23,9 +24,14 @@
         line-height: 24px;
         font-weight: bold;
 
-        .card-title{
+        .card-title {
             cursor: pointer;
-            &:hover{
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            &:hover {
                 color: $primary-color;
             }
         }

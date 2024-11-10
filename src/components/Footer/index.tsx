@@ -45,7 +45,7 @@ const Footer = () => {
             <li><a href="#standard-delivery">Giao hàng tiêu chuẩn</a></li>
             <li><a href="#maison-now">Maison NOW</a></li>
           </ul>
-          <img className="verified-icon" src="link_to_verified_icon" />
+          <img className="verified-icon" src="https://file.hstatic.net/1000284478/file/icon-bct_c5ff22fa4ca24fd58c49573d2114f8b0.svg" />
         </div>
       </div>
 

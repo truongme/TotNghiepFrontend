@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 code {
@@ -41,4 +42,28 @@ ul{
 }
 li{
   list-style: none;
+}
+
+.admin-container{
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+}
+
+.admin-router{
+  width: 100%;
+  background-color: #f0f5fe;
+  margin-left: 250px;
+  overflow: hidden;
+}
+
+.admin-customer{
+  margin-top: 60px;
+}
+
+.nav-fixed{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
 }

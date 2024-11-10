@@ -2,10 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './styles.scss';
 import avatar from '../../assets/images/avatar.jpg';
 import { Link } from 'react-router-dom';
-import cart from '../../assets/images/card.webp';
-import { CiMoneyBill } from "react-icons/ci";
-import { HiIdentification } from "react-icons/hi2";
-import { FaJediOrder } from "react-icons/fa6";
 import axios from 'axios';
 import { WebUrl } from '../../constants';
 import { formatPrice } from '../../helpers';
@@ -43,13 +39,15 @@ const Order = () => {
   const token = sessionStorage.getItem("token");
   const [profileUser, setProfileUser] = useState<User>()
   const [orderArr, setOrderArr] = useState<CartProps[]>([])
-  const [totalOrder, setTotalOrder] = useState<Number>(0)
+  const [totalOrder, setTotalOrder] = useState<number>(0)
   const [arrCity, setArrCity] = useState<any>([])
   const [arrDistricts, setArrDistricts] = useState<any>([])
   const [arrWard, setArrWard] = useState<any>([])
+  const [shippingCost, setShippingCost] = useState<number>(0)
   const { handleSubmit, control, watch } = useForm<OrderForm>();
 
   const onSubmit = async (data: OrderForm) => {
+    console.log('111',data )
     try {
       await axios.put(`${WebUrl}/api/v1/orders/complete-order`, {
         addressDetail: data.addressDetail,
@@ -65,7 +63,9 @@ const Order = () => {
           'Authorization': `Bearer ${token}`, 
         }
       });
+      
       alert("Mua hàng thành công")
+      
     } catch (error) {
       console.error("Error post item cart", error)
     }
@@ -161,7 +161,7 @@ const Order = () => {
           <div className='col-7'>
             <div className='order-user'>
               <div className='order-user-title'>
-                <HiIdentification />
+                {/* <HiIdentification /> */}
                 Thông tin người nhận
               </div>
               <div className='order-infor-user'>
@@ -199,6 +199,15 @@ const Order = () => {
                         aria-label="Chọn thành phố / tỉnh"
                         onChange={(e) => {
                           field.onChange(e);
+                          if(Number(e.target.value)) {
+                            if(Number(e.target.value) === 1) {
+                              setShippingCost(15000)
+                            } else{
+                              setShippingCost(30000)
+                            }
+                          } else {
+                            setShippingCost(0)
+                          }
                           fetchDistricts(Number(e.target.value));
                         }}
                       >
@@ -217,7 +226,6 @@ const Order = () => {
                     name="district"
                     control={control}
                     defaultValue=""
-                    disabled={!watch("city")} 
                     render={({ field }) => (
                       <select 
                         {...field} 
@@ -241,8 +249,7 @@ const Order = () => {
                   <label className="form-label">Phường / Xã</label>
                   <Controller
                     name="ward"
-                    control={control}
-                    disabled={!watch("district")} 
+                    control={control} 
                     defaultValue=""
                     render={({ field }) => (
                       <select 
@@ -307,12 +314,15 @@ const Order = () => {
                 </div>
               ))}
               <hr />
+              <div className='d-flex justify-content-between mb-2'>
+                <span>Giao hàng</span>
+                <span>{formatPrice(shippingCost)}</span>
+              </div>
               <div className='d-flex justify-content-between'>
                 <div >
-                  <CiMoneyBill />
                   Thành tiền
                 </div>
-                <p className='m-0 p-0'>{formatPrice(totalOrder)}</p>
+                <p className='m-0 p-0'>{formatPrice(totalOrder + shippingCost)}</p>
               </div>
               <hr />
               <div className='d-flex justify-content-between order-checkout'>

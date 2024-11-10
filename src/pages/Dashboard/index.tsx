@@ -1,0 +1,182 @@
+import React from 'react'
+import './styles.scss'
+import { FaBoxOpen } from "react-icons/fa6";
+import { RiTShirtFill } from "react-icons/ri";
+import { FaChartLine } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend } from 'chart.js';
+import { Chart } from 'react-chartjs-2';
+import { ChartData, ChartOptions } from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const DashBoard = () => {
+    const data: ChartData<'bar' | 'line'> = {
+        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+        datasets: [
+        {
+            type: 'line' as const,
+            label: 'Số lượng Order',
+            data: [50, 65, 70, 60, 75, 80, 85, 90, 95, 100, 105, 150],
+            borderColor: '#FFF27A',
+            backgroundColor: '#FFF27A',
+            tension: 0.4,
+            fill: false,
+            yAxisID: 'y1', 
+        },
+        {
+            type: 'line' as const,
+            label: 'Sản phẩm bán ra',
+            data: [30, 45, 55, 50, 60, 65, 75, 70, 85, 90, 95, 100],
+            borderColor: '#E16449',
+            backgroundColor: '#E16449',
+            tension: 0.4,
+            fill: false,
+            yAxisID: 'y1', 
+        },
+        {
+            type: 'bar' as const,
+            label: 'Doanh thu',
+            data: [500, 700, 800, 600, 850, 900, 1000, 950, 1100, 1050, 1150, 1200],
+            backgroundColor: '#A5A7FE',
+            borderColor: '#5351FA',
+            borderWidth: 1,
+            yAxisID: 'y',
+            barThickness: 30,
+        },
+        ],
+    };
+
+  const options: ChartOptions<"bar" | "line"> = {
+    responsive: true,
+        plugins: {
+        legend: {
+            display: false,
+        },
+        title: {
+            display: false,
+        },
+        },
+    scales: {
+        y: {
+            beginAtZero: true,
+        },
+        y1: {
+            beginAtZero: true,
+            position: 'right', 
+        },
+        x: {
+            title: {
+                display: true, 
+            },
+        },
+    },
+  };
+
+
+
+    return (
+        <div className='container dashboard-container pt-3 pb-3'>
+            <div className='dashboard-main p-3 mb-3'>
+                <div className='dashboard-main-title'>Sales Distribution</div>
+                <div className='dashboard-main-content'>
+                    <div className='dashboard-main-item'>
+                        <div className='dashboard-main-icon'>
+                            <FaBoxOpen />
+                        </div>
+                        <div className='dashboard-main-item-title'>
+                            <div>Total Sales</div>
+                            <p>2.000</p>
+                        </div>
+                    </div>
+                    <div className='dashboard-main-item'>
+                        <div className='dashboard-main-icon'>
+                            <FaChartLine />
+                        </div>
+                        <div className='dashboard-main-item-title'>
+                            <div>Total Order</div>
+                            <p>2.000</p>
+                        </div>
+                    </div>
+                    <div className='dashboard-main-item'>
+                        <div className='dashboard-main-icon'>
+                            <RiTShirtFill />
+                        </div>
+                        <div className='dashboard-main-item-title'>
+                            <div>Total Product</div>
+                            <p>2.000</p>
+                        </div>
+                    </div>
+                    <div className='dashboard-main-item'>
+                        <div className='dashboard-main-icon'>
+                            <FaUser />
+                        </div>
+                        <div className='dashboard-main-item-title'>
+                            <div>Total Client</div>
+                            <p>2.000</p>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div className='dashboard-main-chart-container'>
+                <div className='dashboard-main-chart'>
+                    <div className='mb-2 dashboard-main-chart-title'>Thống kê doanh thu trong 12 tháng</div>
+                    <Chart type='bar' data={data} options={options} />
+                </div>
+                <div className='dashboard-top-sale'>
+                    <div className='mb-2 dashboard-top-sale-title'>Top Sales</div>
+                    <div className='dashboard-top-sale-cotainer'>
+                        <div className='dashboard-top-sale-item'>
+                            <div className='dashboard-top-sale-item-img'>
+                                <img src="https://product.hstatic.net/200000642007/product/50bll_3adrm1043_1_37a91042545a4307bbc0b76dc1962caf_b0381951ac904d72b9380b694ae56f63_large.jpg" alt="" />
+                            </div>
+                            <div>
+                                <div>MLB - Áo sơ mi unisex cổ bẻ tay ngắn Classic Monogram</div>
+                                <div>Đã bán: 20</div>
+                            </div>
+                        </div>
+                        <div className='dashboard-top-sale-item'>
+                            <div className='dashboard-top-sale-item-img'>
+                                <img src="https://product.hstatic.net/200000642007/product/50bll_3adrm1043_1_37a91042545a4307bbc0b76dc1962caf_b0381951ac904d72b9380b694ae56f63_large.jpg" alt="" />
+                            </div>
+                            <div>
+                                <div>MLB - Áo sơ mi unisex cổ bẻ tay ngắn Classic Monogram</div>
+                                <div>Đã bán: 20</div>
+                            </div>
+                        </div>
+                        <div className='dashboard-top-sale-item'>
+                            <div className='dashboard-top-sale-item-img'>
+                                <img src="https://product.hstatic.net/200000642007/product/50bll_3adrm1043_1_37a91042545a4307bbc0b76dc1962caf_b0381951ac904d72b9380b694ae56f63_large.jpg" alt="" />
+                            </div>
+                            <div>
+                                <div>MLB - Áo sơ mi unisex cổ bẻ tay ngắn Classic Monogram</div>
+                                <div>Đã bán: 20</div>
+                            </div>
+                        </div>
+                        <div className='dashboard-top-sale-item'>
+                            <div className='dashboard-top-sale-item-img'>
+                                <img src="https://product.hstatic.net/200000642007/product/50bll_3adrm1043_1_37a91042545a4307bbc0b76dc1962caf_b0381951ac904d72b9380b694ae56f63_large.jpg" alt="" />
+                            </div>
+                            <div>
+                                <div>MLB - Áo sơ mi unisex cổ bẻ tay ngắn Classic Monogram</div>
+                                <div>Đã bán: 20</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default DashBoard

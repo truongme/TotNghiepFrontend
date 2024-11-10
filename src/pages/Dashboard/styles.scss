@@ -1,0 +1,119 @@
+@import '../../assets/styles/variables.scss';
+
+.dashboard-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+
+    .dashboard-main {
+        width: 100%;
+        background-image: linear-gradient(to right, #C7EAFE, #A5A7FC);
+        border-radius: 20px;
+
+        .dashboard-main-title {
+            font-weight: 600;
+            font-size: 18px;
+        }
+    
+        .dashboard-main-content {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+
+            .dashboard-main-item {
+                width: 24%;
+                z-index: 1;
+                background-color: #F9FDFF;
+                border-radius: 16px;
+                padding: 10px;
+                display: flex;
+                align-items: center;
+
+                .dashboard-main-icon {
+                    padding: 10px;
+                    background-color: #F5F1FF;
+                    border-radius: 50%;
+
+                    svg {
+                        font-size: 30px;
+                        color: #9865FF;
+                    }
+                }
+
+                .dashboard-main-item-title {
+                    font-weight: 600;
+                    margin-left: 15px;
+                    p {
+                        font-weight: 500;
+                        margin: 0;
+                    }
+                }
+            }
+        }
+    
+        }
+        .dashboard-main-chart-container{
+            width: 100%;
+            height: 100%;
+            display: flex;
+
+            .dashboard-main-chart {
+                background-color: $white-color;
+                width: 70%;
+                height: 100%;
+                border-radius: 20px;
+                padding: 15px;
+                margin-right: 15px;
+                .dashboard-main-chart-title {
+                    font-size: 18px;
+                    font-weight: 600;
+                }
+            }
+
+            .dashboard-top-sale{
+                background-color: $white-color;
+                padding: 15px;
+                width: 30%;
+                border-radius: 20px;
+                height: 100%;
+
+                .dashboard-top-sale-title{
+                    font-size: 18px;
+                    font-weight: 600;
+                }
+
+                .dashboard-top-sale-cotainer{
+                    height: calc(100% - 35px);
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    
+
+                    .dashboard-top-sale-item {
+                        display: flex;
+                        align-items: center;
+                        background-color: #EFEEFE;
+                        padding: 10px;
+                        border-radius: 20px;
+                
+                        .dashboard-top-sale-item-img {
+                            width: 40% !important;
+                            overflow: hidden;
+                            margin-right: 10px;
+                            border-radius: 16px;
+                
+                            img {
+                                width: 100%;
+                                object-fit: cover;
+                            }
+                        }
+                
+                    }
+                }
+               
+            }   
+        }   
+}
+
+

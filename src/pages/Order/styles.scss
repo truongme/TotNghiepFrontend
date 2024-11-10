@@ -3,8 +3,8 @@
 .order-breadcrumb {
     display: flex;
     align-items: center;
-    // text-transform: uppercase;
-    font-size: 20px;
+    text-transform: uppercase;
+    font-size: 13px;
     font-weight: 600;
 
     .order-breadcrumb-item {
@@ -35,12 +35,12 @@
         h6{
             font-size: 18px;
             font-weight: 600;
-            color: #0015ff;
+            color: $primary-color;
             
         }
         .order-avatar-user {
-            width: 100px;
-            height: 100px;
+            width: 70px;
+            height: 70px;
             overflow: hidden;
             border-radius: 50%;
             margin-right: 15px;
@@ -113,7 +113,7 @@
 
 .order-user-title {
     text-transform: uppercase;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 600;
     label{
         display: flex; /* Căn ngang icon và chữ */

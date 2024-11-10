@@ -9,8 +9,24 @@ import { WebUrl } from '../../constants';
 
 const Collections = () => {
    const { categoryId } = useParams();
+   const [btnSort, setBtnSort] = useState<string>("popularity")
 
     const [listProduct, setListProduct] = useState<any[]>([])
+
+    const sortProducts = (criteria: string) => {
+        const sortedProducts = [...listProduct];
+        setBtnSort(criteria)
+
+        if (criteria === 'popularity') {
+            sortedProducts.sort((a, b) => b.id - a.id); 
+        } else if (criteria === 'ascending') {
+            sortedProducts.sort((a, b) => a.price - b.price); 
+        } else if (criteria === 'descending') {
+            sortedProducts.sort((a, b) => b.price - a.price);
+        }
+
+        setListProduct(sortedProducts); 
+    };
 
     const getProduct = async () => {
         try {
@@ -38,7 +54,7 @@ const Collections = () => {
 
     useEffect(() => {
         getProduct();
-    }, []);
+    }, [categoryId]);
 
 
     return (
@@ -58,9 +74,9 @@ const Collections = () => {
                 </div>
                 <div className='collections-actions-sort'>
                     <div>Sắp xếp theo</div>
-                    <button className='collections-sort-btn'>Bán chạy</button>
-                    <button className='collections-sort-btn'>Tăng dần</button>
-                    <button className='collections-sort-btn'>Giảm dần</button>
+                    <button className={`collections-sort-btn ${btnSort === 'popularity' && "active"}  `} onClick={() => sortProducts('popularity')}>Bán chạy</button>
+                    <button className={`collections-sort-btn ${btnSort === 'ascending' && "active"}  `} onClick={() => sortProducts('ascending')}>Tăng dần</button>
+                    <button className={`collections-sort-btn ${btnSort === 'descending' && "active"}  `} onClick={() => sortProducts('descending')}>Giảm dần</button>   
                 </div>
             </div>
             <div className='row mb-3'>
