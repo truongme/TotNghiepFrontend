@@ -174,7 +174,7 @@ const Header = () => {
                 <FaMagnifyingGlass className='header-icon' onClick={() => setHiddenSearch(!hiddenSeacrh)}/>
             </div>
             <div className='header-icon-cotainer header-cart'>
-              <Link to={"/cart"} className='link-style'>
+              <Link to={role ? "/cart" : '/login'} className='link-style'>
                 <FaShoppingCart className='header-icon'/>
               </Link>
               {role && itemsOrderCount>0 && 

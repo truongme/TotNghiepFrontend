@@ -60,7 +60,7 @@
         padding: 12px 18px;
         display: flex;
         align-items: center;
-        border-bottom: 1px solid black;
+        // border-bottom: 1px solid black;
         padding-bottom: 12px;
         font-size: 18px;
         font-weight: 600;
@@ -74,7 +74,7 @@
         padding: 0px 18px 12px 18px;
         .filter-item {
             padding: 12px 0px;
-            border-bottom: 1px solid black;
+            border-top: 1px solid $background-color;
     
             .filter-title {
                 font-size: 17px;
@@ -106,5 +106,5 @@
 
 .colections-items{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 }

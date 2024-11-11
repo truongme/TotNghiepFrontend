@@ -9,6 +9,7 @@ import ProductManagement from "../pages/ProductManagement";
 import OrderManagement from "../pages/OrderManagement";
 import DashBoard from "../pages/Dashboard";
 import ProductAdmin from "../pages/ProductEdit";
+import Signup from "../pages/Signup";
 
 export const adminRoutes = [
   { path: "/", element: <DashBoard /> },
@@ -21,6 +22,7 @@ export const adminRoutes = [
 export const userRoutes = [
   { path: "/", element: <Home /> },
   { path: "/login", element: <Login /> },
+  { path: "/signup", element: <Signup /> },
   { path: "/collections/:categoryId", element: <Collections /> },
   { path: "/product/:id", element: <Product /> },
   { path: "/cart", element: <Cart /> },

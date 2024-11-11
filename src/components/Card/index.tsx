@@ -20,7 +20,8 @@ const Card: React.FC<ICardProps> = ({data}) => {
   return (
     <div className='card-cotainer'>
       <div className='card-img'>
-        <img src={data.img} alt="" onClick={e => handleOnClick(data.id)}/>
+        <img src={data.img} alt="" onClick={e => handleOnClick(data.id)} className='img-main'/>
+        <img src={data.imgHover} alt="" onClick={e => handleOnClick(data.id)} className='img-hover' />
       </div>
       <div className='card-content'>
         <div className='card-title' onClick={e => handleOnClick(data.id)}>

@@ -14,6 +14,7 @@ import { WebUrl } from '../../constants';
 export interface CardProps {
   id: string;
   img: string;
+  imgHover?: string;
   name: string;
   price: string;
   rank?: number
@@ -56,7 +57,8 @@ const Home = () => {
       
       const data: CardProps[] = response.data.data.map((e: any, index: number) => ({
         id: e.productId,  
-        img: e.images?.[0].imageURL,  
+        img: e.images?.[0].imageURL,
+        imgHover: e.images?.[1].imageURL,    
         name: e.name,
         price: formatPrice(e.price),
         rank: index+1,

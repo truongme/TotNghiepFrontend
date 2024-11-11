@@ -44,6 +44,7 @@ const Collections = () => {
                 name: e.name,
                 price: e.price,
                 img: e.images[0].imageURL,
+                imgHover: e.images[1].imageURL
             }));
             setListProduct(data);
         } catch (error) {
@@ -80,10 +81,9 @@ const Collections = () => {
                 </div>
             </div>
             <div className='row mb-3'>
-                <div className='col-3'>
+                {/* <div className='col-3'>
                     <div className='filter-container mt-2'>
                         <div className='filter-header'>
-                            <TiFilter className='filter-header-icon'/>
                             <div>Bộ lọc tìm kiếm</div>
                         </div>
                         <div className='filter-cotent'>
@@ -100,6 +100,17 @@ const Collections = () => {
                             </div>
                             <div className='filter-item'>
                                 <div className='filter-title'>
+                                    Kích thước
+                                </div>
+                                <ul>
+                                    <li><input type="checkbox" />Áo thun</li>
+                                    <li><input type="checkbox" />Áo Polo</li>
+                                    <li><input type="checkbox" />Áo Sweater</li>
+                                    <li><input type="checkbox" />Áo khoác</li>
+                                </ul>
+                            </div>
+                            <div className='filter-item'>
+                                <div className='filter-title'>
                                     Giá
                                 </div>
                                 <ul>
@@ -111,26 +122,13 @@ const Collections = () => {
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className='col-9 colections-items'>
+                </div> */}
+                <div className='col-12 colections-items'>
                     {listProduct.map((e: CardProps) => (
                         <div className='p-2'>
                             <Card data={e}/>
                         </div>
                     ))}
-                    {/* 
-                    <div className='p-2'>
-                        <Card/>
-                    </div>
-                    <div className='p-2'>
-                        <Card/>
-                    </div>
-                    <div className='p-2'>
-                        <Card/>
-                    </div>
-                    <div className='p-2'>
-                        <Card/>
-                    </div> */}
                 </div>
             </div>
         </div>

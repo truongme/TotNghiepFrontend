@@ -106,12 +106,12 @@ const Login = () => {
               </div>
             </form>
             <div className='d-flex justify-content-center form-action'>
-              <Link to={"/"} className='link-style'>
+              <Link to={"/signup"} className='link-style'>
                 <span style={{paddingRight:"10px", borderRight:"2px black solid"}} className='item-form-action'>
                   Quên mật khẩu?
                 </span>
               </Link>
-              <Link to={"/"} className='link-style'>
+              <Link to={"/signup"} className='link-style'>
                 <span style={{paddingLeft:"10px"}} className='item-form-action'>Đăng ký</span>
               </Link>
             </div>
