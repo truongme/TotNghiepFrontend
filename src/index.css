@@ -15,6 +15,7 @@ code {
 
 *{
   box-sizing: border-box;
+  font-family: 'Product sans', sans-serif !important;
 }
 
 .link-style{
@@ -30,11 +31,6 @@ code {
   width: 100% !important;
 }
 
-
-*{
-  box-sizing: border-box;
-  font-family: 'Product sans', sans-serif !important;
-}
 
 ul{
   margin: 0 !important;

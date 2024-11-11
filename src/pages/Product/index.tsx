@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Slider from "react-slick";
 import './styles.scss';
-import Card from '../../components/Card';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { formatPrice } from '../../helpers';
-import { error } from 'console';
 import { WebUrl } from '../../constants';
 
 interface ProductProps {

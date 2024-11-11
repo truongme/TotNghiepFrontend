@@ -65,18 +65,3 @@
     }
   }
   
-  // Media query cho màn hình nhỏ hơn 768px
-  @media (max-width: 768px) {
-    .footer-section {
-      flex-basis: 33%; // Mỗi phần chiếm 1/3 chiều rộng
-      margin-right: 0; // Không cần margin phải
-    }
-  
-    .footer-sections {
-      flex-direction: row; // Xếp hàng
-    }
-  
-    .footer-section ul {
-      display: none; // Ẩn danh sách mặc định
-    }
-  }
