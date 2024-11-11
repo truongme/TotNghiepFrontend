@@ -18,3 +18,11 @@
 .delete{
     background-color: $red-color;
 }
+
+.product-img{
+    width: 150px;
+    img{
+        width: 100%;
+        object-fit: cover;
+    }
+}

@@ -86,8 +86,8 @@ const ProductAdmin = () => {
         const product: ProductForm = {
             id: result.productId,
             name: result.name,
-            category: result.category,
-            subCategory :result.subCategory,
+            category: result.category.name,
+            subCategory :result.subCategory.name,
             price: formatPrice(result.price),
             description: result.description,
             images: result.images.map((e : any) => e.imageURL),
@@ -98,6 +98,16 @@ const ProductAdmin = () => {
                 stock: e.stock
             }))
         };
+        console.log(product)
+
+        setValue("name", product.name);
+        setValue("price", product.price);
+        setValue("category", product.category);
+        setValue("subCategory", product.subCategory);
+        setValue("description", product.description);
+        setValue("images", product.images);
+        setValue("variants", product.variants);
+        setPreviews(product.images);
 
         setProjectVariants(product.variants)
         setProductDetail(product)
@@ -105,12 +115,6 @@ const ProductAdmin = () => {
         console.error("Error get product details", error)
         }
     }
-
-    useEffect(() => {
-        if(id !== 'new'){
-            getProductDetails()
-        }
-    },[id]);
 
     const fetchAllCategories = async () =>{
         try {
@@ -127,8 +131,11 @@ const ProductAdmin = () => {
     }
 
     useEffect(() => {
+        if(id !== 'new'){
+            getProductDetails()
+        }
         fetchAllCategories()
-    },[])
+    },[id])
 
   return (
     <div style={{width:"calc(100% - 16px)"}}>
@@ -233,7 +240,7 @@ const ProductAdmin = () => {
                                 <select {...field} className='input-new-product form-select text-capitalize'>
                                     <option value="">Select category</option>
                                     {arrCategory?.map((item: any) => (
-                                        <option className='text-capitalize' value={item.categoryId}>{item.name}</option>
+                                        <option className='text-capitalize' value={item.name}>{item.name}</option>
                                     ))}
                                 </select>
                             )}
@@ -250,8 +257,9 @@ const ProductAdmin = () => {
                             rules={{ required: "Sub Category is required" }}
                             render={({ field }) => {
                                 const categoriesSelected = watch("category")
-                                const subCategory: any = arrCategory.find((e: any) => e.categoryId === categoriesSelected)
+                                const subCategory: any = arrCategory.find((e: any) => e.name === categoriesSelected)
                                 const arrSubCategory = subCategory?.subCategories
+                                console.log('categoriesSelected',categoriesSelected)
                                 return (
                                     <select 
                                         {...field} 
@@ -260,7 +268,7 @@ const ProductAdmin = () => {
                                     >
                                         <option value="">Select sub-category</option>
                                         {arrSubCategory?.map((e: any) => (
-                                            <option className='text-capitalize' value={e.subCategoryId}>{e.name}</option>
+                                            <option className='text-capitalize' value={e.subCategory}>{e.name}</option>
                                         ))}
                                     </select>
                             )}}

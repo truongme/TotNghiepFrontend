@@ -9,22 +9,45 @@ interface OrderTable {
 
 const OrderManagement = () => {
 
-  const orders: any[] = [
+  const orders = [
     {
-        orderId: "001",
-        status: "Shipped",
-        products: [
-            { image: "/path/to/image1.jpg", name: "Product 1", size: "M", color: "Red", price: 20, quantity: 2 },
-            { image: "/path/to/image2.jpg", name: "Product 2", size: "L", color: "Blue", price: 25, quantity: 1 },
-        ],
+        status: "PENDING",
+        orderId: "cm388jg0a00008xkjw8y1hhsy",
+        user: {
+            lastName: "Cong Van",
+            firstName: "Dao"
+        },
+        payment: {
+            paymentMethod: "COD"
+        },
+        shipment: {
+            estimatedDeliveryDate: "2024-11-11T14:10:38.908Z"
+        }
     },
     {
-        orderId: "002",
-        status: "Processing",
-        products: [
-            { image: "/path/to/image3.jpg", name: "Product 3", size: "S", color: "Green", price: 15, quantity: 3 },
-        ],
+        status: "PENDING",
+        orderId: "cm388jg0a00018xkjrahswpqa",
+        user: {
+            lastName: "Xuan Dong",
+            firstName: "Dao"
+        },
+        payment: {
+            paymentMethod: "COD"
+        },
+        shipment: {
+            estimatedDeliveryDate: "2024-11-10T14:22:38.214Z"
+        }
     },
+    {
+        status: "IN_CART",
+        orderId: "cm388jg0a00028xkjvhynz5lk",
+        user: {
+            lastName: "Quang Truong",
+            firstName: "Ngo"
+        },
+        payment: null,
+        shipment: null
+    }
 ];
 
   const [selectTab, setSelectTab] = useState<string>("all")
