@@ -6,6 +6,8 @@ import { RiDeleteBin2Fill } from "react-icons/ri";
 import './styles.scss'
 import axios from 'axios';
 import { WebUrl } from '../../constants';
+import { MdNavigateNext } from "react-icons/md";
+import { GrFormPrevious } from "react-icons/gr";
 
 interface TableProduct {
     id: string;
@@ -104,11 +106,11 @@ const ProductManagement = () => {
             </table>
             
             {/* Pagination */}
-            <nav aria-label="Page navigation" className="mt-4">
+            <nav aria-label="Page navigation" className="mt-4 mb-4">
                 <ul className="pagination justify-content-center">
                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
                         <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                            Previous
+                            <GrFormPrevious />
                         </button>
                     </li>
 
@@ -122,15 +124,12 @@ const ProductManagement = () => {
 
                     <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
                         <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                            Next
+                            <MdNavigateNext />
                         </button>
                     </li>
                 </ul>
             </nav>
 
-            <div className='mt-3'>
-                Tổng số sản phẩm: {totalProduct}
-            </div>
             <Link to={'/product/new'}>
                 <button type="button" className="btn btn-success w-100">Thêm sản phẩm</button>
             </Link>

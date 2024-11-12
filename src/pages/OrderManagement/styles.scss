@@ -24,3 +24,165 @@
         color: $white-color !important;
     }
 }
+
+// styles.scss
+
+.order-admin-container {
+    padding: 1rem;
+    // background-color: #f9f9f9;
+
+    .table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 1rem;
+
+        th,
+        td {
+            padding: 0.75rem;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        tr {
+            cursor: pointer;
+
+            &:hover {
+                background-color: #f1f1f1;
+            }
+        }
+    }
+}
+
+// Panel styles
+.panel-order-details-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: end;
+    z-index: 1000;
+
+    .panel-order-details {
+        background: #fff;
+        width: 90%;
+        max-width: 600px;
+        padding: 2rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        height: 100vh;
+        overflow-y: auto;
+
+        .panel-order-details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+
+            .panel-order-details-header-title {
+                font-size: 1.25rem;
+                font-weight: bold;
+            }
+
+            svg {
+                cursor: pointer;
+                font-size: 1.5rem;
+                color: #888;
+
+                &:hover {
+                    color: #000;
+                }
+            }
+        }
+
+        .panel-order-details-row {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+
+            .panel-order-details-title {
+                width: 30%;
+                font-weight: 600;
+            }
+
+            .form-control,
+            .form-select {
+                width: 70%;
+            }
+        }
+
+        .panel-order-details-product {
+            margin-top: 1rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid #ddd;
+            font-weight: bold;
+
+            .order-product-details {
+                display: flex;
+                align-items: flex-start;
+                margin-top: 0.75rem;
+                gap: 1rem;
+
+                img {
+                    width: 120px;
+                    object-fit: cover;
+                    border-radius: 5px;
+                    border: 1px solid #ddd;
+                }
+
+                .order-product-details-content {
+                    .name-product {
+                        font-size: 1rem;
+                        font-weight: 600;
+                    }
+
+                    .infor-order-product {
+                        font-size: 0.875rem;
+                        color: #666;
+                    }
+                }
+            }
+        }
+
+        .panel-order-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+
+            .btn-cancel,
+            .btn-save {
+                padding: 0.5rem 1.25rem;
+                font-size: 1rem;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+
+                &.btn-cancel {
+                    background-color: #e0e0e0;
+                    color: #333;
+                    margin-right: 0.5rem;
+
+                    &:hover {
+                        background-color: #bdbdbd;
+                    }
+                }
+
+                &.btn-save {
+                    background-color: #007bff;
+                    color: #fff;
+
+                    &:hover {
+                        background-color: #0056b3;
+                    }
+                }
+            }
+        }
+    }
+}

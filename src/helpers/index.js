@@ -45,3 +45,25 @@ export const hexToColorName = (hex) => {
 
   return colors[hex] || "Unknown Color";
 };
+
+export const getSelectColor = (status) => {
+  switch (status) {
+    case "IN_CART":
+      return "lightblue";
+    case "PENDING":
+      return "orange";
+    case "SHIPPING":
+      return "yellow";
+    case "DELIVERED":
+      return "lightgreen";
+    case "CANCELLED":
+      return "lightcoral";
+    default:
+      return "white";
+  }
+};
+
+export const formatDate = (isoDate) => {
+  const date = new Date(isoDate);
+  return isoDate ? date.toLocaleDateString("en-GB") : "";
+};
