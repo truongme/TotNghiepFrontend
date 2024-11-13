@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './styles.scss'
 import { FaBoxOpen } from "react-icons/fa6";
 import { RiTShirtFill } from "react-icons/ri";
@@ -7,6 +7,10 @@ import { FaUser } from "react-icons/fa";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
 import { ChartData, ChartOptions } from 'chart.js';
+import { CardProps } from '../Home';
+import axios from 'axios';
+import { WebUrl } from '../../constants';
+import { formatPrice } from '../../helpers';
 
 ChartJS.register(
   CategoryScale,
@@ -82,7 +86,34 @@ const DashBoard = () => {
     },
   };
 
+    const [listTopSell, setListTopSell] = useState<any>([])
 
+  const getTopSell = async () => {
+    try{
+      const response = await axios.get(`${WebUrl}/api/v1/products/top-selling?limit=4`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'skip-browser-warning'
+        }
+      }) 
+      
+      const data = response.data.data.map((e: any, index: number) => ({
+        id: e.productId,  
+        img: e.images?.[0].imageURL,
+        name: e.name,
+        price: formatPrice(e.price),
+      }));
+
+      setListTopSell(data)
+
+    } catch (error) {
+      console.error('Error get top sell:', error);
+    }
+  }
+
+  useEffect(() => {
+    getTopSell()
+  },[])
 
     return (
         <div className='container dashboard-container pt-3 pb-3'>
@@ -136,42 +167,17 @@ const DashBoard = () => {
                 <div className='dashboard-top-sale'>
                     <div className='mb-2 dashboard-top-sale-title'>Top Sales</div>
                     <div className='dashboard-top-sale-cotainer'>
-                        <div className='dashboard-top-sale-item'>
-                            <div className='dashboard-top-sale-item-img'>
-                                <img src="https://product.hstatic.net/200000642007/product/50bll_3adrm1043_1_37a91042545a4307bbc0b76dc1962caf_b0381951ac904d72b9380b694ae56f63_large.jpg" alt="" />
+                        {listTopSell.map((e : any) => (
+                            <div className='dashboard-top-sale-item'>
+                                <div className='dashboard-top-sale-item-img'>
+                                    <img src={e.img} alt="" />
+                                </div>
+                                <div>
+                                    <div>{e.name}</div>
+                                    <div>{e.price}</div>
+                                </div>
                             </div>
-                            <div>
-                                <div>MLB - Áo sơ mi unisex cổ bẻ tay ngắn Classic Monogram</div>
-                                <div>Đã bán: 20</div>
-                            </div>
-                        </div>
-                        <div className='dashboard-top-sale-item'>
-                            <div className='dashboard-top-sale-item-img'>
-                                <img src="https://product.hstatic.net/200000642007/product/50bll_3adrm1043_1_37a91042545a4307bbc0b76dc1962caf_b0381951ac904d72b9380b694ae56f63_large.jpg" alt="" />
-                            </div>
-                            <div>
-                                <div>MLB - Áo sơ mi unisex cổ bẻ tay ngắn Classic Monogram</div>
-                                <div>Đã bán: 20</div>
-                            </div>
-                        </div>
-                        <div className='dashboard-top-sale-item'>
-                            <div className='dashboard-top-sale-item-img'>
-                                <img src="https://product.hstatic.net/200000642007/product/50bll_3adrm1043_1_37a91042545a4307bbc0b76dc1962caf_b0381951ac904d72b9380b694ae56f63_large.jpg" alt="" />
-                            </div>
-                            <div>
-                                <div>MLB - Áo sơ mi unisex cổ bẻ tay ngắn Classic Monogram</div>
-                                <div>Đã bán: 20</div>
-                            </div>
-                        </div>
-                        <div className='dashboard-top-sale-item'>
-                            <div className='dashboard-top-sale-item-img'>
-                                <img src="https://product.hstatic.net/200000642007/product/50bll_3adrm1043_1_37a91042545a4307bbc0b76dc1962caf_b0381951ac904d72b9380b694ae56f63_large.jpg" alt="" />
-                            </div>
-                            <div>
-                                <div>MLB - Áo sơ mi unisex cổ bẻ tay ngắn Classic Monogram</div>
-                                <div>Đã bán: 20</div>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
             </div>

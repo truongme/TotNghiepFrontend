@@ -119,7 +119,7 @@ const Header = () => {
           'Authorization': `Bearer ${token}`, 
         }
       })
-      const count = response.data.orderItems.lenght
+      const count = response.data.orderItems.length
       setItemsOrderCount(count)
     } catch (error) {
       console.error("Error get Order item", error)
@@ -127,7 +127,7 @@ const Header = () => {
   }
 
   useEffect(() => {
-    fetchData()
+    role === "CUSTOMER" && fetchData()
   }, [role, token]);
 
   return (
@@ -177,7 +177,7 @@ const Header = () => {
               <Link to={role ? "/cart" : '/login'} className='link-style'>
                 <FaShoppingCart className='header-icon'/>
               </Link>
-              {role && itemsOrderCount>0 && 
+              {itemsOrderCount && 
                 <div className='header-cart-count'>{itemsOrderCount}</div>
               }
             </div>
