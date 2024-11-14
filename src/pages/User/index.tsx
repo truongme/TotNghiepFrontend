@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import './styles.scss'
 import avatar from '../../assets/images/avatar.jpg'
-import { FaUser } from 'react-icons/fa'
-import { FaCartShopping } from 'react-icons/fa6';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Adress from './Address/Address';
 import Information from './Information/Information';
 import axios from 'axios';
 import { WebUrl } from '../../constants';
+import OrderUser from './Order';
+import { FaUserAlt } from "react-icons/fa";
+import { FaBoxOpen } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
 
 export interface User {
   avatar: string | null;
@@ -50,35 +52,33 @@ const User = () => {
     }, []);
 
   return (
-    <div className='container d-flex justify-content-between pt-3'>
+    <div className='container d-flex justify-content-between align-items-start'>
         <div className='user-menu-container'>
             <div className='user'>
               <div className='avatar-user'>
-                <img src={avatar} alt="" />
+                <img src={profileUser?.avatar || avatar} alt="" />
               </div>
               <div>
-                <h6>Ngô Quang Trường</h6>
-                <p>{profileUser?.email}</p>
+                <h6>{profileUser?.firstName || "Ngo Quang"} {profileUser?.lastName || "Truong"}</h6>
+                <div>{profileUser?.email || "TruongNgo@gmail.com"}</div>
               </div>
             </div>
             <hr />
-            <div className='user-menu-title '>
-                <FaUser className='icon'/>
-                <div>Thông tin tài khoản</div>
-            </div>
             <div>
                 <ul>
-                    <li>
-                        <a onClick={() => setItemActive('infor')}>Thông tin cá nhân</a>
+                    <li className='item-user'>
+                        <FaUserAlt />
+                        <a onClick={() => setItemActive('infor')}>My Account</a>
                     </li>
-                    <li>
-                        <a onClick={() => setItemActive('address')}>Địa chỉ giao hàng</a>
+                    <li className='item-user'>
+                        <FaLocationDot />
+                        <a onClick={() => setItemActive('address')}>My Addresses</a>
+                    </li>
+                    <li className='item-user'>
+                        <FaBoxOpen />
+                        <a onClick={() => setItemActive('order')}>My Purchase</a>
                     </li>
                 </ul>
-            </div>
-            <div className='user-menu-title' onClick={() => setItemActive('order')}>
-                <FaCartShopping className='icon'/>
-                <div>Đơn hàng</div>
             </div>
         </div>
         <div className='user-content-container'>
@@ -89,6 +89,9 @@ const User = () => {
             )}
             {itemActive === 'address' && (
                 <Adress/>
+            )}
+            {itemActive === 'order' && (
+                <OrderUser/>
             )}
         </div>
     </div>

@@ -3,7 +3,7 @@ import './styles.scss'
 
 const Address = () => {
   return (
-    <div> 
+    <div className='address-container p-3'> 
       <div>Địa chỉ giao hàng</div>
       <hr />
     </div>

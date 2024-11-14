@@ -1,0 +1,106 @@
+@import '../../../assets/styles/variables.scss';
+
+
+.order-status{
+    margin-bottom: 24px ;
+    position: sticky;
+        top: 60px;
+        left: 0;
+    .order-status-list {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: $gray-color;
+
+        .order-status-item {
+            width: 100%;
+            text-align: center;
+            padding: 10px 0px;
+            cursor: pointer;
+            border-bottom: 2px solid $gray-color;
+            font-size: 17px;
+
+            &:hover {
+                color: $primary-color;
+            }
+        }
+        .active{
+            border-bottom: 2px solid $primary-color !important;
+            color: $primary-color;
+        }
+    }
+}
+
+
+.order-item-container{
+    width: 100%;
+    background-color: $gray-color;
+    padding: 12px 20px;
+    margin-bottom: 24px;
+
+    .order-item-status{
+        color: $primary-color;
+        display: flex;
+        justify-content: end;
+        padding: 6px 0px 12px 0px;
+        border-bottom: 1px solid $primary-color ;
+        font-size: 17px;
+        text-transform: uppercase;
+    }
+    .order-item{
+        display: flex;
+        align-items: center;
+        margin: 12px 0px;
+        justify-content: space-between;
+        .order-item-content{
+            display: flex;
+            align-items: center;
+            .order-item-img {
+                width: 100px;
+                margin-right: 15px;
+        
+                img {
+                    width: 100%;
+                    object-fit: cover;
+                }
+            }
+        }
+    }
+}
+
+.order-item-footer{
+    padding: 12px 20px;
+    border-top: 1px solid $primary-color ;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0px 6px 0px;
+    button{
+        border: none;
+        padding: 8px 0px;
+        margin-right: 12px;
+        width: 150px;
+        
+        // background-color: red;
+    }
+    .primary{
+        color: white;
+        background-color: $primary-color;
+        border: 1px solid $primary-color;
+        &:hover{
+            background-color: #067cdc;;
+        }
+    }
+    .secondary{
+        border: 1px solid $primary-color;
+        background-color: white;
+        color: $primary-color;
+    }
+}
+
+.total-price{
+    color: $primary-color;
+    font-size: 17px;
+    padding-left: 10px !important;
+}

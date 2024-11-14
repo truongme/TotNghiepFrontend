@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './styles.scss'
-import img from '../../../assets/images/avatar.jpg'
+import avatar from '../../../assets/images/avatar.jpg'
 import axios from 'axios'
 import { User } from '..'
 import { WebUrl } from '../../../constants'
@@ -34,38 +34,34 @@ const Information = () => {
   }, []);
 
   return (
-    <div className='w-100'>
-      <div>Hồ sơ của tôi</div>
+    <div className='user-inforation-container w-100 p-3'>
+      <div>My Account</div>
       <hr />
       <div className='d-flex'>
         <div className='user-inforation-title'>
           <ul>
-            <li>Tên đăng nhập</li>
-            <li>Tên</li>
+            <li>Full Name</li>
             <li>Email</li>
-            <li>Số điện thoại</li>
-            <li>Giới tính</li>
-            <li>Ngày sinh</li>
+            <li>Phone Number</li>
+            <li>Gender</li>
           </ul>
         </div>
         <div className='user-inforation-value'>
           <ul>
-            <li>truongmedn</li>
-            <li>Tên</li>
-            <li>{profileUser?.email || ""}</li>
-            <li>{profileUser?.phoneNumber || ""}</li>
-            <li>{profileUser?.gender || ""}</li>
-            <li>**/04/20**</li>
+            <li>{profileUser?.firstName || "Ngo Quang"} {profileUser?.lastName || "Truong"}</li>
+            <li>{profileUser?.email || "TruongNgo@gmail.com"}</li>
+            <li>{profileUser?.phoneNumber || "0353519243"}</li>
+            <li>{profileUser?.gender || "Male"}</li>
           </ul>
-          <button>Lưu</button>
+          <button className="primary">Lưu</button>
         </div>
         <div className='user-inforation-avatar'>
           <div className='avatar'>
-            <img src={img} alt="" />
+            <img src={profileUser?.avatar || avatar} alt="" />
           </div>
-          <button>Chọn ảnh</button>
-          <p>Dụng lượng file tối đa 1 MB</p>
-          <p>Định dạng:.JPEG, .PNG</p>
+          <button className="primary">Chọn ảnh</button>
+          <div>Dụng lượng file tối đa 1 MB</div>
+          <div>Định dạng:.JPEG, .PNG</div>
         </div>
       </div>
       

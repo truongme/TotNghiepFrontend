@@ -177,7 +177,7 @@ const Header = () => {
               <Link to={role ? "/cart" : '/login'} className='link-style'>
                 <FaShoppingCart className='header-icon'/>
               </Link>
-              {itemsOrderCount && 
+              {itemsOrderCount > 0 && 
                 <div className='header-cart-count'>{itemsOrderCount}</div>
               }
             </div>
