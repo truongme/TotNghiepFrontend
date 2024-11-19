@@ -4,15 +4,32 @@ import { formatPrice } from '../../../helpers'
 import axios from 'axios'
 import { WebUrl } from '../../../constants'
 
+interface Order{
+    id: string,
+    status: string,
+    total: number,
+    item: OrderItem[],
+}
+
+interface OrderItem{
+    id: string,
+    name: string,
+    image: string,
+    quantity: number,
+    price: number,
+    color: string,
+    size: string,
+}
+
 const OrderUser = () => {
     const [statusSelected, setStatusSelected] = useState<string>("")
-    const [orderUser, setOrderUser] = useState<any>()
-    const [orderUserPrev, setOrderUserPrev] = useState<any>()
+    const [orderUser, setOrderUser] = useState<Order[]>()
+    const [orderUserPrev, setOrderUserPrev] = useState<Order[]>()
     const token = sessionStorage.getItem("token");
 
     const handleChangeStatus = (status: string) => {
         setStatusSelected(status)
-        const result = orderUserPrev?.filter((e: any) => e.status === status)
+        const result = status !== "" ? orderUserPrev?.filter((e: Order) => e.status === status) : orderUserPrev
         setOrderUser(result)
     }
 
@@ -42,9 +59,10 @@ const OrderUser = () => {
             <div className='order-status'>
                 <ul className='order-status-list'> 
                     <li className={`${statusSelected === '' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("")}>All</li>
-                    <li className={`${statusSelected === 'ship' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("ship")}>To Ship</li>
-                    <li className={`${statusSelected === 'deliver' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("deliver")}>Delivered</li>
-                    <li className={`${statusSelected === 'cancel' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("cancel")}>Cancelled</li>
+                    <li className={`${statusSelected === 'Pending' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("Pending")}>To Ship</li>
+                    <li className={`${statusSelected === 'Shipping' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("Shipping")}>To Ship</li>
+                    <li className={`${statusSelected === 'Delivered' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("Delivered")}>Delivered</li>
+                    <li className={`${statusSelected === 'Cancelled' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("Cancelled")}>Cancelled</li>
                 </ul>
             </div>
             {orderUser?.map((e: any) => (

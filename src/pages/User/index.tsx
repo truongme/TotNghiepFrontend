@@ -66,15 +66,15 @@ const User = () => {
             <hr />
             <div>
                 <ul>
-                    <li className='item-user'>
+                    <li className={`${itemActive === 'infor' ? "active" : ""} item-user`}>
                         <FaUserAlt />
                         <a onClick={() => setItemActive('infor')}>My Account</a>
                     </li>
-                    <li className='item-user'>
+                    <li className={`${itemActive === 'address' ? "active" : ""} item-user`}>
                         <FaLocationDot />
                         <a onClick={() => setItemActive('address')}>My Addresses</a>
                     </li>
-                    <li className='item-user'>
+                    <li className={`${itemActive === 'order' ? "active" : ""} item-user`}>
                         <FaBoxOpen />
                         <a onClick={() => setItemActive('order')}>My Purchase</a>
                     </li>

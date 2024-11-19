@@ -158,6 +158,8 @@ const Product = () => {
       setProjectVariantsColor(color)
       setProjectVariantsSize(sortedSizes)
       setProductDetail(product)
+      setSelectedSize(size?.[0])
+      setSelectedColor(variants?.find((e: any) => e.size === size?.[0])?.color || "")
     } catch (error) {
       console.error("Error get product details", error)
     }
