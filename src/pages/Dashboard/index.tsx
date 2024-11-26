@@ -30,7 +30,7 @@ const DashBoard = () => {
         {
             type: 'line' as const,
             label: 'Số lượng Order',
-            data: [50, 65, 70, 60, 75, 80, 85, 90, 95, 100, 105, 150],
+            data: [50, 65, 70, 60, 75, 80, 85, 90, 95, 100, 105, 20],
             borderColor: '#FFF27A',
             backgroundColor: '#FFF27A',
             tension: 0.4,
@@ -40,7 +40,7 @@ const DashBoard = () => {
         {
             type: 'line' as const,
             label: 'Sản phẩm bán ra',
-            data: [30, 45, 55, 50, 60, 65, 75, 70, 85, 90, 95, 100],
+            data: [30, 45, 55, 50, 60, 65, 75, 70, 85, 90, 95, 40],
             borderColor: '#E16449',
             backgroundColor: '#E16449',
             tension: 0.4,
@@ -50,7 +50,7 @@ const DashBoard = () => {
         {
             type: 'bar' as const,
             label: 'Doanh thu',
-            data: [500, 700, 800, 600, 850, 900, 1000, 950, 1100, 1050, 1150, 1200],
+            data: [11500000, 10700000, 12500000, 10000000, 13500000, 14000000, 17000000, 19050000, 21200000, 22500000, 21500000, 13500000],
             backgroundColor: '#A5A7FE',
             borderColor: '#5351FA',
             borderWidth: 1,
@@ -126,7 +126,7 @@ const DashBoard = () => {
                         </div>
                         <div className='dashboard-main-item-title'>
                             <div>Total Sales</div>
-                            <p>2.000</p>
+                            <p>{formatPrice(13500000)}</p>
                         </div>
                     </div>
                     <div className='dashboard-main-item'>
@@ -135,7 +135,7 @@ const DashBoard = () => {
                         </div>
                         <div className='dashboard-main-item-title'>
                             <div>Total Order</div>
-                            <p>2.000</p>
+                            <p>20</p>
                         </div>
                     </div>
                     <div className='dashboard-main-item'>
@@ -144,7 +144,7 @@ const DashBoard = () => {
                         </div>
                         <div className='dashboard-main-item-title'>
                             <div>Total Product</div>
-                            <p>2.000</p>
+                            <p>40</p>
                         </div>
                     </div>
                     <div className='dashboard-main-item'>
@@ -153,7 +153,7 @@ const DashBoard = () => {
                         </div>
                         <div className='dashboard-main-item-title'>
                             <div>Total Client</div>
-                            <p>2.000</p>
+                            <p>10</p>
                         </div>
                     </div>
                 </div>

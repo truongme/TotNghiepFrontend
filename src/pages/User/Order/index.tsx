@@ -8,7 +8,7 @@ interface Order{
     id: string,
     status: string,
     total: number,
-    item: OrderItem[],
+    items: OrderItem[],
 }
 
 interface OrderItem{
@@ -22,9 +22,10 @@ interface OrderItem{
 }
 
 const OrderUser = () => {
+    
     const [statusSelected, setStatusSelected] = useState<string>("")
-    const [orderUser, setOrderUser] = useState<Order[]>()
-    const [orderUserPrev, setOrderUserPrev] = useState<Order[]>()
+    const [orderUser, setOrderUser] = useState<Order[]>([])
+    const [orderUserPrev, setOrderUserPrev] = useState<Order[]>([])
     const token = sessionStorage.getItem("token");
 
     const handleChangeStatus = (status: string) => {
@@ -34,17 +35,32 @@ const OrderUser = () => {
     }
 
     const fetchOrderUser = async () => {
+
         try {
-            const response = await axios.get(`${WebUrl}/api/v1/users/order`, {
+            const response = await axios.get(`${WebUrl}/api/v1/orders/user-order`, {
                 headers: {
                 'Content-Type': 'application/json',
                 'ngrok-skip-browser-warning': 'skip-browser-warning',
                 'Authorization': `Bearer ${token}`, 
                 }
             });
+            const data = response.data.map((x: any) => ({
+                id: x.orderId,
+                status: x.status,
+                total: x.totalPrice,
+                items: x.orderItems.map((e: any) => ({
+                    id: e.orderItemId,
+                    name: e.productVariant.product.name,
+                    image: e.productVariant.product.images[0]?.imageURL || '', 
+                    quantity: e.quantity,
+                    size: e.productVariant.size.sizeType,
+                    color: e.productVariant.color.name[0],
+                    price: 1000
+                }))
+            }));
 
-            setOrderUser(response.data)
-            setOrderUserPrev(response.data)
+            setOrderUser(data)
+            setOrderUserPrev(data)
         } catch (error) {
             console.error('Unexpected Error:', error);
         }
@@ -59,16 +75,25 @@ const OrderUser = () => {
             <div className='order-status'>
                 <ul className='order-status-list'> 
                     <li className={`${statusSelected === '' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("")}>All</li>
-                    <li className={`${statusSelected === 'Pending' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("Pending")}>To Ship</li>
-                    <li className={`${statusSelected === 'Shipping' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("Shipping")}>To Ship</li>
-                    <li className={`${statusSelected === 'Delivered' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("Delivered")}>Delivered</li>
-                    <li className={`${statusSelected === 'Cancelled' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("Cancelled")}>Cancelled</li>
+                    <li className={`${statusSelected === 'PENDING' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("PENDING")}>Pending</li>
+                    <li className={`${statusSelected === 'SHIPPING' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("SHIPPING")}>To Ship</li>
+                    <li className={`${statusSelected === 'DELIVERED' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("DELIVERED")}>Delivered</li>
+                    <li className={`${statusSelected === 'CANCELLED' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("CANCELLED")}>Cancelled</li>
                 </ul>
             </div>
-            {orderUser?.map((e: any) => (
+            {orderUser.map((e: Order) => (
                 <div className='order-item-container'>
-                    <div className='order-item-status'>{e.status}</div>
-                    {e?.item?.map((x: any) => {
+                    <div className='order-item-header'>
+                        {e.status === 'PENDING' ? (
+                            <div>
+                                <button className='button-cancel'>Cancel Order</button>
+                            </div>
+                        ) : (
+                            <div></div>
+                        )}
+                        <div className='order-item-status'>{e.status}</div>
+                    </div>
+                    {e?.items.map((x: OrderItem) => (
                         <div className='order-item'>
                             <div className='order-item-content'>
                                 <div className='order-item-img'>
@@ -85,7 +110,7 @@ const OrderUser = () => {
                                 {formatPrice(x.price)}
                             </div>
                         </div>
-                    })}
+                    ))}
                     <div className='order-item-footer'>
                         <div>
                             <button className='primary'>Buy Again</button>
@@ -93,101 +118,11 @@ const OrderUser = () => {
                         </div>
                         <div className='d-flex'>
                             <div >Order Total: </div>
-                            <div className='total-price'>{formatPrice(1500000)}</div>
+                            <div className='total-price'>{formatPrice(e.total)}</div>
                         </div>
                     </div>
                 </div>
             ))}
-            <div className='order-item-container'>
-                <div className='order-item-status'>Cancelled</div>
-                <div className='order-item'>
-                    <div className='order-item-content'>
-                        <div className='order-item-img'>
-                            <img src="https://product.hstatic.net/200000642007/product/43crs_3fmth1144_1_15de8306ab8947d2a316cfcffe37e755_5410a48120194ab9a1d58d597ef9073c_master.jpg" alt="" />
-                        </div>
-                        <div>
-                            <div>MLB - Áo thun unisex cổ tròn tay ngắn Vintage Sports Functional Big Logo</div>
-                            <div>Color: </div>
-                            <div>Size: </div>
-                            <div>Quantity: </div>
-                        </div>
-                    </div>
-                    <div>
-                        40.0000đ
-                    </div>
-                </div>
-                <div className='order-item'>
-                    <div className='order-item-content'>
-                        <div className='order-item-img'>
-                            <img src="https://product.hstatic.net/200000642007/product/43crs_3fmth1144_1_15de8306ab8947d2a316cfcffe37e755_5410a48120194ab9a1d58d597ef9073c_master.jpg" alt="" />
-                        </div>
-                        <div>
-                            <div>MLB - Áo thun unisex cổ tròn tay ngắn Vintage Sports Functional Big Logo</div>
-                            <div>Color: </div>
-                            <div>Size: </div>
-                            <div>Quantity: </div>
-                        </div>
-                    </div>
-                    <div>
-                        40.0000đ
-                    </div>
-                </div>
-                <div className='order-item-footer'>
-                    <div>
-                        <button className='primary'>Buy Again</button>
-                        <button className='secondary'>Contact Seller</button>
-                    </div>
-                    <div className='d-flex'>
-                        <div >Order Total: </div>
-                        <div className='total-price'>{formatPrice(1500000)}</div>
-                    </div>
-                </div>
-            </div>
-            <div className='order-item-container'>
-                <div className='order-item-status'>Cancelled</div>
-                <div className='order-item'>
-                    <div className='order-item-content'>
-                        <div className='order-item-img'>
-                            <img src="https://product.hstatic.net/200000642007/product/43crs_3fmth1144_1_15de8306ab8947d2a316cfcffe37e755_5410a48120194ab9a1d58d597ef9073c_master.jpg" alt="" />
-                        </div>
-                        <div>
-                            <div>MLB - Áo thun unisex cổ tròn tay ngắn Vintage Sports Functional Big Logo</div>
-                            <div>Color: </div>
-                            <div>Size: </div>
-                            <div>Quantity: </div>
-                        </div>
-                    </div>
-                    <div className='total-price'>
-                        {formatPrice(750000)}
-                    </div>
-                </div>
-                <div className='order-item'>
-                    <div className='order-item-content'>
-                        <div className='order-item-img'>
-                            <img src="https://product.hstatic.net/200000642007/product/43crs_3fmth1144_1_15de8306ab8947d2a316cfcffe37e755_5410a48120194ab9a1d58d597ef9073c_master.jpg" alt="" />
-                        </div>
-                        <div>
-                            <div>MLB - Áo thun unisex cổ tròn tay ngắn Vintage Sports Functional Big Logo</div>
-                            <div>Color: </div>
-                            <div>Size: </div>
-                            <div>Quantity: </div>
-                        </div>
-                    </div>
-                    <div className='total-price'>
-                        {formatPrice(750000)}
-                    </div>
-                </div>
-                <div className='order-item-footer'>
-                    <div>
-                        <button className='primary'>Buy Again</button>
-                        <button className='secondary'>Contact Seller</button>
-                    </div>
-                    <div className='d-flex'>
-                        <div >Order Total: </div>
-                        <div className='total-price'>{formatPrice(1500000)}</div>
-                    </div>
-                </div>
-            </div>
         </div>
     )
 }

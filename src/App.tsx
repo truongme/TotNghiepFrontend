@@ -19,26 +19,28 @@ function App() {
   },[roleUser])
 
   return (
-    <div className={`${roleUser === ROLE.ADMIN ? 'admin-container' : ''} `}>
-      {roleUser !== ROLE.ADMIN  ? (
-        <div className='header-fixed'>
-          <Header/>
+    <div className='body-container'>
+      <div className={`${roleUser === ROLE.ADMIN ? 'admin-container' : ''}`}>
+        {roleUser !== ROLE.ADMIN  ? (
+          <div className='header-fixed'>
+            <Header/>
+          </div>
+        ) : (
+          <div className='nav-fixed'>
+            <NavAdmin/>
+          </div>
+        )}
+        <div className={`${roleUser === ROLE.ADMIN ? 'admin-router' : 'admin-customer'} `}>
+          <Routes>
+            {router?.map((router: any, index: number) => (
+              <Route key={index} path={router.path} element={router.element}/>
+            ))}
+          </Routes>
         </div>
-      ) : (
-        <div className='nav-fixed'>
-          <NavAdmin/>
-        </div>
-      )}
-      <div className={`${roleUser === ROLE.ADMIN ? 'admin-router' : 'admin-customer'} `}>
-        <Routes>
-          {router?.map((router: any, index: number) => (
-            <Route key={index} path={router.path} element={router.element}/>
-          ))}
-        </Routes>
+        {roleUser !== ROLE.ADMIN && (
+          <Footer/>
+        )}
       </div>
-      {roleUser !== ROLE.ADMIN && (
-        <Footer/>
-      )}
     </div>
   );
 }

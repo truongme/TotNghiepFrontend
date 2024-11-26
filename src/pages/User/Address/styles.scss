@@ -18,3 +18,26 @@
         }
     }
 }
+
+.address-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    button{
+        margin-left: 10px;
+    }
+}
+
+.address-edit-form{
+    button{
+        margin-right: 10px;
+    }
+   
+}
+.address-item-ctn{
+    background-color: $gray-color;
+}
+
+.address-add-form{
+    background-color: $gray-color;
+}

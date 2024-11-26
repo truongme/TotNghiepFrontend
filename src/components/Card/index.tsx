@@ -23,14 +23,16 @@ const Card: React.FC<ICardProps> = ({data}) => {
         <img src={data.img} alt="" onClick={e => handleOnClick(data.id)} className='img-main'/>
         <img src={data.imgHover} alt="" onClick={e => handleOnClick(data.id)} className='img-hover' />
       </div>
-      <div className='card-content'>
-        <div className='card-title' onClick={e => handleOnClick(data.id)}>
-          {data.name}
+      {!data.hidden && (
+        <div className='card-content'>
+          <div className='card-title' onClick={e => handleOnClick(data.id)}>
+            {data.name}
+          </div>
+          <span className='card-price'>
+            {formatPrice(data.price)}
+          </span>
         </div>
-        <span className='card-price'>
-          {formatPrice(data.price)}
-        </span>
-      </div>
+      )}
       {data.rank&&(
         <div className='card-index-rank'>
           {data.rank}

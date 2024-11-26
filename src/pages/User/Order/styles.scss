@@ -45,7 +45,7 @@
         display: flex;
         justify-content: end;
         padding: 6px 0px 12px 0px;
-        border-bottom: 1px solid $primary-color ;
+        
         font-size: 17px;
         text-transform: uppercase;
     }
@@ -77,15 +77,11 @@
     justify-content: space-between;
     align-items: center;
     padding: 12px 0px 6px 0px;
-    button{
-        border: none;
-        padding: 8px 0px;
-        margin-right: 12px;
-        width: 150px;
-        
-        // background-color: red;
-    }
     .primary{
+        border: none;
+            padding: 8px 0px;
+            margin-right: 12px;
+            width: 150px;
         color: white;
         background-color: $primary-color;
         border: 1px solid $primary-color;
@@ -93,7 +89,10 @@
             background-color: #067cdc;;
         }
     }
-    .secondary{
+    .secondary{border: none;
+        padding: 8px 0px;
+        margin-right: 12px;
+        width: 150px;
         border: 1px solid $primary-color;
         background-color: white;
         color: $primary-color;
@@ -104,4 +103,20 @@
     color: $primary-color;
     font-size: 17px;
     padding-left: 10px !important;
+}
+
+.order-item-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid $primary-color ;
+}
+.button-cancel{
+    padding: 5px 0px;
+    background-color: rgb(255, 33, 33);
+    width: 150px !important;
+    color: white;
+    &:hover{
+        background-color: rgb(255, 18, 18);
+    }
 }

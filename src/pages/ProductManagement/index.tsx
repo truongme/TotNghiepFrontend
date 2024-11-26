@@ -61,7 +61,7 @@ const ProductManagement = () => {
 
 
     return (
-        <div className='w-100 p-3'>
+        <div className='w-100 p-3 mr-2'>
             <h4>Danh sách sản phẩm</h4>
             <table className="table table-bordered table-striped w-100 text-center">
                 <thead className="table-primary">

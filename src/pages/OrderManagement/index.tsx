@@ -140,7 +140,7 @@ const OrderManagement = () => {
               <div className='panel-order-details-product'>
                 <div>Product</div>
                 <div className='order-product-details'>
-                  <img src="https://product.hstatic.net/200000642007/product/ao_khoac_denim_3adkm0341_dff08e15f3c943e294b8b820a4f4cd7c_master.jpg" alt="" />
+                  <img className='img-product-order' src="https://product.hstatic.net/200000642007/product/ao_khoac_denim_3adkm0341_dff08e15f3c943e294b8b820a4f4cd7c_master.jpg" alt="" />
                   <div className='order-product-details-content'>
                     <div className='name-product'>MLB - Áo thun unisex cổ tròn tay ngắn hiện đại</div>
                     <div className='infor-order-product'>Color: White</div>
@@ -149,7 +149,7 @@ const OrderManagement = () => {
                   </div>
                 </div>
                 <div className='order-product-details'>
-                  <img src="https://product.hstatic.net/200000642007/product/ao_khoac_denim_3adkm0341_dff08e15f3c943e294b8b820a4f4cd7c_master.jpg" alt="" />
+                  <img className='img-product-order' src="https://product.hstatic.net/200000642007/product/ao_khoac_denim_3adkm0341_dff08e15f3c943e294b8b820a4f4cd7c_master.jpg" alt="" />
                   <div className='order-product-details-content'>
                     <div className='name-product'>MLB - Áo thun unisex cổ tròn tay ngắn hiện đại</div>
                     <div className='infor-order-product'>Color: White</div>
@@ -158,7 +158,7 @@ const OrderManagement = () => {
                   </div>
                 </div>
                 <div className='order-product-details'>
-                  <img src="https://product.hstatic.net/200000642007/product/ao_khoac_denim_3adkm0341_dff08e15f3c943e294b8b820a4f4cd7c_master.jpg" alt="" />
+                  <img className='img-product-order' src="https://product.hstatic.net/200000642007/product/ao_khoac_denim_3adkm0341_dff08e15f3c943e294b8b820a4f4cd7c_master.jpg" alt="" />
                   <div className='order-product-details-content'>
                     <div className='name-product'>MLB - Áo thun unisex cổ tròn tay ngắn hiện đại</div>
                     <div className='infor-order-product'>Color: White</div>
@@ -167,7 +167,7 @@ const OrderManagement = () => {
                   </div>
                 </div>
                 <div className='order-product-details'>
-                  <img src="https://product.hstatic.net/200000642007/product/ao_khoac_denim_3adkm0341_dff08e15f3c943e294b8b820a4f4cd7c_master.jpg" alt="" />
+                  <img className='img-product-order' src="https://product.hstatic.net/200000642007/product/ao_khoac_denim_3adkm0341_dff08e15f3c943e294b8b820a4f4cd7c_master.jpg" alt="" />
                   <div className='order-product-details-content'>
                     <div className='name-product'>MLB - Áo thun unisex cổ tròn tay ngắn hiện đại</div>
                     <div className='infor-order-product'>Color: White</div>
@@ -176,7 +176,7 @@ const OrderManagement = () => {
                   </div>
                 </div>
                 <div className='order-product-details'>
-                  <img src="https://product.hstatic.net/200000642007/product/ao_khoac_denim_3adkm0341_dff08e15f3c943e294b8b820a4f4cd7c_master.jpg" alt="" />
+                  <img className='img-product-order' src="https://product.hstatic.net/200000642007/product/ao_khoac_denim_3adkm0341_dff08e15f3c943e294b8b820a4f4cd7c_master.jpg" alt="" />
                   <div className='order-product-details-content'>
                     <div className='name-product'>MLB - Áo thun unisex cổ tròn tay ngắn hiện đại</div>
                     <div className='infor-order-product'>Color: White</div>
@@ -193,7 +193,7 @@ const OrderManagement = () => {
                 <div className='panel-order-details-title'>Shipment</div>
                 <input disabled className="form-control" placeholder='Shipment' />
               </div>
-              <div className='panel-order-details-row'>
+              <div className='panel-order-details-row mb-3'>
                 <div className='panel-order-details-title'>Status</div>
                 <select
                   className="form-select"

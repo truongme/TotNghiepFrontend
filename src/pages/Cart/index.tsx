@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './styles.scss';
-import img from '../../assets/images/card.webp';
-import { RiDeleteBin2Fill } from "react-icons/ri"; // Icon delete (nếu cần dùng)
-import ButtonCustom from '../../components/ButtonCustom'; // Nếu bạn có button custom
-import { MdDiscount } from "react-icons/md";
-import { FaJediOrder } from "react-icons/fa6";
 import axios from 'axios';
 import { formatPrice, hexToColorName } from '../../helpers';
 import { WebUrl } from '../../constants';
+import Modal from '../../components/Modal';
 
 interface CartProps{
   id: string,
@@ -19,13 +15,32 @@ interface CartProps{
   price: number,
   quantity: number,
   total: number,
+  productId: string
 }
 
 const Cart = () => {
 
   const [orderArr, setOrderArr] = useState<CartProps[]>([])
   const [totalOrder, setTotalOrder] = useState<Number>(0)
+  const [isOpenModal, setIsOpenModal] = useState<string>("")
   const token = sessionStorage.getItem("token");
+  const [propsModal , setPropsModal] = useState<any>()
+
+  const handleOpenModal = (obj: any) => {
+    setIsOpenModal(obj.productId)
+    const data = {
+      id: obj.productId,
+      quantity: obj.quantity,
+      size: obj.size,
+      color: obj.color,
+      img: obj.img
+    }
+    setPropsModal(data)
+  } 
+  
+  const handleCloseModal = () => {
+    setIsOpenModal("");
+  };
 
   const fetchData = async () => {
     try {
@@ -45,6 +60,7 @@ const Cart = () => {
         price: e.price,
         quantity: e.quantity,
         total: e.total,
+        productId: e.productId
       }))
 
       const totalOrderAmount = data.reduce((sum, item) => sum + item.total, 0);
@@ -70,17 +86,18 @@ const Cart = () => {
         <div className='cart-table'>
           <div className='cart-header'>
             <div className='row'>
-              <div className='col-6'>Sản phẩm</div>
+              <div className='col-4'>Sản phẩm</div>
               <div className='col-2'>Giá</div>
               <div className='col-2'>Số lượng</div>
               <div className='col-2'>Tạm tính</div>
+              <div className='col-2'>Action</div>
             </div>
           </div>
           <>
             {orderArr.map((e: CartProps) => (
               <div className='cart-item'>
                 <div className='row align-items-center'>
-                  <div className='col-6 cart-item-product d-flex'>
+                  <div className='col-4 cart-item-product d-flex'>
                     <img src={e.img} alt="product" className='cart-item-img' />
                     <div className='cart-item-details'>
                       <div className='cart-item-title'>{e.name}</div>
@@ -101,7 +118,12 @@ const Cart = () => {
                   <div className='col-2 cart-item-total'>
                     <span>{formatPrice(e.total)}</span>
                   </div>
+                  <div className='col-2 cart-item-action'>
+                    <button className='edit' onClick={() => handleOpenModal(e)}>Edit</button>
+                    <button className='delete'>Delete</button>
+                  </div>
                 </div>
+                
               </div>
             ))}
           </>
@@ -119,22 +141,15 @@ const Cart = () => {
               <span>Tổng</span>
               <span>{formatPrice(totalOrder)}</span>
             </div>
-            <div className="cart-discount">
-              <label htmlFor="discount">
-                <MdDiscount />
-                Phiếu ưu đãi
-              </label>
-              <div className="discount-input-group">
-                <input type="text" id="discount" placeholder="Mã ưu đãi" />
-                <button className="apply-btn">Áp dụng</button>
-              </div>
-            </div>
             <Link to={'/pay'} className='link-style'>
               <button className='checkout-btn'>Mua ngay</button>
             </Link>
           </div>
         </div>
       </div>
+      {isOpenModal && (
+        <Modal id={propsModal.id} quantity={propsModal.quantity} sizeProps={propsModal.size} colorProps={propsModal.color} imgProps={propsModal.img} onClose={handleCloseModal}/>
+      )}
     </div>
   );
 };

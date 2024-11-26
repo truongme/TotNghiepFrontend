@@ -17,7 +17,8 @@ export interface CardProps {
   imgHover?: string;
   name: string;
   price: string;
-  rank?: number
+  rank?: number;
+  hidden?:boolean;
 }
 
 const Home = () => {

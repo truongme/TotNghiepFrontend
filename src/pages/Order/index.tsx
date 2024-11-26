@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './styles.scss';
 import avatar from '../../assets/images/avatar.jpg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { WebUrl } from '../../constants';
 import { formatPrice } from '../../helpers';
@@ -44,10 +44,11 @@ const Order = () => {
   const [arrDistricts, setArrDistricts] = useState<any>([])
   const [arrWard, setArrWard] = useState<any>([])
   const [shippingCost, setShippingCost] = useState<number>(0)
-  const { handleSubmit, control, watch } = useForm<OrderForm>();
+  const { handleSubmit, control, watch,formState: { errors } } = useForm<OrderForm>();
+
+  const navigate = useNavigate()
 
   const onSubmit = async (data: OrderForm) => {
-    console.log('111',data )
     try {
       await axios.put(`${WebUrl}/api/v1/orders/complete-order`, {
         addressDetail: data.addressDetail,
@@ -65,6 +66,7 @@ const Order = () => {
       });
       
       alert("Mua hàng thành công")
+      navigate('/')
       
     } catch (error) {
       console.error("Error post item cart", error)
@@ -150,18 +152,17 @@ const Order = () => {
   return (
     <div className='container mb-5'>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='order-breadcrumb'>
+        <div className='order-breadcrumb' style={{ paddingTop: '20px' }}>
           <Link to={'/'} className='link-style order-breadcrumb-item'>Trang chủ</Link>
           <div className='order-breadcrumb-item'>/</div>
           <Link to={'/cart'} className='link-style order-breadcrumb-item'>Giỏ hàng</Link>
           <div className='order-breadcrumb-item'>/</div>
           <div className='order-breadcrumb-active'>Đơn hàng</div>
         </div>
-        <div className='row' style={{ marginTop: '15px' }}>
+        <div className='row' style={{ marginTop: '20px' }}>
           <div className='col-7'>
             <div className='order-user'>
               <div className='order-user-title'>
-                {/* <HiIdentification /> */}
                 Thông tin người nhận
               </div>
               <div className='order-infor-user'>
@@ -185,7 +186,6 @@ const Order = () => {
                     )}
                   />
                 </div>
-
                 <div className="mb-3 col-6">
                   <label className="form-label">Thành phố / Tỉnh</label>
                   <Controller
@@ -300,11 +300,11 @@ const Order = () => {
             <h6 className='order-user-title'>Đơn hàng</h6>
             <div className='order-items'>
               {orderArr.map((item) => (
-                <div className='order-cart-item row' key={item.id}>
-                  <div className='col-4 order-cart-item-img'>
+                <div className='order-cart-item' key={item.id}>
+                  <div className='order-cart-item-img'>
                     <img src={item.img} alt={item.name} />
                   </div>
-                  <div className='col-8'>
+                  <div>
                     <h6>{item.name}</h6>
                     <div className='d-flex justify-content-between'>
                       <p>{item.price.toLocaleString('vi-VN')}đ</p>

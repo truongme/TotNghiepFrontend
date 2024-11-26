@@ -11,6 +11,8 @@ import OrderUser from './Order';
 import { FaUserAlt } from "react-icons/fa";
 import { FaBoxOpen } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
+import { MdOutlineLogout } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 
 export interface User {
   avatar: string | null;
@@ -23,11 +25,17 @@ export interface User {
 
 const User = () => {
 
-    const [itemActive, setItemActive] = useState<string>('infor');
-
     const token = sessionStorage.getItem("token");
-
+    const navigate = useNavigate()
+    const [itemActive, setItemActive] = useState<string>('infor');
     const [profileUser, setProfileUser] = useState<User>()
+
+
+    const handleLogout = () => {
+        sessionStorage.removeItem("token")
+        sessionStorage.removeItem("role")
+        navigate('/login')
+    }
 
     const getProfile = async () => {
         try {
@@ -53,7 +61,7 @@ const User = () => {
 
   return (
     <div className='container d-flex justify-content-between align-items-start'>
-        <div className='user-menu-container'>
+        <div className='user-menu-container mb-3'>
             <div className='user'>
               <div className='avatar-user'>
                 <img src={profileUser?.avatar || avatar} alt="" />
@@ -77,6 +85,10 @@ const User = () => {
                     <li className={`${itemActive === 'order' ? "active" : ""} item-user`}>
                         <FaBoxOpen />
                         <a onClick={() => setItemActive('order')}>My Purchase</a>
+                    </li>
+                    <li className='item-user'>
+                        <MdOutlineLogout />
+                        <a onClick={() => handleLogout()}>Đăng xuất</a>
                     </li>
                 </ul>
             </div>

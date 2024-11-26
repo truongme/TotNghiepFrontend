@@ -34,7 +34,7 @@ const Information = () => {
   }, []);
 
   return (
-    <div className='user-inforation-container w-100 p-3'>
+    <div className='user-inforation-container w-100 p-3 mb-3'>
       <div>My Account</div>
       <hr />
       <div className='d-flex'>
@@ -48,10 +48,10 @@ const Information = () => {
         </div>
         <div className='user-inforation-value'>
           <ul>
-            <li>{profileUser?.firstName || "Ngo Quang"} {profileUser?.lastName || "Truong"}</li>
-            <li>{profileUser?.email || "TruongNgo@gmail.com"}</li>
-            <li>{profileUser?.phoneNumber || "0353519243"}</li>
-            <li>{profileUser?.gender || "Male"}</li>
+            <li>{profileUser?.firstName} {profileUser?.lastName}</li>
+            <li>{profileUser?.email}</li>
+            <li>{profileUser?.phoneNumber}</li>
+            <li>{profileUser?.gender}</li>
           </ul>
           <button className="primary">Lưu</button>
         </div>

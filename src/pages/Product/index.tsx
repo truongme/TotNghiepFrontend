@@ -104,7 +104,7 @@ const Product = () => {
     } else {
       const product = projectVariants.find(x => x.color === selectedColor && x.size === selectedSize)
       try {
-        await axios.post(`${WebUrl}/order-item`, {
+        await axios.post(`${WebUrl}/api/v1/order-item`, {
           quantity: quantity,
           productVariantId: product?.id,
         }, {
@@ -166,9 +166,8 @@ const Product = () => {
   }
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     getProductDetails()
-  },[]);
+  },[id]);
 
   return (
     <div className='container product-container'>
@@ -260,7 +259,7 @@ const Product = () => {
           </div>
         </div>
       </div>
-      <div className='row product-tabs'>
+      {/* <div className='row product-tabs'>
         <div className='col-3 tab' onClick={() => setActiveTab('info')}>
           <h3 className={activeTab === 'info' ? 'active' : ''}>THÔNG TIN SẢN PHẨM</h3>
         </div>
@@ -333,20 +332,6 @@ const Product = () => {
             <p>Đang cập nhật...</p>
           </div>
         )}
-      </div>
-      {/* <div className='container mt-5'>
-        <div className='title-folder-home'>Có thể bạn cũng thích</div>
-        <div className='top-sale'>
-          <Slider {...settings2}>
-          </Slider>
-        </div>
-      </div>
-      <div className='container mt-5'>
-        <div className='title-folder-home'>Sản phẩm đã xem</div>
-        <div className='top-sale'>
-          <Slider {...settings2}>
-          </Slider>
-        </div>
       </div> */}
     </div>
   );

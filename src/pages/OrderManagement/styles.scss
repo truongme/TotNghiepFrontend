@@ -81,9 +81,8 @@
                         margin-top:15px ;
                         background-color: $gray-color;
                         display: flex;
-                        img{
-                            width: 100px;
-                        }
+                        overflow: hidden;
+                       
                         .order-product-details-content{
                             display: flex;
                             flex-direction: column;
@@ -123,3 +122,8 @@
         }
     }
 }
+
+ .img-product-order {
+     width: 100px !important;
+     height: auto;
+ }

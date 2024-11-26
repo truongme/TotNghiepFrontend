@@ -18,6 +18,11 @@ code {
   font-family: 'Product sans', sans-serif !important;
 }
 
+.body-container{
+  position: relative;
+}
+
+
 .link-style{
   text-decoration: none;
   color: black;

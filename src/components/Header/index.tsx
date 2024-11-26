@@ -11,6 +11,20 @@ import imageCoat from '../../assets/images/category-coat.jpg'
 import { MdCancel } from "react-icons/md";
 import axios from 'axios';
 import { WebUrl } from '../../constants';
+import { IoSearch } from "react-icons/io5";
+import { FaXmark } from "react-icons/fa6";
+import { formatPrice } from '../../helpers';
+import Card from '../Card';
+
+export interface CardProps {
+  id: string;
+  img: string;
+  imgHover?: string;
+  name: string;
+  price: string;
+  rank?: number;
+  hidden?: boolean;
+}
 
 const Header = () => {
 
@@ -107,10 +121,64 @@ const Header = () => {
   const role = sessionStorage.getItem("role");
   const token = sessionStorage.getItem("token");
   const navigate = useNavigate();
-  const [hiddenSeacrh , setHiddenSearch] = useState<Boolean>(false)
+  const [hiddenSearch , setHiddenSearch] = useState<Boolean>(true)
   const [itemsOrderCount , setItemsOrderCount] = useState<number>(0)
+  const [value , setValue] = useState<string>("")
+  const [nameProduct, setNameProduct] = useState<any[]>([])
+  const [listTopSell, setListTopSell] = useState<CardProps[]>([])
 
-    const fetchData = async () => {
+  const handleNavigateToProduct = (productId: string) => {
+    setNameProduct([]);
+    navigate(`/product/${productId}`);
+    setHiddenSearch(!hiddenSearch);
+    setValue('');
+  };
+
+   const getTopSell = async () => {
+    try{
+      const response = await axios.get(`${WebUrl}/api/v1/products/top-selling?limit=4`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'skip-browser-warning'
+        }
+      }) 
+      
+      const data: CardProps[] = response.data.data.map((e: any, index: number) => ({
+        id: e.productId,  
+        img: e.images?.[0].imageURL,
+        imgHover: e.images?.[1].imageURL,    
+        name: e.name,
+        price: formatPrice(e.price),
+        hidden: true,
+      }));
+
+      setListTopSell(data)
+
+    } catch (error) {
+      console.error('Error get top sell:', error);
+    }
+  }
+
+  const filterProduct = async (name: string) => {
+    setValue(name)
+    if(!!name){
+      try {
+        const response = await axios.get(`${WebUrl}/api/v1/products/all?search=${name}`,{
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'skip-browser-warning',
+          }
+        })
+        setNameProduct(response.data.data)
+      } catch (error) {
+        console.error("Error get Order item", error)
+      }
+    } else {
+      setNameProduct([])
+    }
+  }
+
+  const fetchData = async () => {
     try {
       const response = await axios.get(`${WebUrl}/api/v1/orders/in-cart`,{
         headers: {
@@ -128,6 +196,7 @@ const Header = () => {
 
   useEffect(() => {
     role === "CUSTOMER" && fetchData()
+    getTopSell();
   }, [role, token]);
 
   return (
@@ -171,13 +240,13 @@ const Header = () => {
           </div>
           <div className="d-flex">
             <div className='header-icon-cotainer'>
-                <FaMagnifyingGlass className='header-icon' onClick={() => setHiddenSearch(!hiddenSeacrh)}/>
+                <FaMagnifyingGlass className='header-icon' onClick={() => setHiddenSearch(!hiddenSearch)}/>
             </div>
             <div className='header-icon-cotainer header-cart'>
               <Link to={role ? "/cart" : '/login'} className='link-style'>
                 <FaShoppingCart className='header-icon'/>
               </Link>
-              {itemsOrderCount > 0 && 
+              {role && itemsOrderCount > 0 && 
                 <div className='header-cart-count'>{itemsOrderCount}</div>
               }
             </div>
@@ -189,13 +258,62 @@ const Header = () => {
           </div>
         </div>
       </div>
-      {hiddenSeacrh && (
+      {!hiddenSearch && (
         <div className='header-search-ctn'>
           <div className='container'>
+            <div className='header-search-header'>
+              <div className='header-search-title'>Search for products</div>
+              <div className='icon-cancel' onClick={() => setHiddenSearch(!hiddenSearch)}> 
+                <FaXmark />
+              </div>
+            </div>
             <div className='header-search'>
-              <input type="text" /> 
-              <button>tim kiem</button>
-              <MdCancel onClick={() => setHiddenSearch(!hiddenSeacrh)}/>
+              <input type="text" placeholder='Enter the name of the product...' value={value} onChange={(e) => filterProduct(e.target.value)}/> 
+              {value && (
+                <div className='icon-delete'> 
+                  <MdCancel onClick={() => setValue("")}/>
+                </div>
+              )}
+               <div className='border-icon-search'>
+                  <IoSearch />
+                </div>
+            </div>
+            <div className='header-search-body'>
+              {value != "" ? (
+                <div>
+                  {nameProduct.map((e: any) => (
+                    <div className='header-search-body-item' onClick={() => handleNavigateToProduct(e.productId)}>
+                      <div className='img-ctn-header'>
+                        <img src={e.images[0].imageURL} alt="" />
+                      </div>
+                      <div>{e.name}</div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className='header-body-suggested'>
+                  <div className='popular-search-terms'>
+                    <div className='title-body-header'>Popular search terms</div>
+                    <ul>
+                      <li className='title-body-item' onClick={() => setHiddenSearch(!hiddenSearch)}>Jogger Pants</li>
+                      <li className='title-body-item' onClick={() => setHiddenSearch(!hiddenSearch)}>T-shirt</li>
+                      <li className='title-body-item' onClick={() => setHiddenSearch(!hiddenSearch)}>Shoe</li>
+                      <li className='title-body-item' onClick={() => setHiddenSearch(!hiddenSearch)}>Sweater</li>
+                      <li className='title-body-item' onClick={() => setHiddenSearch(!hiddenSearch)}>Hat</li>
+                    </ul>
+                  </div>
+                  <div className='suggested-products'>
+                    <div className='title-body-header'>Suggested products</div>
+                    <div className='suggested-products-content'>
+                     {listTopSell.map((e: CardProps) => (
+                        <div className='suggested-products-card' onClick={() => setHiddenSearch(!hiddenSearch)}>
+                          <Card data={e}/>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

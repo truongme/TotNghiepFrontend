@@ -219,6 +219,7 @@ const ProductAdmin = () => {
                                 rules={{ required: "Description is required" }}
                                 render={({ field }) =>
                                     <ReactQuill
+                                        style={{backgroundColor:'white'}}
                                         {...field}
                                         theme="snow"
                                         className='input-new-product'
