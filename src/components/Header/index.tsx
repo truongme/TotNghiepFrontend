@@ -15,6 +15,7 @@ import { IoSearch } from "react-icons/io5";
 import { FaXmark } from "react-icons/fa6";
 import { formatPrice } from '../../helpers';
 import Card from '../Card';
+import { TiCamera } from "react-icons/ti";
 
 export interface CardProps {
   id: string;
@@ -268,14 +269,18 @@ const Header = () => {
               </div>
             </div>
             <div className='header-search'>
+              <div className='icon-search'>
+                <IoSearch />
+              </div>
+              
               <input type="text" placeholder='Enter the name of the product...' value={value} onChange={(e) => filterProduct(e.target.value)}/> 
               {value && (
                 <div className='icon-delete'> 
                   <MdCancel onClick={() => setValue("")}/>
                 </div>
               )}
-               <div className='border-icon-search'>
-                  <IoSearch />
+                <div className='border-icon-search'>
+                  <TiCamera />
                 </div>
             </div>
             <div className='header-search-body'>

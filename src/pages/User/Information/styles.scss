@@ -10,11 +10,24 @@
 }
 
 .user-inforation-value{
-    width: 40%;
+    padding-right: 20px;
+    width: 70%;
     border-right: 1px solid $primary-color;
     li {
-            margin-bottom: 8px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+
+        .label-input{
+            width: 250px;
+            white-space: nowrap;
+            text-align: right;
+            margin-right: 20px;
         }
+    }
+    button{
+        margin-left: 187px;
+    }
 }
 
 .user-inforation-avatar{
@@ -74,4 +87,9 @@ button {
         background-color: #067cdc;
         ;
     }
+}
+
+.input-full-name{
+    display: flex;
+
 }

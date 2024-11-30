@@ -3,6 +3,7 @@ import './styles.scss'
 import { formatPrice } from '../../../helpers'
 import axios from 'axios'
 import { WebUrl } from '../../../constants'
+import ModalMain from '../../../components/Modal/Modal'
 
 interface Order{
     id: string,
@@ -27,6 +28,56 @@ const OrderUser = () => {
     const [orderUser, setOrderUser] = useState<Order[]>([])
     const [orderUserPrev, setOrderUserPrev] = useState<Order[]>([])
     const token = sessionStorage.getItem("token");
+    const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+    const [idOrderCancel, setIdOrderCancel] = useState<string>('')
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [selectedReason, setSelectedReason] = useState<string>();
+
+    const reasons = [
+       "I don't need this product anymore",
+       "I want to change my shipping address",
+       "I want to change the delivery method",
+       "I want to buy another product",
+       "Other reasons"
+    ];
+
+    const bodyModal = () => {
+        return (
+            <div>
+                {reasons.map((reason) => (
+                    <div className="form-check" key={reason}>
+                        <input
+                            className="form-check-input"
+                            type="radio"
+                            name="cancelReason"
+                            value={reason}
+                            onChange={() => setSelectedReason(reason)}
+                            checked={selectedReason === reason}
+                        />
+                        <label className="form-check-label">
+                            {reason}
+                        </label>
+                    </div>
+                ))}
+            </div>
+        );
+    };
+
+    const handleOpenModalCancelOrder = (id: string) => {
+        setIsOpenModal(true)
+        setIdOrderCancel(id)
+    }
+
+    const handleCloseModalCancelOrder = () => {
+        setIsOpenModal(false)
+    }
+
+    const handleCancelOrder = () => {
+        setIsOpenModal(false)
+        putStatusOrder(idOrderCancel)
+        setStatusSelected("")
+        fetchOrderUser()
+    }
 
     const handleChangeStatus = (status: string) => {
         setStatusSelected(status)
@@ -34,9 +85,27 @@ const OrderUser = () => {
         setOrderUser(result)
     }
 
-    const fetchOrderUser = async () => {
-
+    const putStatusOrder = async (id: string) => {
         try {
+            await axios.put(`${WebUrl}/api/v1/orders/cancel-by-user/${id}`, {
+                note: selectedReason
+            }, 
+            {
+                headers: {
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': 'skip-browser-warning',
+                'Authorization': `Bearer ${token}`,
+                }
+            }
+            )
+        } catch (error) {
+            console.error('Unexpected Error:', error);
+        }
+    }
+
+    const fetchOrderUser = async () => {
+        try {
+            setIsLoading(true)
             const response = await axios.get(`${WebUrl}/api/v1/orders/user-order`, {
                 headers: {
                 'Content-Type': 'application/json',
@@ -61,6 +130,7 @@ const OrderUser = () => {
 
             setOrderUser(data)
             setOrderUserPrev(data)
+            setIsLoading(false)
         } catch (error) {
             console.error('Unexpected Error:', error);
         }
@@ -81,48 +151,58 @@ const OrderUser = () => {
                     <li className={`${statusSelected === 'CANCELLED' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("CANCELLED")}>Cancelled</li>
                 </ul>
             </div>
-            {orderUser.map((e: Order) => (
-                <div className='order-item-container'>
-                    <div className='order-item-header'>
-                        {e.status === 'PENDING' ? (
-                            <div>
-                                <button className='button-cancel'>Cancel Order</button>
-                            </div>
-                        ) : (
-                            <div></div>
-                        )}
-                        <div className='order-item-status'>{e.status}</div>
+            {isLoading ? (
+                <div className='text-center mt-3'>
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
                     </div>
-                    {e?.items.map((x: OrderItem) => (
-                        <div className='order-item'>
-                            <div className='order-item-content'>
-                                <div className='order-item-img'>
-                                    <img src={x.image} alt="" />
-                                </div>
-                                <div>
-                                    <div>{x.name}</div>
-                                    <div>Color: {x.color}</div>
-                                    <div>Size: {x.size}</div>
-                                    <div>Quantity: {x.quantity}</div>
-                                </div>
+                </div>
+            ) : (
+                <div>
+                     {orderUser.map((e: Order) => (
+                        <div className='order-item-container'>
+                            <div className='order-item-header'>
+                                <div></div>
+                                <div className='order-item-status'>{e.status}</div>
                             </div>
-                            <div className='total-price'>
-                                {formatPrice(x.price)}
+                            {e?.items.map((x: OrderItem) => (
+                                <div className='order-item'>
+                                    <div className='order-item-content'>
+                                        <div className='order-item-img'>
+                                            <img src={x.image} alt="" />
+                                        </div>
+                                        <div>
+                                            <div>{x.name}</div>
+                                            <div>Color: {x.color}</div>
+                                            <div>Size: {x.size}</div>
+                                            <div>Quantity: {x.quantity}</div>
+                                        </div>
+                                    </div>
+                                    <div className='total-price'>
+                                        {formatPrice(x.price)}
+                                    </div>
+                                </div>
+                            ))}
+                            <div className='order-item-footer'>
+                                <div>
+                                    <button className='primary'>Buy Again</button>
+                                    <button className='secondary'>Contact Seller</button>
+                                    {e.status === 'PENDING' && (
+                                        <button className='cancel' onClick={() => handleOpenModalCancelOrder(e.id)}>Cancel</button>
+                                    )}
+                                </div>
+                                <div className='d-flex'>
+                                    <div >Order Total: </div>
+                                    <div className='total-price'>{formatPrice(e.total)}</div>
+                                </div>
                             </div>
                         </div>
                     ))}
-                    <div className='order-item-footer'>
-                        <div>
-                            <button className='primary'>Buy Again</button>
-                            <button className='secondary'>Contact Seller</button>
-                        </div>
-                        <div className='d-flex'>
-                            <div >Order Total: </div>
-                            <div className='total-price'>{formatPrice(e.total)}</div>
-                        </div>
-                    </div>
                 </div>
-            ))}
+            )}
+            {isOpenModal && (
+                <ModalMain title='Notification' content={bodyModal()}  btn1='Cancel' btn2='Yes' onClose={handleCloseModalCancelOrder} onSave={handleCancelOrder}/>
+            )}
         </div>
     )
 }

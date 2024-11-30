@@ -132,12 +132,12 @@
             justify-content: center;
             align-items: center;
             border-radius: 30px;
-            background-color: $gray-color;
+            // background-color: $gray-color;
             margin: 5px 8px;
             cursor: pointer;
             &:hover {
-                background-color: $primary-color;
-                color: white;
+                // background-color: $primary-color;
+                color: $primary-color;
             }
             svg {
                 font-size: 20px;
@@ -149,7 +149,7 @@
             border: none;
             background-color: transparent;
             outline: none;
-            padding: 5px 20px;
+            padding: 5px 20px 5px 0px;
         }
     }
 }
@@ -251,4 +251,8 @@
             }
         }
     }
+}
+
+.icon-search{
+    margin: 0px 10px;
 }

@@ -6,12 +6,13 @@ import { WebUrl } from '../../constants';
 import { formatPrice } from '../../helpers';
 
 interface ModalProps {
+  orderId: string;
     id: string,
     quantity: number,
     colorProps: string,
     sizeProps: string,
     imgProps:string,
-    onClose: () => void;
+   onClose: (isUpdate: boolean) => void;
 }
 
 interface ProductProps {
@@ -29,7 +30,7 @@ interface ProductVariants {
   stock: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ id, quantity, colorProps, sizeProps,imgProps, onClose }) => {
+const Modal: React.FC<ModalProps> = ({orderId, id, quantity, colorProps, sizeProps,imgProps, onClose }) => {
 
   const sizeOrder = ['XS','S', 'M', 'L', 'XL','XXL'];
   const [productDetail, setProductDetail] = useState<ProductProps>()
@@ -40,6 +41,7 @@ const Modal: React.FC<ModalProps> = ({ id, quantity, colorProps, sizeProps,imgPr
   const [selectedColor, setSelectedColor] = useState('');
   const [quantityItem, setQuantityItem] = useState<number>(quantity);
   const token = sessionStorage.getItem("token");
+  const [errorMessage, setErrorMessage] = useState<string>('')
   
   const getValidColors = (size: string) => {
     return projectVariants.filter(item => item.size === size).map(item => item.color);
@@ -91,7 +93,6 @@ const Modal: React.FC<ModalProps> = ({ id, quantity, colorProps, sizeProps,imgPr
       });
 
       const colorFilter = response.data.productVariants.find((e: any)=> e.color.name[0] === colorProps)
-      console.log(colorFilter)
 
       setProjectVariants(variants)
       setProjectVariantsColor(color)
@@ -104,16 +105,39 @@ const Modal: React.FC<ModalProps> = ({ id, quantity, colorProps, sizeProps,imgPr
     }
   }
 
-    useEffect(() => {
-      getProductDetails()
-    },[id]);
+  const handleUpdateItemToCart = async () => {
+    if(!selectedColor || !selectedSize || !quantityItem) {
+      setErrorMessage('Vui lòng chọn màu sắc và size cho sản phẩm!')
+    }  else {
+      const product = projectVariants.find(x => x.color === selectedColor && x.size === selectedSize)
+      try {
+        await axios.put(`${WebUrl}/api/v1/order-item/${orderId}`, {
+          quantity: quantityItem,
+          productVariantId: product?.id
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'skip-browser-warning',
+            'Authorization': `Bearer ${token}`, 
+          }
+        });
+        onClose(true);
+      } catch (error) {
+        console.error("Error post item cart", error)
+      }
+    }
+  }
+
+  useEffect(() => {
+    getProductDetails()
+  },[id]);
 
     return (
         <div className='modal-container'>
             <div className='modal-box'>
                 <div className='modal-header'>
                     <div className='modal-title'>change option</div>
-                    <div onClick={onClose}><FaXmark /></div>
+                    <div onClick={() => onClose(false)}><FaXmark /></div>
                 </div>
                 <div className='modal-body'>
                     <div className='modal-body-img'>
@@ -159,11 +183,14 @@ const Modal: React.FC<ModalProps> = ({ id, quantity, colorProps, sizeProps,imgPr
                             />
                             <button onClick={() => setQuantityItem(prevQuantity => prevQuantity + 1)} className="quantity-btn-modal">+</button>
                         </div>
+                        {errorMessage && (
+                          <div className='error-message'>{errorMessage}</div>
+                        )}
                     </div>
                 </div>
                 <div className='modal-footer'>
-                    <button className='delete' onClick={onClose}>Cancel</button>
-                <button className='edit'>Update</button>
+                    <button className='delete' onClick={() => onClose(false)}>Cancel</button>
+                <button className='edit' onClick={() => handleUpdateItemToCart()}>Update</button>
                 </div>
             </div>
         </div>

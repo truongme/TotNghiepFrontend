@@ -97,6 +97,14 @@
         background-color: white;
         color: $primary-color;
     }
+    .cancel{
+        padding: 8px 0px;
+        margin-right: 12px;
+        width: 150px;
+        border: 1px solid $red-color;
+        background-color: $red-color;
+        color: $white-color;
+    }
 }
 
 .total-price{
@@ -119,4 +127,8 @@
     &:hover{
         background-color: rgb(255, 18, 18);
     }
+}
+
+.form-check-reason{
+    margin: 10px 0px ;
 }

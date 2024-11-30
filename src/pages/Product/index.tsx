@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { formatPrice } from '../../helpers';
 import { WebUrl } from '../../constants';
+import ModalMain from '../../components/Modal/Modal';
 
 interface ProductProps {
   id: string;
@@ -79,6 +80,11 @@ const Product = () => {
   const [quantity, setQuantity] = useState<number>(1);
   const [errorMessage, setErrorMessage] = useState<string>('')
   const token = sessionStorage.getItem("token");
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+
+  const handleCloseModal = () => {
+    setIsOpenModal(false);
+  };
   
   const getValidColors = (size: string) => {
     return projectVariants.filter(item => item.size === size).map(item => item.color);
@@ -95,6 +101,10 @@ const Product = () => {
   const handleSizeSelect = (size: string) => {
     selectedSize === size ? setSelectedSize('') : setSelectedSize(size);
   };
+  const handleBuy = async () => {
+    handleAddToCart()
+    navigate('/cart')
+  }
 
   const handleAddToCart = async () => {
     if(!selectedColor || !selectedSize || !quantity) {
@@ -114,7 +124,6 @@ const Product = () => {
             'Authorization': `Bearer ${token}`, 
           }
         });
-        alert("Thêm giỏ hàng thành công")
       } catch (error) {
         console.error("Error post item cart", error)
       }
@@ -248,8 +257,8 @@ const Product = () => {
               <div className='error-message'>{errorMessage}</div>
             )}
             <div className='product-order-btn'>
-              <button className='btn-add-cart' onClick={e => handleAddToCart()}>Thêm vào giỏ hàng</button>
-              <button className='btn-order'>Mua ngay</button>
+              <button className='btn-add-cart' onClick={e => {handleAddToCart(); setIsOpenModal(true)}}>Thêm vào giỏ hàng</button>
+              <button className='btn-order' onClick={() => handleBuy()}>Mua ngay</button>
             </div>
             <div className='product-promotion'>
               <h5>MLB Chào bạn mới</h5>
@@ -259,7 +268,7 @@ const Product = () => {
           </div>
         </div>
       </div>
-      {/* <div className='row product-tabs'>
+      <div className='row product-tabs'>
         <div className='col-3 tab' onClick={() => setActiveTab('info')}>
           <h3 className={activeTab === 'info' ? 'active' : ''}>THÔNG TIN SẢN PHẨM</h3>
         </div>
@@ -332,7 +341,10 @@ const Product = () => {
             <p>Đang cập nhật...</p>
           </div>
         )}
-      </div> */}
+      </div>
+      {isOpenModal && (
+        <ModalMain title='Notification' content='Item has been added to cart' btn2='Ok' onSave={handleCloseModal}/>
+      )}
     </div>
   );
 };

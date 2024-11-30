@@ -141,3 +141,15 @@
 
     }
 }
+
+.modal-box-small{
+    width: 500px;
+    background-color: white;
+    padding: 25px 30px;
+}
+
+.error-message {
+    color: $red-color;
+    padding-top: 10px;
+    font-size: 13px;
+}

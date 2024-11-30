@@ -277,3 +277,22 @@
       background-color: $white-color;
   }
 }
+
+.cart-empty{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-primary{
+  background-color: $primary-color;
+  min-width: 200px;
+  padding: 8px 20px;
+  color: white;
+}
+
+.img-cart-item{
+  width: 200px;
+}

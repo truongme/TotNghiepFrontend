@@ -6,6 +6,7 @@ import axios from 'axios';
 import { WebUrl } from '../../constants';
 import { formatPrice } from '../../helpers';
 import { Controller, useForm } from 'react-hook-form';
+import ModalMain from '../../components/Modal/Modal';
 
 export interface User {
   avatar: string | null;
@@ -45,8 +46,24 @@ const Order = () => {
   const [arrWard, setArrWard] = useState<any>([])
   const [shippingCost, setShippingCost] = useState<number>(0)
   const { handleSubmit, control, watch,formState: { errors } } = useForm<OrderForm>();
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+  const [isOpenModalExit, setIsOpenModalExit] = useState<boolean>(false)
+   const navigate = useNavigate()
 
-  const navigate = useNavigate()
+  const handleCloseModal = () => {
+    setIsOpenModal(false)
+    navigate('/')
+  }
+
+  const handleCloseModalExit = () => {
+    setIsOpenModalExit(false)
+    navigate('/cart')
+  }
+
+  const handleCancelCloseModalExit = () => {
+    setIsOpenModalExit(false)
+  }
+
 
   const onSubmit = async (data: OrderForm) => {
     try {
@@ -64,9 +81,7 @@ const Order = () => {
           'Authorization': `Bearer ${token}`, 
         }
       });
-      
-      alert("Mua hàng thành công")
-      navigate('/')
+      setIsOpenModal(true)
       
     } catch (error) {
       console.error("Error post item cart", error)
@@ -326,15 +341,19 @@ const Order = () => {
               </div>
               <hr />
               <div className='d-flex justify-content-between order-checkout'>
-                <Link to='/cart' style={{ textDecoration: 'none' }}>
-                  <div className='back-btn'>Quay lại giỏ hàng</div>
-                </Link>
+                <div className='back-btn' onClick={() => setIsOpenModalExit(true)}>Quay lại giỏ hàng</div>
                 <button type="submit" className='checkout-btn'>Xác nhận đặt hàng</button>
               </div>
             </div>
           </div>
         </div>
       </form>
+      {isOpenModal && (
+        <ModalMain title='Notification' content='You have successfully placed your order.' btn2='OK' onSave={handleCloseModal}/>
+      )}
+      {isOpenModalExit && (
+        <ModalMain title='Notification' content='Do you want to exit the order checkout page?' btn1='No' btn2='Yes' onClose={handleCancelCloseModalExit} onSave={handleCloseModalExit}/>
+      )}
     </div>
   );
 };
