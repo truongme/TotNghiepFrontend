@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './styles.scss';
 import avatar from '../../../assets/images/avatar.jpg';
 import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
-import { WebUrl } from '../../../constants';
+import { IMG_BB_API_KEY, WebUrl } from '../../../constants';
+
 
 interface User {
   firstName: string;
@@ -14,11 +15,57 @@ interface User {
   avatar?: string;
 }
 
-const Information = () => {
-  const token = sessionStorage.getItem('token');
+interface InformationProps {
+  onSaveComplete: () => void;
+}
 
+const Information: React.FC<InformationProps> = ({ onSaveComplete }) => {
+  
+  const token = sessionStorage.getItem('token');
   const [profileUser, setProfileUser] = useState<User>();
-  const { control, handleSubmit, setValue } = useForm<User>();
+  const { control, handleSubmit, setValue, reset  } = useForm<User>();
+  const [avatarPreview, setAvatarPreview] = useState<string | undefined>(avatar);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isDisableButton, setIsDisableButton] = useState<boolean>(false);
+  const [urlAvatar, setUrlAvatar] = useState<string>("");
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 1024 * 1024) {
+        setErrorMessage("Dung lượng ảnh không được vượt quá 1MB.");
+        return;
+      }
+      setErrorMessage("");
+      setAvatarPreview(URL.createObjectURL(file));
+      handleUploadAvatar(file); 
+    }
+  };
+
+  const handleUploadAvatar = async (file: File) => {
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      setIsDisableButton(true)
+      const response = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${IMG_BB_API_KEY}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setUrlAvatar(response.data.data.url)
+      setIsDisableButton(false)
+    } catch (error) {
+      console.error("Error uploading avatar to imgBB:", error);
+    }
+  };
 
   const getProfile = async () => {
     try {
@@ -33,11 +80,13 @@ const Information = () => {
       setProfileUser(response.data);
 
       const data = response.data;
-      setValue('firstName', data.firstName);
-      setValue('lastName', data.lastName);
-      setValue('email', data.email);
-      setValue('phoneNumber', data.phoneNumber);
-      setValue('gender', data.gender);
+      reset({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+        gender: data.gender,
+      });
     } catch (error) {
       console.error('Unexpected Error:', error);
     }
@@ -56,6 +105,8 @@ const Information = () => {
           },
         }
       );
+      onSaveComplete();
+      getProfile();
     } catch (error) {
       console.error('Update Error:', error);
     }
@@ -126,9 +177,17 @@ const Information = () => {
           </div>
           <div className='user-inforation-avatar'>
             <div className='avatar'>
-              <img src={profileUser?.avatar || avatar} alt='' />
+              <img src={avatarPreview || avatar} />
             </div>
-            <button type='button' className='primary'>
+            <input
+              type="file"
+              ref={fileInputRef} 
+              accept=".jpg, .jpeg, .png"
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+            />
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
+            <button disabled={isDisableButton} onClick={() => fileInputRef.current?.click()} type='button' className='primary'>
               Chọn ảnh
             </button>
             <div>Dụng lượng file tối đa 1 MB</div>

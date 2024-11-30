@@ -4,6 +4,7 @@ import { FaXmark } from "react-icons/fa6";
 import axios from 'axios';
 import { WebUrl } from '../../constants';
 import { formatPrice } from '../../helpers';
+import { useDataContext } from '../../helpers/ContentApi';
 
 interface ModalProps {
   orderId: string;
@@ -42,6 +43,7 @@ const Modal: React.FC<ModalProps> = ({orderId, id, quantity, colorProps, sizePro
   const [quantityItem, setQuantityItem] = useState<number>(quantity);
   const token = sessionStorage.getItem("token");
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const { setRefreshData } = useDataContext();
   
   const getValidColors = (size: string) => {
     return projectVariants.filter(item => item.size === size).map(item => item.color);
@@ -121,6 +123,7 @@ const Modal: React.FC<ModalProps> = ({orderId, id, quantity, colorProps, sizePro
             'Authorization': `Bearer ${token}`, 
           }
         });
+        setRefreshData(true);
         onClose(true);
       } catch (error) {
         console.error("Error post item cart", error)

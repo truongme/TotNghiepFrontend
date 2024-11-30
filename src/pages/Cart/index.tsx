@@ -6,6 +6,7 @@ import { formatPrice, hexToColorName } from '../../helpers';
 import { WebUrl } from '../../constants';
 import Modal from '../../components/Modal';
 import imgCartEmpry from '../../assets/images/empty-cart.png'
+import { useDataContext } from '../../helpers/ContentApi';
 
 interface CartProps{
   id: string,
@@ -27,6 +28,7 @@ const Cart = () => {
   const token = sessionStorage.getItem("token");
   const [propsModal , setPropsModal] = useState<any>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { setRefreshData } = useDataContext();
 
   const handleOpenModal = (obj: any) => {
     setIsOpenModalEdit(obj.productId)
@@ -62,6 +64,7 @@ const Cart = () => {
         .filter((item) => item.id !== id)
         .reduce((sum, item) => sum + item.total, 0);
       setTotalOrder(newTotalOrder);
+      setRefreshData(true);
     } catch (error) {
       console.error('Error deleting item:', error);
     } finally {

@@ -87,6 +87,14 @@ button {
         background-color: #067cdc;
         ;
     }
+    &:disabled{
+        background-color: $background-color;
+        border: 1px solid $background-color;
+        &:hover {
+            background-color:$background-color;
+            ;
+        }
+    }
 }
 
 .input-full-name{

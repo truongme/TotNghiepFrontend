@@ -45,10 +45,11 @@ const Order = () => {
   const [arrDistricts, setArrDistricts] = useState<any>([])
   const [arrWard, setArrWard] = useState<any>([])
   const [shippingCost, setShippingCost] = useState<number>(0)
-  const { handleSubmit, control, watch,formState: { errors } } = useForm<OrderForm>();
+  const { handleSubmit, control,setValue, watch, formState: { errors } } = useForm<OrderForm>();
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [isOpenModalExit, setIsOpenModalExit] = useState<boolean>(false)
-   const navigate = useNavigate()
+  const navigate = useNavigate()
+  const [arrMyAddresses, setArrMyAddresses] = useState<any[]>([])
 
   const handleCloseModal = () => {
     setIsOpenModal(false)
@@ -64,6 +65,50 @@ const Order = () => {
     setIsOpenModalExit(false)
   }
 
+  const handleAddressChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedId = event.target.value;
+    if (selectedId === 'new') {
+      setValue('addressDetail', '');
+      setValue('city', '');
+      setValue('district','');
+      setValue('ward', '');
+    } else {
+      const address : any = arrMyAddresses?.find((addr : any) => addr.id == selectedId);
+      if (address) {
+        setValue('addressDetail', address.addressDetail || '');
+        setValue('city', address.city || '');
+        setValue('district', address.district || '');
+        setValue('ward', address.ward || '');
+      }
+    }
+  };
+
+  const fetchAddress = async () => {
+    try {
+      const response = await axios.get('https://open.oapi.vn/location/provinces?size=1000')
+      setArrCity(response.data.data)
+    } catch (error) {
+      console.error("Error fecth adress", error)
+    }
+  }
+
+  const fetchDistricts = async (id: number) => {
+    try {
+      const response = await axios.get(`https://open.oapi.vn/location/districts/${id}?size=1000`)
+      setArrDistricts(response.data.data)
+    } catch (error) {
+      console.error("Error fecth adress", error)
+    }
+  }
+
+  const fetchWard = async (id: number) => {
+    try {
+      const response = await axios.get(`https://open.oapi.vn/location/wards/${id}?size=1000`)
+      setArrWard(response.data.data)
+    } catch (error) {
+      console.error("Error fecth adress", error)
+    }
+  }
 
   const onSubmit = async (data: OrderForm) => {
     try {
@@ -82,7 +127,6 @@ const Order = () => {
         }
       });
       setIsOpenModal(true)
-      
     } catch (error) {
       console.error("Error post item cart", error)
     }
@@ -122,7 +166,6 @@ const Order = () => {
         quantity: e.quantity,
         total: e.total,
       }))
-
       const totalOrderAmount = data.reduce((sum, item) => sum + item.total, 0);
       setTotalOrder(totalOrderAmount)
       setOrderArr(data)
@@ -131,37 +174,31 @@ const Order = () => {
     }
   }
 
-  const fetchAddress = async () => {
+  const fetchMyAddress = async () => {
     try {
-      const response = await axios.get('https://open.oapi.vn/location/provinces?size=1000')
-      setArrCity(response.data.data)
+      const selectedAddress = arrMyAddresses[9];
+      if (!selectedAddress) {
+        console.error("No address available in arrMyAddresses.");
+        return;
+      }
+      await Promise.all([
+        fetchDistricts(Number(selectedAddress.city)), 
+        fetchWard(Number(selectedAddress.district)), 
+      ]);
+      setValue('addressDetail', selectedAddress.addressDetail);
+      setValue('city', selectedAddress.city);
+      setValue('district', selectedAddress.district);
+      setValue('ward', selectedAddress.ward);
     } catch (error) {
-      console.error("Error fecth adress", error)
+      console.error("Error fetching address details", error);
     }
-  }
-
-  const fetchDistricts = async (id: number) => {
-    try {
-      const response = await axios.get(`https://open.oapi.vn/location/districts/${id}?size=1000`)
-      setArrDistricts(response.data.data)
-    } catch (error) {
-      console.error("Error fecth adress", error)
-    }
-  }
-
-  const fetchWard = async (id: number) => {
-    try {
-      const response = await axios.get(`https://open.oapi.vn/location/wards/${id}?size=1000`)
-      setArrWard(response.data.data)
-    } catch (error) {
-      console.error("Error fecth adress", error)
-    }
-  }
+  };
 
   useEffect(() => {
     getProfile();
     fetchData();
     fetchAddress()
+    fetchMyAddress();
   }, []);
 
   return (
@@ -190,6 +227,15 @@ const Order = () => {
                 </div>
               </div>
               <div className='row'>
+                <div className="mb-3 col-12">
+                  <label className="form-label">Your shipping address</label>
+                  <select className="form-select" onChange={handleAddressChange}>
+                    {arrMyAddresses?.map((address: any) => (
+                      <option key={address.id} value={address.id}>{address.addressDetail}</option>
+                    ))}
+                    <option value="new">Create shipping address</option>
+                  </select>
+                </div>
                 <div className="mb-3 col-6">
                   <label className="form-label">Địa chỉ</label>
                   <Controller

@@ -55,6 +55,10 @@ const User = () => {
         }
     }
 
+    const handleSaveComplete = () => {
+        getProfile();
+    };
+
     useEffect(() => {
         getProfile();
     }, []);
@@ -96,7 +100,7 @@ const User = () => {
         <div className='user-content-container'>
             {itemActive === 'infor' && (
                 <>
-                <Information/>
+                <Information onSaveComplete={handleSaveComplete}/>
                 </>
             )}
             {itemActive === 'address' && (

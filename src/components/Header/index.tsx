@@ -16,6 +16,7 @@ import { FaXmark } from "react-icons/fa6";
 import { formatPrice } from '../../helpers';
 import Card from '../Card';
 import { TiCamera } from "react-icons/ti";
+import { useDataContext } from '../../helpers/ContentApi';
 
 export interface CardProps {
   id: string;
@@ -127,6 +128,7 @@ const Header = () => {
   const [value , setValue] = useState<string>("")
   const [nameProduct, setNameProduct] = useState<any[]>([])
   const [listTopSell, setListTopSell] = useState<CardProps[]>([])
+  const { refreshData, setRefreshData } = useDataContext();
 
   const handleNavigateToProduct = (productId: string) => {
     setNameProduct([]);
@@ -135,7 +137,7 @@ const Header = () => {
     setValue('');
   };
 
-   const getTopSell = async () => {
+  const getTopSell = async () => {
     try{
       const response = await axios.get(`${WebUrl}/api/v1/products/top-selling?limit=4`, {
         headers: {
@@ -196,9 +198,12 @@ const Header = () => {
   }
 
   useEffect(() => {
-    role === "CUSTOMER" && fetchData()
-    getTopSell();
-  }, [role, token]);
+    if (refreshData) {
+      role === "CUSTOMER" && fetchData()
+      getTopSell();
+      setRefreshData(false);
+    }
+  }, [role, token, refreshData]);
 
   return (
     <div className='header-container'>

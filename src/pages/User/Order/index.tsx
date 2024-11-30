@@ -32,6 +32,8 @@ const OrderUser = () => {
     const [idOrderCancel, setIdOrderCancel] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [selectedReason, setSelectedReason] = useState<string>();
+    const [selectedOtherReason, setSelectedOtherReason] = useState<boolean>(false);
+    const [valueOtherReason, setValueOtherReason] = useState<string>("");
 
     const reasons = [
        "I don't need this product anymore",
@@ -41,9 +43,19 @@ const OrderUser = () => {
        "Other reasons"
     ];
 
+    const handleSelectedReason = (reason: string) => {
+        setSelectedReason(reason)
+        if(reason === "Other reasons"){
+            setSelectedOtherReason(true)
+        } else{
+            setSelectedOtherReason(false)
+            setValueOtherReason("")
+        }
+    }
+
     const bodyModal = () => {
         return (
-            <div>
+            <div style={{width: '100%'}}>
                 {reasons.map((reason) => (
                     <div className="form-check" key={reason}>
                         <input
@@ -51,7 +63,7 @@ const OrderUser = () => {
                             type="radio"
                             name="cancelReason"
                             value={reason}
-                            onChange={() => setSelectedReason(reason)}
+                            onChange={() => handleSelectedReason(reason)}
                             checked={selectedReason === reason}
                         />
                         <label className="form-check-label">
@@ -59,6 +71,11 @@ const OrderUser = () => {
                         </label>
                     </div>
                 ))}
+                {selectedOtherReason && (
+                    <div className='mt-1'>
+                        <textarea className="form-control" onChange={(e) => setValueOtherReason(e.target.value)}></textarea>
+                    </div>
+                )}
             </div>
         );
     };
@@ -86,9 +103,10 @@ const OrderUser = () => {
     }
 
     const putStatusOrder = async (id: string) => {
+        console.log(selectedOtherReason ? valueOtherReason : selectedReason)
         try {
             await axios.put(`${WebUrl}/api/v1/orders/cancel-by-user/${id}`, {
-                note: selectedReason
+                note: selectedOtherReason ? valueOtherReason : selectedReason
             }, 
             {
                 headers: {

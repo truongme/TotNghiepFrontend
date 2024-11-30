@@ -95,7 +95,6 @@ const Address = () => {
     }
   }, [selectedProvince]);
 
-  // Effect to fetch communes when district changes
   useEffect(() => {
     if (selectedDistrict) {
       const district: any = districts.find((d: any) => d.name === selectedDistrict);
