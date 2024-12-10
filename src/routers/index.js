@@ -10,10 +10,11 @@ import OrderManagement from "../pages/OrderManagement";
 import DashBoard from "../pages/Dashboard";
 import ProductAdmin from "../pages/ProductEdit";
 import Signup from "../pages/Signup";
+import ForgetPassword from "../pages/ForgetPassword";
 
 export const adminRoutes = [
   { path: "/", element: <DashBoard /> },
-  { path: "/product/:id", element: <ProductAdmin/>},
+  { path: "/product/:id", element: <ProductAdmin /> },
   { path: "/login", element: <Login /> },
   { path: "/productManagement", element: <ProductManagement /> },
   { path: "/orderManagement", element: <OrderManagement /> },
@@ -21,6 +22,7 @@ export const adminRoutes = [
 
 export const userRoutes = [
   { path: "/", element: <Home /> },
+  { path: "/reset-password", element: <ForgetPassword /> },
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <Signup /> },
   { path: "/collections/:categoryId", element: <Collections /> },

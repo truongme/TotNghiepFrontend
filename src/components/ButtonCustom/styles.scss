@@ -3,13 +3,17 @@
 .button-custom{
     width: 100%;
     margin: 10px 0px;
-    background-color: $primary-color;
-    border: none;
-    border-radius: 3px;
+
+    border: 1px solid black;
     text-transform: uppercase;
     font-size: 16px;
-    font-weight: 600;
     font-family: $primary-font;
-    color: $white-color;
+    color: black;
+    background-color: white;
+    
     padding: 10px;
+    &:hover{
+        color: $white-color;
+        background-color: black;
+    }
 }

@@ -140,7 +140,11 @@ const Modal: React.FC<ModalProps> = ({orderId, id, quantity, colorProps, sizePro
             <div className='modal-box'>
                 <div className='modal-header'>
                     <div className='modal-title'>change option</div>
-                    <div onClick={() => onClose(false)}><FaXmark /></div>
+                    <div onClick={() => onClose(false)}>
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" role="presentation">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M8.93942 10.3536L3.29297 16L4.00008 16.7071L9.64652 11.0607L15.293 16.7071L16.0001 16L10.3536 10.3536L16.0001 4.70711L15.293 4L9.64652 9.64645L4.00008 4L3.29297 4.70711L8.93942 10.3536Z" fill="#222222"></path>
+                      </svg>
+                    </div>
                 </div>
                 <div className='modal-body'>
                     <div className='modal-body-img'>
@@ -192,8 +196,13 @@ const Modal: React.FC<ModalProps> = ({orderId, id, quantity, colorProps, sizePro
                     </div>
                 </div>
                 <div className='modal-footer'>
-                    <button className='delete' onClick={() => onClose(false)}>Cancel</button>
-                <button className='edit' onClick={() => handleUpdateItemToCart()}>Update</button>
+                  <div >
+                    <button className='btn-secondary' onClick={() => onClose(false)}>Cancel</button>
+                  </div>
+                  <div >
+                    <button className='btn-primary' onClick={() => handleUpdateItemToCart()}>Update</button>
+                  </div>
+                  
                 </div>
             </div>
         </div>

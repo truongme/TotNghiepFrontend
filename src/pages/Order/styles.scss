@@ -4,8 +4,7 @@
     display: flex;
     align-items: center;
     text-transform: uppercase;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 14px;
 
     .order-breadcrumb-item {
         margin-right: 5px;
@@ -17,7 +16,6 @@
     }
 
     .order-breadcrumb-active {
-        color: $primary-color;
     }
 }
 
@@ -114,7 +112,6 @@
 .order-user-title {
     text-transform: uppercase;
     font-size: 15px;
-    font-weight: 600;
     label{
         display: flex; /* Căn ngang icon và chữ */
         align-items: center; /* Đảm bảo icon và chữ căn giữa theo trục dọc */
@@ -199,8 +196,7 @@
         .back-btn {
             flex: 1;
             // text-decoration: none !important; /* Bỏ gạch chân */
-            color: white; /* Đảm bảo màu chữ là trắng */
-            background-color: $red-color;
+            color: black; /* Đảm bảo màu chữ là trắng */
             padding: 10px 20px;
             text-align: center;
             display: block;
@@ -210,13 +206,11 @@
             width: 100%;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            border: none; /* Loại bỏ viền của nút */
             outline: none; /* Loại bỏ viền khi nhấn vào */
-            border-radius: 20px;
-    
-            &:hover {
-                background-color: #000000;
-            }
+            background-color: white;
+            border: 1px solid #000000;
+            text-transform: uppercase;
+          
               
         }
     
@@ -228,8 +222,6 @@
             margin-left: 15px;
             flex: 1;
             text-decoration: none; /* Bỏ gạch chân */
-            color: white; /* Đảm bảo màu chữ là trắng */
-            background-color: $primary-color;
             padding: 10px 20px;
             text-align: center;
             margin-top: 20px;
@@ -239,13 +231,42 @@
             transition: background-color 0.3s ease;
             border: none; /* Loại bỏ viền của nút */
             outline: none; /* Loại bỏ viền khi nhấn vào */
-            border-radius: 20px;
+            background-color: black;
+                border: 1px solid #000000;
+                text-transform: uppercase;
+                color: white;
     
-            &:hover {
-              background-color: #000000;
-            }
+           
         }
     }
 
     
+}
+
+.form-check-ship {
+    cursor: pointer;
+    padding: 10px 14px !important;
+    border: 1px solid black;
+    margin-bottom: 10px !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-check-ship:hover {
+    background-color: #f9f9f9;
+}
+
+.form-check-ship.selected {
+    border: 2px solid $primary-color;
+    background-color: #f3faff;
+}
+
+.ship-method-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ship-method-detail{
+    font-size: 14px;
 }

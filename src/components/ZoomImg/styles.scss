@@ -1,0 +1,26 @@
+.image-container {
+    position: relative;
+    overflow: hidden;
+    cursor: zoom-in;
+}
+
+.image-container img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.image-container.zoomed {
+    cursor: zoom-out;
+}
+
+.image-container.zoomed img {
+    transform: scale(2);
+    transition: transform 0.3s ease, transform-origin 0.3s ease;
+}
+
+.image-container.leaving img {
+    transform: scale(1);
+    transition: transform 0.4s ease;
+}

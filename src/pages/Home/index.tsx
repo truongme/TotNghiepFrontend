@@ -10,6 +10,7 @@ import Slider from 'react-slick';
 import axios from 'axios';
 import { formatPrice } from '../../helpers';
 import { WebUrl } from '../../constants';
+import { useNavigate } from 'react-router-dom';
 
 export interface CardProps {
   id: string;
@@ -22,6 +23,12 @@ export interface CardProps {
 }
 
 const Home = () => {
+  const fake ={id: "2",
+    img: "https://fearofgod.com/cdn/shop/files/F23FOGA57_PERFORMANCE_JERSEY_ATHLETICS_TANK_SESAME_1_x800.jpg?v=1733450417",
+    imgHover: "https://fearofgod.com/cdn/shop/files/F23FOGA57_PERFORMANCE_JERSEY_ATHLETICS_TANK_SESAME_1_x800.jpg?v=1733450417",
+    name: "FEAR OF GOD ATHLETICS",
+    price: "5000000",
+}
 
   const [listTopSell, setListTopSell] = useState<CardProps[]>([])
   const [listNewProduct, setNewProduct] = useState<CardProps[]>([])
@@ -48,6 +55,8 @@ const Home = () => {
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
   };
+
+  const navigate = useNavigate()
 
   const getTopSell = async () => {
     try{
@@ -76,7 +85,7 @@ const Home = () => {
 
   const getNewProduct = async () => {
     try{
-      const response = await axios.get(`${WebUrl}/api/v1/products/top-selling?limit=4`, {
+      const response = await axios.get(`${WebUrl}/api/v1/products/top-selling?limit=10`, {
         headers: {
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'skip-browser-warning'
@@ -134,13 +143,13 @@ const Home = () => {
       <div className='banner-container'>
         <div id="carouselExample" className="carousel slide">
           <div className="carousel-inner">
-            <div className="carousel-item active">
-              <img src={imageBanner} alt="" className="d-block w-100"/>
-            </div>
-            <div className="carousel-item">
+            <div className="carousel-item active banner-img">
               <img src={imageBanner2} alt="" className="d-block w-100"/>
             </div>
-            <div className="carousel-item">
+            <div className="carousel-item banner-img">
+              <img src={imageBanner} alt="" className="d-block w-100"/>
+            </div>
+            <div className="carousel-item banner-img">
               <img src={imageBanner3} alt="" className="d-block w-100"/>
             </div>
           </div>
@@ -153,25 +162,71 @@ const Home = () => {
             <span className="visually-hidden">Next</span>
           </button>
         </div>
-      </div>
-      <div className='container mt-5'>
-        <div className='new-arrival-header'>
-          <div className='title-folder-home  mb-3'>HÀNG MỚI VỀ</div>
+        <div className='banner-container-title'>
+          ESSENTIALS HOLIDAY 2024 COLLECTION
         </div>
-        <div className='new-arrival'>
-          <div className='new-arrival-banner'>
-            <img src={imgNewArrival} alt="new-arrival" />
+      </div>
+      <div className='container mt-5'> 
+        <div className='category-home'>
+          <div className='category-home-1' onClick={() => navigate('/collections/tops')}>
+            <img src="https://fearofgod.com/cdn/shop/files/Essentials_HO24_NBAHeat01_0061copy2-3-4crop_x1800.jpg?v=1732044175" alt="" />
+            <div className='category-home-content'>
+              <div className='category-home-content-ctn'>
+                <div className='category-name'>TOPS</div>
+                <button className='btn-primary-home'>Shop now</button>
+              </div>
+            </div>
           </div>
+          <div className='category-home-2'>
+            <div className='category-home-3'>
+              <div className='category-home-5'>
+                <img src="https://hufworldwide.com/cdn/shop/files/06-RIGHT_MIDDLE-SMALL_cf15a7d2-ef3d-4ac0-b9ad-c892b7edee4d_1600x.jpg?v=1732139155" alt="" />
+                <div className='category-home-content'>
+                  <div className='category-home-content-ctn'>
+                    <div className='category-name'>BOTTOMS</div>
+                    <button>Shop now</button>
+                  </div>
+                </div>
+              </div>
+              <div className='category-home-6'>
+                <img src="https://cdn.shopify.com/s/files/1/0087/6193/3920/files/Stussy-Spring-_24---7_bebea07a-a5f4-4fcd-92ed-343f262e8807.jpg?v=1712878906&width=1920" alt="" />
+                <div className='category-home-content'>
+                  <div className='category-home-content-ctn'>
+                    <div className='category-name'>womenswear</div>
+                    <button>Shop now</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className='category-home-4'>
+              <img src="https://hufworldwide.com/cdn/shop/files/TRD-RESTOCK-HP_DESKTOP_1600x.jpg?v=1732567328" alt="" />
+                <div className='category-home-content'>
+                  <div className='category-home-content-ctn'>
+                    <div className='category-name'>outerwear</div>
+                    <button>Shop now</button>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className='container mt-5'>
+        <span className='title-folder-home'>new arrivals</span>
+        <div className='new-arrival mt-3'>
           <div className='new-arrival-card'>
             {listNewProduct.map((e: CardProps) => (
-               <div className='p-2'><Card data={e}/></div>
+              <div><Card data={e}/></div>
             ))}
           </div>
         </div>
       </div>
+      <div className='video-home mt-5'>
+        <video autoPlay loop muted playsInline src="https://brand.assets.adidas.com/video/upload/f_auto:video,q_auto/if_w_gt_1920,w_1920/MH_Banner_DT_2880x1280_59c4dfc960.mp4"></video>
+      </div>
       <div className='container mt-5'>
-        <div className='title-folder-home  mb-3'>HÀNG BÁN CHẠY</div>
-        <div className='top-sale'>
+        <span className='title-folder-home'>Best Sellers</span>
+        <div className='top-sale mt-3'>
           <Slider {...settings}>
             {listTopSell.map((e: CardProps) => (
               <Card data={e}/>
@@ -179,53 +234,15 @@ const Home = () => {
           </Slider>
         </div>
       </div>
-
       <div className='container mt-5 mb-5'>
-        <div className='title-folder-home  mb-3'>Bộ sưu tập</div>
-        <div className='collection-container'>
-          <div className='collection-background'></div>
-          <div className='collection-content'>
-            <div className='collection-text'>
-              <h1>YOUNG & HIP</h1>
-              <h2>#Varsity Collection</h2>
-            </div>
-            <div className='collection-slider'>
-              <Slider {...settings2}>
-                {listCollection.map((e: CardProps) => (
-                  <Card data={e}/>
-                ))}
-              </Slider>
-            </div>
+        <span className='title-folder-home'>About us</span>
+        <div className='about-us-ctn mt-3'>
+          <div className='about-us-img'>
+            <img src="https://cdn.shopify.com/s/files/1/0343/3988/1005/files/11_1728x.jpg?v=1676309871" alt="" />
           </div>
-        </div>
-      </div>
-
-      <div className='container mt-5 mb-5'>
-        <div className='title-folder-home mb-3'>Cập nhật thêm từ @mlbkorea_vn</div>
-        <div className='social-container'>
-          <div className='social-container-item'>
-            <img src="https://phosphor.utils.elfsightcdn.com/?url=https%3A%2F%2Fscontent-ber1-1.cdninstagram.com%2Fv%2Ft39.30808-6%2F465844360_536355899029535_8835073787455627808_n.jpg%3Fstp%3Ddst-jpg_e35_p1080x1080_sh0.08%26efg%3DeyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMzY1eDE3MDYuc2RyLmYzMDgwOC5kZWZhdWx0X2ltYWdlIn0%26_nc_ht%3Dscontent-ber1-1.cdninstagram.com%26_nc_cat%3D111%26_nc_ohc%3DXy109OWHelYQ7kNvgEwZBBy%26_nc_gid%3D94aa11ac208d4888aa901cdbb284e2e8%26edm%3DAPU89FAAAAAA%26ccb%3D7-5%26oh%3D00_AYBAqJCf3f8zeFK_69KxB40J7qxj6zQbKMz1JTETI9GYlg%26oe%3D673CF9AE%26_nc_sid%3Dbc0c2c" alt="" />
-          </div>
-          <div className='social-container-item'>
-            <img src="https://phosphor.utils.elfsightcdn.com/?url=https%3A%2F%2Finstagram.fbog4-2.fna.fbcdn.net%2Fv%2Ft39.30808-6%2F465839273_535018695829922_6848564851369589967_n.jpg%3Fstp%3Ddst-jpg_e35_p1080x1080_sh0.08%26efg%3DeyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMzY1eDE3MDYuc2RyLmYzMDgwOC5kZWZhdWx0X2ltYWdlIn0%26_nc_ht%3Dinstagram.fbog4-2.fna.fbcdn.net%26_nc_cat%3D102%26_nc_ohc%3DSf3XGZPl-BUQ7kNvgHqIaf_%26_nc_gid%3D1524b20aeb9f4d88b8ddb7625bf7965b%26edm%3DAPU89FAAAAAA%26ccb%3D7-5%26oh%3D00_AYDvpg8qQUbjXc8uxo4V9weeynDJfaw5YjKDw6bmoRSCRA%26oe%3D67353C3A%26_nc_sid%3Dbc0c2c" alt="" />
-          </div>
-          <div className='social-container-item'>
-            <img src="https://phosphor.utils.elfsightcdn.com/?url=https%3A%2F%2Fscontent-ber1-1.cdninstagram.com%2Fv%2Ft39.30808-6%2F465764020_537053228959802_3022008780394203162_n.jpg%3Fstp%3Ddst-jpg_e35_p1080x1080_sh0.08%26efg%3DeyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMzY1eDE3MDYuc2RyLmYzMDgwOC5kZWZhdWx0X2ltYWdlIn0%26_nc_ht%3Dscontent-ber1-1.cdninstagram.com%26_nc_cat%3D102%26_nc_ohc%3DHckNYiX2qIQQ7kNvgH6OtLT%26_nc_gid%3D94aa11ac208d4888aa901cdbb284e2e8%26edm%3DAPU89FAAAAAA%26ccb%3D7-5%26oh%3D00_AYC7k0LDso8kRwQrvYrevpvRV4tvnVsAt74Vtd9Kp6Wl4Q%26oe%3D673CD06F%26_nc_sid%3Dbc0c2c" alt="" />
-          </div>
-          <div className='social-container-item'>
-            <img src="https://phosphor.utils.elfsightcdn.com/?url=https%3A%2F%2Fscontent-atl3-2.cdninstagram.com%2Fv%2Ft39.30808-6%2F464273751_527047259960399_2186555186434779944_n.jpg%3Fstp%3Ddst-jpg_e35_p1080x1080_sh0.08%26efg%3DeyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMzY1eDE3MDYuc2RyLmYzMDgwOC5kZWZhdWx0X2ltYWdlIn0%26_nc_ht%3Dscontent-atl3-2.cdninstagram.com%26_nc_cat%3D111%26_nc_ohc%3D-F4x013bEA8Q7kNvgHBzDcS%26_nc_gid%3D398beb798597473ca96b13c1e0dc1f29%26edm%3DAPU89FAAAAAA%26ccb%3D7-5%26oh%3D00_AYCxRLFkkSPve_7PROK2M-a2FDAM_CVNmtcJsuSMlRaYQA%26oe%3D673D06D0%26_nc_sid%3Dbc0c2c" alt="" />
-          </div>
-          <div className='social-container-item'>
-            <img src="https://phosphor.utils.elfsightcdn.com/?url=https%3A%2F%2Fscontent-lim1-1.cdninstagram.com%2Fv%2Ft39.30808-6%2F461959885_511929031472222_1251614908919681346_n.jpg%3Fstp%3Ddst-jpg_e15_fr_p1080x1080%26efg%3DeyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEzMTkuc2RyLmYzMDgwOC5kZWZhdWx0X2ltYWdlIn0%26_nc_ht%3Dscontent-lim1-1.cdninstagram.com%26_nc_cat%3D102%26_nc_ohc%3DY6xhByoDmqkQ7kNvgF4LWfZ%26_nc_gid%3D02cbbdfb711e428fb72364cca873ea90%26edm%3DAPU89FAAAAAA%26ccb%3D7-5%26oh%3D00_AYDUAmtrfsHmmV-1-piKAej2di6kA7uUuzMvbTWRgN7ZWg%26oe%3D673D00D2%26_nc_sid%3Dbc0c2c" alt="" />
-          </div>
-          <div className='social-container-item'>
-            <img src="https://phosphor.utils.elfsightcdn.com/?url=https%3A%2F%2Fscontent-lim1-1.cdninstagram.com%2Fv%2Ft39.30808-6%2F461843598_510454348286357_133897979932546382_n.jpg%3Fstp%3Ddst-jpg_e35_p1080x1080_sh0.08%26efg%3DeyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMzY1eDE3MDYuc2RyLmYzMDgwOC5kZWZhdWx0X2ltYWdlIn0%26_nc_ht%3Dscontent-lim1-1.cdninstagram.com%26_nc_cat%3D105%26_nc_ohc%3DZZ2zFDEOWQ8Q7kNvgHaLtrv%26_nc_gid%3D02cbbdfb711e428fb72364cca873ea90%26edm%3DAPU89FAAAAAA%26ccb%3D7-5%26oh%3D00_AYDpIUI9RCEOUmVpuMB6yEpMw83HUeEyr_lawB2TJU4aOA%26oe%3D673CE15C%26_nc_sid%3Dbc0c2c" alt="" />
-          </div>
-          <div className='social-container-item'>
-            <img src="https://phosphor.utils.elfsightcdn.com/?url=https%3A%2F%2Fscontent-lim1-1.cdninstagram.com%2Fv%2Ft51.29350-15%2F460722828_850660227192602_5227891797914191123_n.jpg%3Fstp%3Ddst-jpg_e35_p1080x1080%26efg%3DeyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xNDQweDE3OTYuc2RyLmYyOTM1MC5kZWZhdWx0X2ltYWdlIn0%26_nc_ht%3Dscontent-lim1-1.cdninstagram.com%26_nc_cat%3D102%26_nc_ohc%3DAG46bLYgqXgQ7kNvgEDte10%26_nc_gid%3D02cbbdfb711e428fb72364cca873ea90%26edm%3DAPU89FABAAAA%26ccb%3D7-5%26oh%3D00_AYDZ5ng2renHgYWQQSlJIMG6fbQG1n0nqJfc6cpdI8Em4A%26oe%3D673CCFFF%26_nc_sid%3Dbc0c2c" alt="" />
-          </div>
-          <div className='social-container-item'>
-            <img src="https://phosphor.utils.elfsightcdn.com/?url=https%3A%2F%2Fscontent-lim1-1.cdninstagram.com%2Fv%2Ft39.30808-6%2F461519821_507422501922875_7530108277539126156_n.jpg%3Fstp%3Ddst-jpg_e15_fr_p1080x1080%26efg%3DeyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDEyOTguc2RyLmYzMDgwOC5kZWZhdWx0X2ltYWdlIn0%26_nc_ht%3Dscontent-lim1-1.cdninstagram.com%26_nc_cat%3D111%26_nc_ohc%3DmCBThNbk1a8Q7kNvgF4iacV%26_nc_gid%3D02cbbdfb711e428fb72364cca873ea90%26edm%3DAPU89FAAAAAA%26ccb%3D7-5%26oh%3D00_AYDFFHwUjlvhhI4gL_oZaW7GySyN41OIPUJ2S9H4BBvVaw%26oe%3D673CDF69%26_nc_sid%3Dbc0c2c" alt="" />
+          <div className='about-us-content'>
+            <div className='about-us-title'>STORIES, STYLES AND SPORTSWEAR AT ADIDAS, SINCE 1949</div>
+            <div className='about-us'>Sport keeps us fit. Keeps you mindful. Brings us together. Through sport we have the power to change lives. Whether it is through stories of inspiring athletes. Helping you to get up and get moving. Sportswear featuring the latest technologies, to up your performance. Beat your PB.adidas offers a home to the runner, the basketball player, the soccer kid, the fitness enthusiast. The weekend hiker that loves to escape the city. The yoga teacher that spreads the moves. The 3-Stripes are seen in the music scene. On stage, at festivals. Our sports clothing keeps you focused before that whistle blows. During the race. And at the finish lines. We’re here to supportcreators. Improve their game. Their lives. And change the world. <br /> <br /> Adidas is about more than sportswear and workout clothes. We partner with the best in the industry to co-create. This way we offer our fans the sports apparel and style that match their athletic needs, while keeping sustainability in mind. We’re here to support creators. Improve their game. Create change. And we think about the impact we have on our world.</div>
           </div>
         </div>
       </div>

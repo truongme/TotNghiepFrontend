@@ -37,6 +37,7 @@ const Login = () => {
       sessionStorage.setItem('token', accessToken);
       sessionStorage.setItem('role', role);
       navigate('/')
+      window.location.reload();
       
     } catch (error) {
       setLoginFail(true)
@@ -57,8 +58,10 @@ const Login = () => {
         </div>
         <div className='col-6 d-flex justify-content-center'>
           <div className='m-5 container'>
-            <h1 className='form-login-title'>Đăng nhập</h1>
-            <h6 style={{marginTop:"24px"}}>Đăng ký thành viên và nhận ngay ưu đãi 10% cho đơn hàng đầu tiên.</h6>
+            <div className='text-center'> 
+              <h1 className='form-login-title'>login</h1>
+              <h6 style={{marginTop:"24px"}}>Sign up for membership and get 10% off your first order.</h6>
+            </div>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div>
                 <label className='form-login-label'>Email</label>
@@ -99,27 +102,27 @@ const Login = () => {
                 {errors.password && <div className="error">{errors.password.message}</div>}
               </div>
               {loginFail && (
-                <div className="error-login-fail">Tài khoản hoặc mật khẩu không chính xác!</div>
+                <div className="error-login-fail">Incorrect account or password!</div>
               )}
               <div className='mt-3 mb-3'>
-                <ButtonCustom label='Đăng nhập'/>
+                <ButtonCustom label='Login'/>
               </div>
             </form>
             <div className='d-flex justify-content-center form-action'>
-              <Link to={"/signup"} className='link-style'>
+              <Link to={"/reset-password"} className='link-style'>
                 <span style={{paddingRight:"10px", borderRight:"2px black solid"}} className='item-form-action'>
-                  Quên mật khẩu?
+                  Forgot password?
                 </span>
               </Link>
               <Link to={"/signup"} className='link-style'>
-                <span style={{paddingLeft:"10px"}} className='item-form-action'>Đăng ký</span>
+                <span style={{paddingLeft:"10px"}} className='item-form-action'>Create account</span>
               </Link>
             </div>
             <div className='mt-3 mb-1'>
-              <ButtonCustom label='Đăng nhập Google'/>
+              <ButtonCustom label='Sign in with Google'/>
             </div>
-            <div className='mt-1'>
-              <ButtonCustom label='Đăng nhập facebook'/>
+            <div className='mt-1'>  
+              <ButtonCustom label='Sign in with facebook'/>
             </div>
           </div>
         </div>

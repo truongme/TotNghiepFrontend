@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './styles.scss'
-import { formatPrice } from '../../../helpers'
+import { formatDate, formatPrice } from '../../../helpers'
 import axios from 'axios'
 import { WebUrl } from '../../../constants'
 import ModalMain from '../../../components/Modal/Modal'
@@ -9,6 +9,7 @@ interface Order{
     id: string,
     status: string,
     total: number,
+    time: any,
     items: OrderItem[],
 }
 
@@ -134,17 +135,19 @@ const OrderUser = () => {
             const data = response.data.map((x: any) => ({
                 id: x.orderId,
                 status: x.status,
-                total: x.totalPrice,
+                total: x.totalAmount,
+                time: x.orderDate,
                 items: x.orderItems.map((e: any) => ({
                     id: e.orderItemId,
                     name: e.productVariant.product.name,
-                    image: e.productVariant.product.images[0]?.imageURL || '', 
+                    image: e.productVariant.product.images[0]?.imageURL || '',
                     quantity: e.quantity,
                     size: e.productVariant.size.sizeType,
                     color: e.productVariant.color.name[0],
-                    price: 1000
+                    price:  e.productVariant.product.price
                 }))
-            }));
+            })).sort((a: any, b: any) => new Date(b.time).getTime() - new Date(a.time).getTime());
+
 
             setOrderUser(data)
             setOrderUserPrev(data)
@@ -176,11 +179,11 @@ const OrderUser = () => {
                     </div>
                 </div>
             ) : (
-                <div>
+                <div> 
                      {orderUser.map((e: Order) => (
                         <div className='order-item-container'>
                             <div className='order-item-header'>
-                                <div></div>
+                                <div className='order-item-time'>Order Date: {formatDate(e.time)}</div>
                                 <div className='order-item-status'>{e.status}</div>
                             </div>
                             {e?.items.map((x: OrderItem) => (

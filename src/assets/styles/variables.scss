@@ -1,4 +1,10 @@
 @import url('https://fonts.cdnfonts.com/css/product-sans');
+@font-face {
+    font-family: 'HelveticaNeueLTPro';
+    src: url('./font/HelveticaNeueLTPro-Cn.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
 
 $primary-color: #2196F3;
 $background-color: #586579;
@@ -10,4 +16,4 @@ $blue-color: #77CDFF;
 $green-color: #77ff82;
 
 
-$primary-font: 'Product sans',sans-serif;
+$primary-font: 'HelveticaNeueLTPro',sans-serif !important;

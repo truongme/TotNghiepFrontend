@@ -7,6 +7,7 @@ import { WebUrl } from '../../constants';
 import { formatPrice } from '../../helpers';
 import { Controller, useForm } from 'react-hook-form';
 import ModalMain from '../../components/Modal/Modal';
+import { FaCheck } from "react-icons/fa6";
 
 export interface User {
   avatar: string | null;
@@ -33,6 +34,7 @@ interface OrderForm {
   ward: string;
   shipmentMethod: string;
   paymentId: string;
+  addressId: string;
 }
 
 const Order = () => {
@@ -50,6 +52,7 @@ const Order = () => {
   const [isOpenModalExit, setIsOpenModalExit] = useState<boolean>(false)
   const navigate = useNavigate()
   const [arrMyAddresses, setArrMyAddresses] = useState<any[]>([])
+  const [addressIdSelect, setAddressIdSelect] = useState<any>()
 
   const handleCloseModal = () => {
     setIsOpenModal(false)
@@ -73,10 +76,13 @@ const Order = () => {
       setValue('district','');
       setValue('ward', '');
     } else {
-      const address : any = arrMyAddresses?.find((addr : any) => addr.id == selectedId);
+      const address : any = arrMyAddresses?.find((addr : any) => addr.addressId == selectedId);
       if (address) {
+        setAddressIdSelect(selectedId)
         setValue('addressDetail', address.addressDetail || '');
         setValue('city', address.city || '');
+        fetchDistricts(address.city)
+        fetchWard(address.district)
         setValue('district', address.district || '');
         setValue('ward', address.ward || '');
       }
@@ -112,12 +118,14 @@ const Order = () => {
 
   const onSubmit = async (data: OrderForm) => {
     try {
+      console.log(addressIdSelect)
       await axios.put(`${WebUrl}/api/v1/orders/complete-order`, {
+        addressId: addressIdSelect,
         addressDetail: data.addressDetail,
         city: data.city,
         district: data.district,
         ward: data.ward,
-        shipmentMethod:  'EXPRESS',
+        shipmentMethod:  data.shipmentMethod,
         paymentId: "1",
       }, {
         headers: {
@@ -176,19 +184,14 @@ const Order = () => {
 
   const fetchMyAddress = async () => {
     try {
-      const selectedAddress = arrMyAddresses[9];
-      if (!selectedAddress) {
-        console.error("No address available in arrMyAddresses.");
-        return;
-      }
-      await Promise.all([
-        fetchDistricts(Number(selectedAddress.city)), 
-        fetchWard(Number(selectedAddress.district)), 
-      ]);
-      setValue('addressDetail', selectedAddress.addressDetail);
-      setValue('city', selectedAddress.city);
-      setValue('district', selectedAddress.district);
-      setValue('ward', selectedAddress.ward);
+      const response = await axios.get(`${WebUrl}/api/v1/addresses/all`, {
+        headers: {
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'skip-browser-warning',
+        'Authorization': `Bearer ${token}`, 
+        }
+      });
+      setArrMyAddresses(response.data)
     } catch (error) {
       console.error("Error fetching address details", error);
     }
@@ -205,17 +208,17 @@ const Order = () => {
     <div className='container mb-5'>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='order-breadcrumb' style={{ paddingTop: '20px' }}>
-          <Link to={'/'} className='link-style order-breadcrumb-item'>Trang chủ</Link>
+          <Link to={'/'} className='link-style order-breadcrumb-item'>Home</Link>
           <div className='order-breadcrumb-item'>/</div>
-          <Link to={'/cart'} className='link-style order-breadcrumb-item'>Giỏ hàng</Link>
+          <Link to={'/cart'} className='link-style order-breadcrumb-item'>BAG</Link>
           <div className='order-breadcrumb-item'>/</div>
-          <div className='order-breadcrumb-active'>Đơn hàng</div>
+          <div className='order-breadcrumb-active'>ORDER</div>
         </div>
         <div className='row' style={{ marginTop: '20px' }}>
           <div className='col-7'>
             <div className='order-user'>
               <div className='order-user-title'>
-                Thông tin người nhận
+                Recipient information
               </div>
               <div className='order-infor-user'>
                 <div className='order-avatar-user'>
@@ -231,7 +234,7 @@ const Order = () => {
                   <label className="form-label">Your shipping address</label>
                   <select className="form-select" onChange={handleAddressChange}>
                     {arrMyAddresses?.map((address: any) => (
-                      <option key={address.id} value={address.id}>{address.addressDetail}</option>
+                      <option key={address.addressId} value={address.addressId}>{address.fullAddress}</option>
                     ))}
                     <option value="new">Create shipping address</option>
                   </select>
@@ -327,33 +330,82 @@ const Order = () => {
                   />
                 </div>
 
-                <div className="mb-3 col-6">
-                  <label className="form-label">Shipment</label>
+               <div className="mb-3 col-12">
+                  <label className="form-label">Shipping method</label>
                   <Controller
                     name="shipmentMethod"
+                    defaultValue=""
                     control={control}
-                    defaultValue="EXPRESS"
+                    render={({ field }) => {
+                      const { value } = field;
+                      const city = watch("city")
+                      return (
+                        <div>
+                          <div
+                            className={`form-check-ship ${value === 'SHIPMENT' ? 'selected' : ''}`}
+                            onClick={() => {setValue('shipmentMethod', 'SHIPMENT'); setShippingCost(city === "1" ? 15000 : 30000)}}
+                          >
+                            <div className='ship-method-header'>
+                              <div>Standard</div>
+                              <div>{formatPrice(city === "1" ? 15000 : 30000)}</div>
+                            </div>
+                            <div className='ship-method-detail'>Guaranteed delivery within 2 to 3 days</div>
+                          </div>
+                          <div
+                            className={`form-check-ship ${value === 'EXPRESS' ? 'selected' : ''}`}
+                            onClick={() => {setValue('shipmentMethod', 'EXPRESS'); setShippingCost(50000)}}
+                          >
+                            <div className='ship-method-header'>
+                              <div>Express</div>
+                              <div>{formatPrice(50000)}</div>
+                            </div>
+                            <div className='ship-method-detail'>Guaranteed delivery tomorrow</div>
+                          </div>
+                          
+                        </div>
+                      );
+                    }}
+                  />
+                </div>
+                <div className="mb-3 col-12">
+                  <label className="form-label">Payment method</label>
+                  <Controller
+                    name="paymentId"
+                    control={control}
+                    defaultValue=''
                     render={({ field }) => (
-                      <select {...field} className="form-select">
-                        <option value="EXPRESS">Express</option>
-                        <option value="STANDARD">Standard</option>
-                      </select>
+                      <div>
+                        <div className="form-check">
+                          <input
+                            {...field}
+                            id="paymentOnline"
+                            type="radio"
+                            className="form-check-input"
+                            value="online"
+                            checked={field.value === 'online'}
+                          />
+                          <label htmlFor="paymentOnline" className="form-check-label">
+                            Online Payment
+                          </label>
+                        </div>
+                        <div className="form-check">
+                          <input
+                            {...field}
+                            id="paymentCOD"
+                            type="radio"
+                            className="form-check-input"
+                            value="cod"
+                            checked={field.value === 'cod'}
+                          />
+                          <label htmlFor="paymentCOD" className="form-check-label">
+                            Cash on Delivery
+                          </label>
+                        </div>
+                      </div>
                     )}
                   />
                 </div>
 
-                <div className="mb-3 col-6">
-                  <label className="form-label">Payment</label>
-                  <Controller
-                    name="paymentId"
-                    control={control}
-                    defaultValue={'1'}
-                    disabled
-                    render={({ field }) => (
-                      <input {...field} className="form-control" placeholder="Payment ID" type="number" />
-                    )}
-                  />
-                </div>
               </div>
             </div>
           </div>
@@ -387,8 +439,8 @@ const Order = () => {
               </div>
               <hr />
               <div className='d-flex justify-content-between order-checkout'>
-                <div className='back-btn' onClick={() => setIsOpenModalExit(true)}>Quay lại giỏ hàng</div>
-                <button type="submit" className='checkout-btn'>Xác nhận đặt hàng</button>
+                <div className='back-btn' onClick={() => setIsOpenModalExit(true)}>Back to cart</div>
+                <button type="submit" className='checkout-btn'>Order Confirmation</button>
               </div>
             </div>
           </div>

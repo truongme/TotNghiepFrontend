@@ -24,15 +24,10 @@
     font-size: 20px;
     margin-bottom: 15px;
     svg{
-        font-size: 25px;
         cursor: pointer;
-        &:hover{
-            color: $primary-color;
-        }
     }
     .modal-title{
         text-transform: uppercase;
-       font-weight: 600;
     }
 }
 
@@ -60,36 +55,39 @@
     }
 }
 .modal-footer {
-   button{
-    margin-left: 10px;
-   }
+    width: 100%;
+    display: grid !important;
+    gap: 10px !important;
+    grid-template-columns: 1fr 1fr !important;
+    justify-content: flex-end;
 }
 
 .product-size {
     padding: 5px 25px;
-    border-radius: 30px;
-    margin: 5px;
-    border: 1px solid #ddd;
+    margin-right: 10px;
+    border: 1px solid black;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
     background-color: $white-color;
 
     &.selected {
-        background-color: $primary-color;
+        background-color: $black-color;
         color: #fff;
-        border-color: $primary-color;
+        border-color: $black-color;
     }
 }
 
 .quantity-input-modal-container {
     display: flex;
-    border: 1px solid $background-color;
+    // border: 1px solid $background-color;
     align-items: center;
    
 
     .quantity-btn-modal {
-        border: none;
-        width: 50px;
+        background-color: white;
+        margin-right: 10px;
+        border: 1px solid black;
+        width: 40px;
         height: 40px;
         display: flex;
         justify-content: center;
@@ -98,7 +96,10 @@
     }
 
     .product-quantity-modal {
-        border: none;
+        margin-right: 10px;
+        border: 1px solid black;
+        width: 40px;
+        height: 40px;
     }
 
     input {
@@ -152,4 +153,20 @@
     color: $red-color;
     padding-top: 10px;
     font-size: 13px;
+}
+.btn-secondary{
+    width: 100%;
+    padding: 5px;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    text-transform: uppercase;
+}
+.btn-primary {
+    width: 100%;
+    padding: 5px;
+    background-color: black;
+    color: white;
+    border: 1px solid black;
+    text-transform: uppercase;
 }

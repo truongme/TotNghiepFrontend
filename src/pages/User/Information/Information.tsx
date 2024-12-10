@@ -33,8 +33,15 @@ const Information: React.FC<InformationProps> = ({ onSaveComplete }) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+
+      const validImageTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+      if (!validImageTypes.includes(file.type)) {
+        setErrorMessage("File format must be JPEG, PNG, GIF, or WebP.");
+        return;
+      }
+
       if (file.size > 1024 * 1024) {
-        setErrorMessage("Dung lượng ảnh không được vượt quá 1MB.");
+        setErrorMessage("Photo size must not exceed 1MB.");
         return;
       }
       setErrorMessage("");
@@ -87,6 +94,7 @@ const Information: React.FC<InformationProps> = ({ onSaveComplete }) => {
         phoneNumber: data.phoneNumber,
         gender: data.gender,
       });
+      setAvatarPreview(data.avatar)
     } catch (error) {
       console.error('Unexpected Error:', error);
     }
@@ -96,7 +104,10 @@ const Information: React.FC<InformationProps> = ({ onSaveComplete }) => {
     try {
       await axios.put(
         `${WebUrl}/api/v1/users/update`,
-        { ...data },
+        { 
+          ...data,
+          avatar: urlAvatar
+        },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -145,7 +156,7 @@ const Information: React.FC<InformationProps> = ({ onSaveComplete }) => {
                 <Controller
                   name='email'
                   control={control}
-                  render={({ field }) => <input className="form-control" {...field} placeholder='Email' />}
+                  render={({ field }) => <input disabled className="form-control" {...field} placeholder='Email' />}
                 />
               </li>
               <li className='input-full-name'>
@@ -171,7 +182,7 @@ const Information: React.FC<InformationProps> = ({ onSaveComplete }) => {
                 />
               </li>
             </ul>
-            <button className='primary' type='submit'>
+            <button className='primary' type='submit' disabled={isDisableButton}>
               Save
             </button>
           </div>

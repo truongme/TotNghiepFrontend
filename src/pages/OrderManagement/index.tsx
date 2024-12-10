@@ -10,24 +10,32 @@ import { GrFormPrevious } from "react-icons/gr";
 interface OrderTable {
   orderId: string;
   status: string;
-  payment: any;
-  shipment: any;
-  user: any;
+  orderDate: any;
+  totalPrice: any;
+  userId: any;
+  orderItems: any;
 }
 
 const OrderManagement = () => {
-  const [selectTab, setSelectTab] = useState<string>("all");
+  const [selectTab, setSelectTab] = useState<string>("");
   const token = sessionStorage.getItem("token");
-  const [selectOrder, setSelectOrder] = useState<string>("");
+  const [selectOrder, setSelectOrder] = useState<any>();
   const [status, setStatus] = useState<any>(OrderStatus);
   const [listOrder, setListOrder] = useState<OrderTable[]>([]);
+  const [listOrderPrev, setListOrderPrev] = useState<OrderTable[]>([]);
   const [totalOrders, setTotalOrders] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 3;
+  const limit = 10;
   const totalPages = Math.ceil(totalOrders / limit);
 
   const handleChangeTab = (status: string) => {
     setSelectTab(status);
+    if( status === "" ){
+      setListOrder(listOrderPrev)
+    } else {
+      const listOrderFilter = listOrderPrev.filter(x=> x.status === status)
+      setListOrder(listOrderFilter)
+    }
   };
 
   const handlePageChange = (page: number) => {
@@ -44,16 +52,36 @@ const OrderManagement = () => {
         },
       });
 
-      const data = response.data.data.map((e: OrderTable) => ({
+      const data = response.data.data.map((e: any) => ({
         orderId: e.orderId,  
         status: e.status,
-        user: e.user.firstName + " " + e.user.lastName,
-        payment: e.payment?.paymentMethod,
-        shipment: formatDate(e.shipment?.estimatedDeliveryDate),
+        userId: e.userId,
+        orderDate: formatDate(e.orderDate),
+        totalPrice: e.totalPrice,
+        orderItems: e.orderItems,
       }));
 
       setTotalOrders(response.data.meta.total);
       setListOrder(data);
+      setListOrderPrev(data)
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    }
+  };
+
+  const handleAcceptOrder = async (id: string) => {
+    try {
+      await axios.put(`${WebUrl}/api/v1/orders/accept-by-admin/${id}`,
+        {},
+        {
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'skip-browser-warning',
+          'Authorization': `Bearer ${token}`, 
+        },
+      });
+      setSelectOrder("")
+      fetchListOrder(currentPage)
     } catch (error) {
       console.error('Error fetching orders:', error);
     }
@@ -61,15 +89,16 @@ const OrderManagement = () => {
 
   useEffect(() => {
     fetchListOrder(currentPage);
-  }, [currentPage]);
+  }, [currentPage,selectTab]);
 
   return (
     <div className='conntainer p-3 order-admin-container'>
       <div className='order-header'>
-        <div className={`order-header-item ${selectTab === "all" ? 'active' : ''}`} onClick={() => handleChangeTab("all")}>Tất cả</div>
-        <div className={`order-header-item ${selectTab === "waiting" ? 'active' : ''}`} onClick={() => handleChangeTab("waiting")}>Chờ xác nhận</div>
-        <div className={`order-header-item ${selectTab === "delivery" ? 'active' : ''}`} onClick={() => handleChangeTab("delivery")}>Đang giao hàng</div>
-        <div className={`order-header-item ${selectTab === "completed" ? 'active' : ''}`} onClick={() => handleChangeTab("completed")}>Đã hoàn thành</div>
+        <div className={`order-header-item ${selectTab === "" ? 'active' : ''}`} onClick={() => handleChangeTab("")}>Tất cả</div>
+        <div className={`order-header-item ${selectTab === "PENDING" ? 'active' : ''}`} onClick={() => handleChangeTab("PENDING")}>Chờ xác nhận</div>
+        <div className={`order-header-item ${selectTab === "SHIPPING" ? 'active' : ''}`} onClick={() => handleChangeTab("SHIPPING")}>Đang giao hàng</div>
+        <div className={`order-header-item ${selectTab === "DELIVERED" ? 'active' : ''}`} onClick={() => handleChangeTab("DELIVERED")}>Đã hoàn thành</div>
+        <div className={`order-header-item ${selectTab === "CANCELLED" ? 'active' : ''}`} onClick={() => handleChangeTab("CANCELLED")}>Cancelled</div>
       </div>
       <table className="table table-bordered table-striped mt-3 text-center">
         <thead className="table-primary">
@@ -77,19 +106,19 @@ const OrderManagement = () => {
             <th>Index</th>
             <th>Order ID</th>
             <th>Người dùng</th>
-            <th>Payment</th>
+            <th>Order Date</th>
             <th>Shipment</th>
             <th>Status</th>
           </tr>
         </thead>
         <tbody>
           {listOrder.map((order: any, index: number) => (
-            <tr key={order.orderId} onClick={() => setSelectOrder(order.orderId)}>
+            <tr key={order.orderId} onClick={() => setSelectOrder(order)}>
               <th>{index + 1 + (currentPage - 1) * limit}</th>
               <td>{order.orderId}</td>
-              <td>{order.user}</td>
-              <td>{order.payment}</td>
-              <td>{order.shipment}</td>
+              <td>{order.userId}</td>
+              <td>{order.orderDate}</td>
+              <td>{formatPrice(order.totalPrice)}</td>
               <td>{order.status}</td>
             </tr>
           ))}
@@ -129,88 +158,50 @@ const OrderManagement = () => {
               <MdCancel onClick={() => setSelectOrder("")}/>
             </div>
             <div style={{overflowY:'auto'}}>
-              <div className='panel-order-details-row'>
+              <div className='panel-order-details-row mt-2'>
                 <div className='panel-order-details-title'>Order code</div>
-                <input disabled className="form-control" placeholder='OrderID' />
+                <input disabled className="form-control" value={selectOrder.orderId}/>
               </div>
-              <div className='panel-order-details-row'>
-                <div className='panel-order-details-title'>Username</div>
-                <input disabled className="form-control" placeholder='Username' />
+              <div className='panel-order-details-row mt-2'>
+                <div className='panel-order-details-title'>UserId</div>
+                <input disabled className="form-control" value={selectOrder.userId}/>
               </div>
-              <div className='panel-order-details-product'>
+               <div className='panel-order-details-row mt-2'>
+                <div className='panel-order-details-title'>Total Price</div>
+                <input disabled className="form-control" placeholder='Payment' value={formatPrice(selectOrder.totalPrice)}/>
+              </div>
+              <div className='panel-order-details-row mt-2'>
+                <div className='panel-order-details-title'>Order Date</div>
+                <input disabled className="form-control" placeholder='Shipment' value={formatDate(selectOrder.orderDate)}/>
+              </div>
+              <div className='panel-order-details-product mt-2'>
                 <div>Product</div>
-                <div className='order-product-details'>
-                  <img className='img-product-order' src="https://product.hstatic.net/200000642007/product/ao_khoac_denim_3adkm0341_dff08e15f3c943e294b8b820a4f4cd7c_master.jpg" alt="" />
-                  <div className='order-product-details-content'>
-                    <div className='name-product'>MLB - Áo thun unisex cổ tròn tay ngắn hiện đại</div>
-                    <div className='infor-order-product'>Color: White</div>
-                    <div className='infor-order-product'>Size: XL</div>
-                    <div className='infor-order-product'>Quantity: 5</div>
+                {selectOrder.orderItems?.map((x: any) => (
+                  <div className='order-product-details'>
+                    <img className='img-product-order' src={x.productVariant.product.images[0].imageURL} alt="" />
+                    <div className='order-product-details-content'>
+                      <div className='name-product'>{x.productVariant.product.name}</div>
+                      <div className='infor-order-product'>Color: {x.productVariant.color.name}</div>
+                      <div className='infor-order-product'>Size: {x.productVariant.color.name}</div>
+                      <div className='infor-order-product'>Quantity: {x.quantity}</div>
+                    </div>
                   </div>
-                </div>
-                <div className='order-product-details'>
-                  <img className='img-product-order' src="https://product.hstatic.net/200000642007/product/ao_khoac_denim_3adkm0341_dff08e15f3c943e294b8b820a4f4cd7c_master.jpg" alt="" />
-                  <div className='order-product-details-content'>
-                    <div className='name-product'>MLB - Áo thun unisex cổ tròn tay ngắn hiện đại</div>
-                    <div className='infor-order-product'>Color: White</div>
-                    <div className='infor-order-product'>Size: XL</div>
-                    <div className='infor-order-product'>Quantity: 5</div>
-                  </div>
-                </div>
-                <div className='order-product-details'>
-                  <img className='img-product-order' src="https://product.hstatic.net/200000642007/product/ao_khoac_denim_3adkm0341_dff08e15f3c943e294b8b820a4f4cd7c_master.jpg" alt="" />
-                  <div className='order-product-details-content'>
-                    <div className='name-product'>MLB - Áo thun unisex cổ tròn tay ngắn hiện đại</div>
-                    <div className='infor-order-product'>Color: White</div>
-                    <div className='infor-order-product'>Size: XL</div>
-                    <div className='infor-order-product'>Quantity: 5</div>
-                  </div>
-                </div>
-                <div className='order-product-details'>
-                  <img className='img-product-order' src="https://product.hstatic.net/200000642007/product/ao_khoac_denim_3adkm0341_dff08e15f3c943e294b8b820a4f4cd7c_master.jpg" alt="" />
-                  <div className='order-product-details-content'>
-                    <div className='name-product'>MLB - Áo thun unisex cổ tròn tay ngắn hiện đại</div>
-                    <div className='infor-order-product'>Color: White</div>
-                    <div className='infor-order-product'>Size: XL</div>
-                    <div className='infor-order-product'>Quantity: 5</div>
-                  </div>
-                </div>
-                <div className='order-product-details'>
-                  <img className='img-product-order' src="https://product.hstatic.net/200000642007/product/ao_khoac_denim_3adkm0341_dff08e15f3c943e294b8b820a4f4cd7c_master.jpg" alt="" />
-                  <div className='order-product-details-content'>
-                    <div className='name-product'>MLB - Áo thun unisex cổ tròn tay ngắn hiện đại</div>
-                    <div className='infor-order-product'>Color: White</div>
-                    <div className='infor-order-product'>Size: XL</div>
-                    <div className='infor-order-product'>Quantity: 5</div>
-                  </div>
-                </div>
+                ))}
               </div>
-              <div className='panel-order-details-row'>
-                <div className='panel-order-details-title'>Payment</div>
-                <input disabled className="form-control" placeholder='Payment' />
-              </div>
-              <div className='panel-order-details-row'>
-                <div className='panel-order-details-title'>Shipment</div>
-                <input disabled className="form-control" placeholder='Shipment' />
-              </div>
-              <div className='panel-order-details-row mb-3'>
+              <div className='panel-order-details-row mb-3 mt-2'>
                 <div className='panel-order-details-title'>Status</div>
-                <select
-                  className="form-select"
-                  aria-label="Trạng thái đơn hàng"
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                >
-                  {OrderStatus.map((e: any) => (
-                    <option value={e.value}>{e.name}</option>
-                  ))}
-                </select>
+                <input disabled className="form-control" placeholder='Status' value={selectOrder.status}/>
               </div>
             </div>
             
             <div className='panel-order-footer'>
-              <button className='btn-cancel' onClick={() => setSelectOrder("")}>Cancel</button>
-              <button className='btn-save'>Save</button>
+              <button className='close' onClick={() => setSelectOrder('')}>Close</button>
+              {selectOrder.status === "PENDING" || selectOrder.status === "SHIPPING" && (
+                <button className='delete' onClick={() => setSelectOrder('')}>Cancel</button>
+              )}
+              {selectOrder.status === "PENDING" && (
+                <button className='primary' onClick={() => handleAcceptOrder(selectOrder.orderId)}>Accept</button>
+              )}
             </div>
           </div>
         </div>

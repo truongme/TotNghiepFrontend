@@ -23,7 +23,7 @@ const ProductManagement = () => {
     const [listProduct, setListProduct] = useState<TableProduct[]>([])
     const [totalProduct, setTotalProduct] = useState(0)
     const [currentPage, setCurrentPage] = useState(1);
-    const limit = 3; 
+    const limit = 6; 
     const totalPages = Math.ceil(totalProduct / limit);
     const navigate = useNavigate()
 
@@ -43,11 +43,12 @@ const ProductManagement = () => {
                 id: e.productId,
                 name: e.name,
                 price: e.price,
-                img: e.images[0].imageURL,
+                img: e?.images?.[0]?.imageURL,
                 category: e.categoryId,
                 subCategory: e.subCategoryId,
                 quantity: e.quantity,
             }));
+            console.log(data)
             setTotalProduct(response.data.meta.total);
             setListProduct(data);
         } catch (error) {
@@ -72,7 +73,6 @@ const ProductManagement = () => {
                         <th>Category</th>
                         <th>Sub Category</th>
                         <th>Giá</th>
-                        <th>Số lượng</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -87,7 +87,6 @@ const ProductManagement = () => {
                             <td>{e.category}</td>
                             <td>{e.subCategory}</td>
                             <td>{formatPrice(e.price)}</td>
-                            <td>{e.quantity}</td>
                             <td>
                                 <div className='d-flex justify-content-around'>
                                     <Link to={`/product/${e.id}`}>

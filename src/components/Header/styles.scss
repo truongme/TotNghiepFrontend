@@ -1,9 +1,12 @@
 @import '../../assets/styles/style.scss';
 @import '../../assets/styles/variables.scss';
 
+
 .header-container {
     position: relative;
     background-color: $white-color;
+    height: 55px;
+    letter-spacing: .1em;
 
     .header-logo {
         font-size: 60px;
@@ -22,17 +25,32 @@
 
     .header-nav-container{
         display: flex;
-        margin-left: 30px;
 
         .header-link {
-            padding: 16px 18px;
-            position: relative;
-            font-size: 17px;
-            font-weight: 700;
+            padding: 17px 18px;
+            
+            font-size: 14px;
             text-transform: uppercase;
-            &:hover {
-                color: $primary-color;
+            .header-link-ctn{
+                position: relative;
+                &::after {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    bottom: 0px;
+                    width: 0;
+                    height: 1px;
+                    background-color: #373737;
+                    transition: width 0.1s ease-in-out;
+                }
+            
+                &:hover {
+                    &::after {
+                        width: 100%;
+                    }
+                }
             }
+            
         }
 
         .header-nav-item-hover{
@@ -42,26 +60,33 @@
             top: 100%;
             left: 0;
             background-color: $white-color;
-            border-top: 2px solid $gray-color;
+            
+            // border-top: 2px solid $gray-color;
 
             &:hover{
                 display: block;
             }
 
             .header-category-ctn{
-                display: flex;
                 .header-category {
                     margin-right:100px ;
+                    margin-left: 16px;
                     .header-category-title{
                         text-transform: uppercase;
                         font-weight: 600;
-                        margin-bottom: 10px;
+                        margin-bottom: 6px;
                     }
                     .header-category-item{
+                        font-size: 12px !important;
+                        text-transform: uppercase;
                         font-weight: 500;
                         cursor: pointer;
-                        margin-bottom: 10px;
+                        margin-bottom: 6px;
                         font-size: 15px;
+                        color: #737373;
+                        &:hover{
+                            color: black;
+                        }
                     }
                 }
             }
@@ -96,8 +121,8 @@
     cursor: pointer;
     .header-cart-count{
         position: absolute;
-        top: 0;
-        right: -10px;
+        top: -5px;
+        right: -15px;
         width: 15px;
         height: 15px;
         border-radius: 50%;
@@ -255,4 +280,27 @@
 
 .icon-search{
     margin: 0px 10px;
+}
+
+.header-notification-container{
+    background-color: $primary-color;
+    width: 100%;
+    height: 50px;
+}
+
+.nav-right-header{
+    display: flex;
+    justify-content: end;
+}
+
+.logo-header{
+    width: 140px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.header-notification-container{
+    height: 50px;
+    width: 100%;
+    background-color: #373737;
 }

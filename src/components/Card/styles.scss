@@ -3,10 +3,16 @@
 .card-cotainer{
     font-family: $primary-font;
     position: relative;
-    border: 1px solid #ddd;
+
+    &:hover{
+        border: 1px solid black;
+        .card-price-img{
+            transform: translateY(-10px);
+        }
+    }
     
     .card-img{
-        width: 100%;
+        position: relative;
         overflow: hidden;
         cursor: pointer;
         position: relative;
@@ -29,15 +35,25 @@
         .img-main{
             transition: opacity 0.3s ease-out;
         }
+        .card-price-img{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            padding: 3px 10px;
+            margin-left: 10px ;
+            background-color: white;
+            transition: transform 0.1s ease;
+        }
+        
     }
     .card-content{
         width: 100%;
         background-color: $white-color;
         padding: 16px 10px;
         font-family: $primary-font;
-        font-size: 16px;
+        font-size: 14px;
         line-height: 24px;
-        font-weight: bold;
+        letter-spacing: .1em;
 
         .card-title {
             cursor: pointer;
@@ -46,28 +62,39 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
+            color: rgb(85, 85, 85);
             &:hover {
-                color: $primary-color;
+                color: black;
             }
         }
 
         .card-price{
-            color: $primary-color;
+            color: rgb(85, 85, 85);
         }
     }
     .card-index-rank{
         position: absolute;
         top: 0;
         left: 0;
-        width: 30px;
-        height: 30px;
-        background-color: $black-color;
+        background-image: url('https: //file.hstatic.net/200000642007/file/bg_rank_c21e90ddb3c74242970a777d424a1ae5.png');
         border-radius: 50px;
-        margin: 10px;
         color: $white-color;
         align-items: center;
         display: flex;
         justify-content: center;
         font-weight: 600;
+        .rank-count{
+            z-index: 10;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        img{
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
     }
 }

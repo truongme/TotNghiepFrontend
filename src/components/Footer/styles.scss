@@ -1,7 +1,7 @@
 .footer-container {
-    background-color: #2b2b2b;
+    background-color: black;
     color: #fff;
-    padding: 100px 40px 20px;
+    padding: 40px 40px 20px;
     display: flex;
     justify-content: center; // Căn giữa
 
@@ -17,10 +17,11 @@
   .footer-section {
     flex: 1; // Mỗi phần chiếm không gian đều
     margin-right: 20px;
-    text-align: center; // Căn giữa cho h3
+    text-align: center; 
     h3 {
       font-size: 16px;
       margin-bottom: 20px;
+      font-weight: 600;
     //   text-align: center; // Căn giữa cho h3
 
       cursor: pointer; // Thay đổi con trỏ khi hover

@@ -4,7 +4,7 @@ import { Controller, useForm, useFieldArray } from 'react-hook-form';
 import { colorSystem, formatPrice } from '../../helpers';
 import { MdCancel } from "react-icons/md";
 import axios from 'axios';
-import { WebUrl } from '../../constants';
+import { IMG_BB_API_KEY, WebUrl } from '../../constants';
 import { IoMdAdd } from "react-icons/io";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -34,8 +34,7 @@ const ProductAdmin = () => {
     const [previews, setPreviews] = useState<string[]>([]);
     const [arrCategory, setArrCategory] = useState<any[]>([]);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const [productDetail, setProductDetail] = useState<ProductForm>()
-    const [projectVariants, setProjectVariants] = useState<ProductVariants[]>([])
+    const token = sessionStorage.getItem("token");
 
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm<ProductForm>({
         defaultValues: {
@@ -54,12 +53,46 @@ const ProductAdmin = () => {
         }
     };
 
-    const handlePreview = (files: FileList) => {
+    const handlePreview = async (files: FileList) => {
         const fileArray = Array.from(files);
+
         const newPreviews = fileArray.map(file => URL.createObjectURL(file));
         setPreviews(prev => [...prev, ...newPreviews]);
-        const newArrImages = [...watch("images"), ...fileArray]
-        setValue("images", newArrImages);
+
+        try {
+            const uploadPromises = fileArray.map(file => handleUploadAvatar(file));
+            const uploadedUrls = await Promise.all(uploadPromises);
+            
+
+            const newArrImages = [...watch("images"), ...uploadedUrls];
+            setValue("images", newArrImages);
+
+        } catch (error) {
+            console.error("Error uploading files:", error);
+        }
+    };
+
+    const handleUploadAvatar = async (file: File) => {
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+            const response = await axios.post(
+                `https://api.imgbb.com/1/upload?key=${IMG_BB_API_KEY}`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+            return response.data.data.url;
+        } catch (error) {
+            console.error("Error uploading avatar to imgBB:", error);
+            throw error; 
+        }
     };
 
     const handleDeleteImage = (index: number) => {
@@ -67,8 +100,31 @@ const ProductAdmin = () => {
         setValue("images", watch("images").filter((_ : any, i: number) => i !== index));
     }
 
-    const onSubmit = (data: ProductForm) => {
-        console.log("New Product Data:", data);
+    const onSubmit = async (data: ProductForm) => {
+         try {
+            await axios.post(`${WebUrl}/api/v1/products/create`,
+                {
+                    name: data.name,
+                    description: data.description,
+                    price: Number(data.price), 
+                    categoryId: data.category, 
+                    subCategoryId: data.subCategory, 
+                    imageURLs: data.images,
+                    colorId: "blue",
+                    brandId: "mlb",
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'skip-browser-warning',
+                        'Authorization': `Bearer ${token}`, 
+                    },
+                }
+            );
+        } catch (error) {
+            console.error("Error uploading avatar to imgBB:", error);
+            throw error; 
+        }
     };
 
 
@@ -82,12 +138,13 @@ const ProductAdmin = () => {
         })
 
         const result = response.data
+        console.log(result)
 
         const product: ProductForm = {
             id: result.productId,
             name: result.name,
-            category: result.category.name,
-            subCategory :result.subCategory.name,
+            category: result.category.categoryId,
+            subCategory :result.subCategory.subCategoryId,
             price: formatPrice(result.price),
             description: result.description,
             images: result.images.map((e : any) => e.imageURL),
@@ -98,7 +155,7 @@ const ProductAdmin = () => {
                 stock: e.stock
             }))
         };
-        console.log(product)
+
 
         setValue("name", product.name);
         setValue("price", product.price);
@@ -108,9 +165,6 @@ const ProductAdmin = () => {
         setValue("images", product.images);
         setValue("variants", product.variants);
         setPreviews(product.images);
-
-        setProjectVariants(product.variants)
-        setProductDetail(product)
         } catch (error) {
         console.error("Error get product details", error)
         }
@@ -125,6 +179,7 @@ const ProductAdmin = () => {
                 }
             }) 
             setArrCategory(reponse.data.data)
+            console.log(reponse.data.data)
         } catch (error) {
             console.error("Error get category", error)
         }
@@ -241,7 +296,7 @@ const ProductAdmin = () => {
                                 <select {...field} className='input-new-product form-select text-capitalize'>
                                     <option value="">Select category</option>
                                     {arrCategory?.map((item: any) => (
-                                        <option className='text-capitalize' value={item.name}>{item.name}</option>
+                                        <option className='text-capitalize' value={item.categoryId}>{item.name}</option>
                                     ))}
                                 </select>
                             )}
@@ -258,9 +313,8 @@ const ProductAdmin = () => {
                             rules={{ required: "Sub Category is required" }}
                             render={({ field }) => {
                                 const categoriesSelected = watch("category")
-                                const subCategory: any = arrCategory.find((e: any) => e.name === categoriesSelected)
+                                const subCategory: any = arrCategory.find((e: any) => e.categoryId === categoriesSelected)
                                 const arrSubCategory = subCategory?.subCategories
-                                console.log('categoriesSelected',categoriesSelected)
                                 return (
                                     <select 
                                         {...field} 
@@ -269,14 +323,15 @@ const ProductAdmin = () => {
                                     >
                                         <option value="">Select sub-category</option>
                                         {arrSubCategory?.map((e: any) => (
-                                            <option className='text-capitalize' value={e.subCategory}>{e.name}</option>
+                                            <option className='text-capitalize' value={e.subCategoryId}>{e.name}</option>
                                         ))}
                                     </select>
                             )}}
                         />
                         {errors.subCategory && <p className='error'>{errors.subCategory.message}</p>}
                     </div>
-                    <div className='col-12 mb-3'>
+                    {id !== "new" && (
+                        <div className='col-12 mb-3'>
                         <label className='label-new-product'>Product Variant</label>
                         <table className="table table-bordered">
                             <thead>
@@ -352,17 +407,18 @@ const ProductAdmin = () => {
                                             />
                                         </td>
                                         <td>
-                                            <button type="button" className="btn btn-danger" onClick={() => remove(index)} disabled={fields.length === 1}>Remove</button>
+                                            <button type="button" className="delete" onClick={() => remove(index)} disabled={fields.length === 1}>Remove</button>
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                        <button type="button" className="btn btn-primary" onClick={() => append({ size: "", color: "", stock: 1 })}>
+                        <button type="button" className="primary" onClick={() => append({ size: "", color: "", stock: 1 })}>
                             Add Variant
                         </button>
                     </div>
-                    <div className='col-12'>
+                    )}
+                    <div className='col-12 mt-3'>
                         <button className='btn btn-success col-12 mb-3' type="submit">Add Product</button>
                     </div>
                 </div>

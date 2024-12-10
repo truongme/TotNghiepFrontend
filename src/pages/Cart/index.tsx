@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './styles.scss';
 import axios from 'axios';
 import { formatPrice, hexToColorName } from '../../helpers';
 import { WebUrl } from '../../constants';
 import Modal from '../../components/Modal';
 import imgCartEmpry from '../../assets/images/empty-cart.png'
-import { useDataContext } from '../../helpers/ContentApi';
 
 interface CartProps{
   id: string,
@@ -27,8 +26,8 @@ const Cart = () => {
   const [isOpenModalEdit, setIsOpenModalEdit] = useState<string>("")
   const token = sessionStorage.getItem("token");
   const [propsModal , setPropsModal] = useState<any>()
+  const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { setRefreshData } = useDataContext();
 
   const handleOpenModal = (obj: any) => {
     setIsOpenModalEdit(obj.productId)
@@ -64,7 +63,6 @@ const Cart = () => {
         .filter((item) => item.id !== id)
         .reduce((sum, item) => sum + item.total, 0);
       setTotalOrder(newTotalOrder);
-      setRefreshData(true);
     } catch (error) {
       console.error('Error deleting item:', error);
     } finally {
@@ -112,18 +110,18 @@ const Cart = () => {
   return (
     <div className="cart-container container">
       <div className='cart-breadcrumb mb-3'>
-        <Link to={'/'} className='link-style cart-breadcrumb-item'>Trang chủ</Link>
+        <Link to={'/'} className='link-style cart-breadcrumb-item'>home</Link>
         <div className='cart-breadcrumb-item'>/</div>
-        <div className='cart-breadcrumb-active'>Giỏ hàng</div>
+        <div className='cart-breadcrumb-active'>CART</div>
       </div>
       <div className="cart-content">
         <div className='cart-table'>
           <div className='cart-header'>
             <div className='row'>
-              <div className='col-4'>Sản phẩm</div>
-              <div className='col-2'>Giá</div>
-              <div className='col-2'>Số lượng</div>
-              <div className='col-2'>Tạm tính</div>
+              <div className='col-4'>Product</div>
+              <div className='col-2'>price</div>
+              <div className='col-2'>quantity</div>
+              <div className='col-2'>Provisional</div>
               <div className='col-2'>Action</div>
             </div>
           </div>
@@ -151,8 +149,8 @@ const Cart = () => {
                           <div className='cart-item-details'>
                             <div className='cart-item-title'>{e.name}</div>
                             <div className='cart-item-meta'>
-                              <span>Màu: {e.color}</span>
-                              <span>Size: {e.size}</span>
+                              <div>Màu: {e.color}</div>
+                              <div>Size: {e.size}</div>
                             </div>
                           </div>
                         </div>
@@ -168,8 +166,8 @@ const Cart = () => {
                           <span>{formatPrice(e.total)}</span>
                         </div>
                         <div className='col-2 cart-item-action'>
-                          <button className='edit' onClick={() => handleOpenModal(e)}>Edit</button>
-                          <button className='delete' onClick={() => handleDeleteItem(e.id)}>Delete</button>
+                          <button className='btn-secondary' onClick={() => handleOpenModal(e)}>Edit</button>
+                          <button className='btn-primary' onClick={() => handleDeleteItem(e.id)}>Delete</button>
                         </div>
                       </div>
                       
@@ -194,9 +192,10 @@ const Cart = () => {
               <span>Tổng</span>
               <span>{formatPrice(totalOrder)}</span>
             </div>
-            <Link to={'/pay'} className='link-style'>
-              <button className='checkout-btn'>Mua ngay</button>
-            </Link>
+            <div className='cart-btn'>
+              <button className='shopping-btn' onClick={() => navigate("/")}>Continue Shopping</button>
+              <button className='checkout-btn' disabled={totalOrder === 0} onClick={() => navigate("/pay")}>Checkout</button>
+            </div>
           </div>
         </div>
       </div>

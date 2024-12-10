@@ -1,3 +1,14 @@
+@font-face {
+  font-family: 'HelveticaNeueLTPro';
+  src: url('./assets/styles/font/HelveticaNeueLTPro-Cn.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'HelveticaNeueLTPro', sans-serif !important;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -8,6 +19,11 @@ body {
   overflow-x: hidden;
 }
 
+.no-scroll {
+  overflow: hidden;
+}
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -15,7 +31,6 @@ code {
 
 *{
   box-sizing: border-box;
-  font-family: 'Product sans', sans-serif !important;
 }
 
 .body-container{
@@ -29,7 +44,7 @@ code {
 }
 
 .header-fixed {
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   z-index: 1000;
@@ -57,13 +72,13 @@ li{
   margin-left: 250px;
 }
 
-.admin-customer{
-  margin-top: 60px;
-}
-
 .nav-fixed{
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
+}
+
+button{
+  border: none;
 }

@@ -28,6 +28,7 @@ const NavAdmin = () => {
     sessionStorage.removeItem("role");
     sessionStorage.removeItem("token");
     navigate('/login');
+    window.location.reload()
   };
 
   return (

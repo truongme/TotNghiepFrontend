@@ -1,7 +1,14 @@
 @import '../../assets/styles/variables.scss';
+@font-face {
+  font-family: 'OPTIMA';
+  src: url('../../assets/styles/font/OPTIMA.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
 
 .product-container {
     padding: 20px;
+    font-family: $primary-font;
   
     .row {
       display: flex;
@@ -12,9 +19,14 @@
     .product-images {
       .slick-image {
         width: 100%; 
-        max-width: 450px; 
-        height: auto; 
-        object-fit: cover; 
+        margin-bottom:10px ;
+        overflow: hidden;
+        img{
+          width: 100%;
+          height: auto;
+          object-fit: cover;
+      }
+       
       }
     
       .slick-slide {
@@ -80,6 +92,9 @@
     
     /* Product Details Styling */
     .product-order {
+      position: sticky;
+      top: 75px;
+      left: 0;
       .size-list {
         list-style: none;
         padding: 0;
@@ -103,11 +118,11 @@
         font-size: 24px;
         font-weight: bold;
         margin-bottom: 10px;
+        // font-family: Optima, sans-serif !important;
       }
   
       .product-price {
         font-size: 22px;
-        color: $primary-color;
       }
   
       .product-size-title {
@@ -144,18 +159,21 @@
   
       .product-sizes {
         .product-size {
-          padding: 5px 25px;
-          border-radius: 30px;
+          border-radius: 0px;
+          width: 50px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           margin: 5px;
-          border: 1px solid #ddd;
+          border: 1px solid black;
           cursor: pointer;
-          transition: background-color 0.3s ease, color 0.3s ease;
           background-color: $white-color;
       
           &.selected {
-            background-color: $primary-color;  
+            background-color: $black-color;  
             color: #fff; 
-            border-color: $primary-color;
+            border-color: $black-color;
           }
         }
       }
@@ -321,3 +339,16 @@
   }
 }
   
+
+.product-description{
+  .product-description-title{
+    font-size: 16px;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    padding: 10px;
+    text-transform: uppercase;
+  }
+  .product-description-content{
+    padding: 10px;
+  }
+}

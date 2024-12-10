@@ -23,14 +23,10 @@ const Signup = () => {
 
     const postSignup = async (data: SignupForm) => {
         try {
-            await axios.post(`${WebUrl}/api/v1/auth/sign-in`, {
+            await axios.post(`${WebUrl}/api/v1/auth/sign-up`, {
                 email: data.email,
                 password: data.password,
                 confirmPassword: data.confirmPassword,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'ngrok-skip-browser-warning': 'skip-browser-warning'
-                }
             });
 
             alert("Bạn đã đăng ký tài khoản thành công! Hãy đăng nhập để mua sắm")
@@ -56,8 +52,10 @@ const Signup = () => {
                 </div>
                 <div className='col-6 d-flex justify-content-center'>
                     <div className='m-5 container'>
-                        <h1 className='form-signup-title'>Đăng ký tài khoản</h1>
-                        <h6 style={{ marginTop: "24px" }}>Đăng ký thành viên và nhận ngay ưu đãi 10% cho đơn hàng đầu tiên.</h6>
+                        <div className='text-center'>
+                            <h1 className='form-signup-title'>Sign up for an account</h1>
+                            <h6 style={{ marginTop: "24px" }} className=''>Sign up for membership and get 10% off your first order.</h6>
+                        </div>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div>
                                 <label className='form-signup-label'>Email</label>
@@ -117,27 +115,27 @@ const Signup = () => {
                                 {errors.password && <div className="error">{errors.password.message}</div>}
                             </div>
                             {signupFail && (
-                                <div className="error-signup-fail">Tài khoản hoặc mật khẩu không chính xác!</div>
+                                <div className="error-signup-fail">Account registration failed!</div>
                             )}
                             <div className='mt-3 mb-3'>
-                                <ButtonCustom label='Đăng ký' />
+                                <ButtonCustom label='Create Account'/>
                             </div>
                         </form>
                         <div className='d-flex justify-content-center form-action'>
-                            <Link to={"/"} className='link-style'>
+                            <Link to={"/reset-password"} className='link-style'>
                                 <span style={{ paddingRight: "10px", borderRight: "2px black solid" }} className='item-form-action'>
-                                    Quên mật khẩu?
+                                    Forgot password?
                                 </span>
                             </Link>
-                            <Link to={"/"} className='link-style'>
-                                <span style={{ paddingLeft: "10px" }} className='item-form-action'>Đăng nhập</span>
+                            <Link to={"/login"} className='link-style'>
+                                <span style={{ paddingLeft: "10px" }} className='item-form-action'>Already have an account</span>
                             </Link>
                         </div>
                         <div className='mt-3 mb-1'>
-                            <ButtonCustom label='Đăng nhập Google' />
+                            <ButtonCustom label='Sign up with Google' />
                         </div>
                         <div className='mt-1'>
-                            <ButtonCustom label='Đăng nhập facebook' />
+                            <ButtonCustom label='Sign up with facebook' />
                         </div>
                     </div>
                 </div>
