@@ -92,7 +92,7 @@ const User = () => {
                     </li>
                     <li className='item-user'>
                         <MdOutlineLogout />
-                        <a onClick={() => handleLogout()}>Đăng xuất</a>
+                        <a onClick={() => handleLogout()}>Logout</a>
                     </li>
                 </ul>
             </div>

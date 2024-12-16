@@ -120,6 +120,7 @@ const Product = () => {
     } else {
       const product = projectVariants.find(x => x.color === selectedColor && x.size === selectedSize)
       try {
+        setIsOpenModal(true)
         await axios.post(`${WebUrl}/api/v1/order-item`, {
           quantity: quantity,
           productVariantId: product?.id,
@@ -257,7 +258,7 @@ const Product = () => {
               </div>
             </div> */}
             <div className='product-order-btn'>
-              <button className='btn-add-cart' onClick={e => {handleAddToCart(); setIsOpenModal(true)}}>add to bag</button>
+              <button className='btn-add-cart' onClick={e => {handleAddToCart()}}>add to bag</button>
               <button className='btn-order' onClick={() => handleBuy()}>check out</button>
               
             </div>

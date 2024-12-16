@@ -137,7 +137,7 @@ const Cart = () => {
                 <div className='cart-empty'>
                   <img src={imgCartEmpry} alt="" className='img-cart-item'/>
                   <div className='mb-2'>Your shopping cart is empty</div>
-                  <Link to={'/'}><button className='button-primary'>Go Shopping Now</button></Link>
+                  <Link to={'/'}><button className='btn-primary'>Go Shopping Now</button></Link>
                 </div>
               ) : (
                 <div>
@@ -182,19 +182,19 @@ const Cart = () => {
         <div className="cart-summary-container">
           <div className="cart-summary">
             <h5>              
-              Thông tin đơn hàng
+              Order information
             </h5>
             <div className="cart-summary-item">
-              <span>Tạm tính</span>
+              <span>Provisional</span>
               <span>{formatPrice(totalOrder)}</span>
             </div>
             <div className="cart-summary-item">
-              <span>Tổng</span>
+              <span>Total</span>
               <span>{formatPrice(totalOrder)}</span>
             </div>
             <div className='cart-btn'>
-              <button className='shopping-btn' onClick={() => navigate("/")}>Continue Shopping</button>
-              <button className='checkout-btn' disabled={totalOrder === 0} onClick={() => navigate("/pay")}>Checkout</button>
+              <button className='btn-secondary' onClick={() => navigate("/")}>Continue Shopping</button>
+              <button className='btn-primary' disabled={totalOrder === 0} onClick={() => navigate("/pay")}>Checkout</button>
             </div>
           </div>
         </div>

@@ -182,7 +182,7 @@ const Information: React.FC<InformationProps> = ({ onSaveComplete }) => {
                 />
               </li>
             </ul>
-            <button className='primary' type='submit' disabled={isDisableButton}>
+            <button className='btn-primary' type='submit' disabled={isDisableButton} style={{width:"200px"}}>
               Save
             </button>
           </div>
@@ -198,11 +198,11 @@ const Information: React.FC<InformationProps> = ({ onSaveComplete }) => {
               style={{ display: "none" }}
             />
             {errorMessage && <div className="error-message">{errorMessage}</div>}
-            <button disabled={isDisableButton} onClick={() => fileInputRef.current?.click()} type='button' className='primary'>
-              Chọn ảnh
+            <button disabled={isDisableButton} onClick={() => fileInputRef.current?.click()} type='button' className='btn-primary'>
+              Select photo
             </button>
-            <div>Dụng lượng file tối đa 1 MB</div>
-            <div>Định dạng:.JPEG, .PNG</div>
+            <div>Maximum file size 1 MB</div>
+            <div>Format: .JPEG, .PNG</div>
           </div>
         </div>
       </form>
