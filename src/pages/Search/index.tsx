@@ -15,7 +15,7 @@ const Search = () => {
   const handleSearchImage = async (file: any) => {
     try {
       const response = await axios.post(
-        `https://1f4b-2001-ee0-8205-f9b5-f14d-76d0-2f39-e03.ngrok-free.app/search-image`,
+        `${WebUrl}/search-image`,
         {
           url: "https://fearofgod.com/cdn/shop/files/125AL244301_KNICKS_ESSENTIALS_TEE-LIGHT_HEATHER_1_900x.jpg?v=1731638100",
         },
@@ -33,8 +33,8 @@ const Search = () => {
         name: e.name,
         price: e.price,
         img: e.url,
-      }))
-      setArrResult(data)
+      }));
+      setArrResult(data);
     } catch (error) {
       console.error("Error uploading avatar to imgBB:", error);
     }
