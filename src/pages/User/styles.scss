@@ -1,9 +1,10 @@
 @import '../../assets/styles/variables.scss';
 
 .user-menu-container{
+    letter-spacing: .08em;
     background-color: $gray-color;
     position: sticky;
-    top: 60px;
+    top: 55px;
     left: 0;
     padding: 15px;
     width: 25%;

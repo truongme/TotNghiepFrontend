@@ -4,6 +4,8 @@ import { formatDate, formatPrice } from '../../../helpers'
 import axios from 'axios'
 import { WebUrl } from '../../../constants'
 import ModalMain from '../../../components/Modal/Modal'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../../helpers/AuthContext'
 
 interface Order{
     id: string,
@@ -35,6 +37,7 @@ const OrderUser = () => {
     const [selectedReason, setSelectedReason] = useState<string>();
     const [selectedOtherReason, setSelectedOtherReason] = useState<boolean>(false);
     const [valueOtherReason, setValueOtherReason] = useState<string>("");
+    const navigate = useNavigate()
 
     const reasons = [
        "I don't need this product anymore",
@@ -180,45 +183,55 @@ const OrderUser = () => {
                 </div>
             ) : (
                 <div> 
-                     {orderUser.map((e: Order) => (
-                        <div className='order-item-container'>
-                            <div className='order-item-header'>
-                                <div className='order-item-time'>Order Date: {formatDate(e.time)}</div>
-                                <div className='order-item-status'>{e.status}</div>
-                            </div>
-                            {e?.items.map((x: OrderItem) => (
-                                <div className='order-item'>
-                                    <div className='order-item-content'>
-                                        <div className='order-item-img'>
-                                            <img src={x.image} alt="" />
-                                        </div>
-                                        <div>
-                                            <div>{x.name}</div>
-                                            <div>Color: {x.color}</div>
-                                            <div>Size: {x.size}</div>
-                                            <div>Quantity: {x.quantity}</div>
-                                        </div>
+                    {orderUser.length>0 ? (
+                        <>
+                             {orderUser.map((e: Order) => (
+                                <div className='order-item-container'>
+                                    <div className='order-item-header'>
+                                        <div className='order-item-time'>Order Date: {formatDate(e.time)}</div>
+                                        <div className='order-item-status'>{e.status}</div>
                                     </div>
-                                    <div className='total-price'>
-                                        {formatPrice(x.price)}
+                                    {e?.items.map((x: OrderItem) => (
+                                        <div className='order-item'>
+                                            <div className='order-item-content'>
+                                                <div className='order-item-img'>
+                                                    <img src={x.image} alt="" />
+                                                </div>
+                                                <div>
+                                                    <div>{x.name}</div>
+                                                    <div>Color: {x.color}</div>
+                                                    <div>Size: {x.size}</div>
+                                                    <div>Quantity: {x.quantity}</div>
+                                                </div>
+                                            </div>
+                                            <div className='total-price'>
+                                                {formatPrice(x.price)}
+                                            </div>
+                                        </div>
+                                    ))}
+                                    <div className='order-item-footer'>
+                                        <div>
+                                            <button className='primary'>Buy Again</button>
+                                            {/* <button className='secondary'>Contact Seller</button> */}
+                                            {e.status === 'PENDING' && (
+                                                <button className='cancel' onClick={() => handleOpenModalCancelOrder(e.id)}>Cancel</button>
+                                            )}
+                                        </div>
+                                        <div className='d-flex'>
+                                            <div >Order Total: </div>
+                                            <div className='total-price'>{formatPrice(e.total)}</div>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
-                            <div className='order-item-footer'>
-                                <div>
-                                    <button className='primary'>Buy Again</button>
-                                    <button className='secondary'>Contact Seller</button>
-                                    {e.status === 'PENDING' && (
-                                        <button className='cancel' onClick={() => handleOpenModalCancelOrder(e.id)}>Cancel</button>
-                                    )}
-                                </div>
-                                <div className='d-flex'>
-                                    <div >Order Total: </div>
-                                    <div className='total-price'>{formatPrice(e.total)}</div>
-                                </div>
-                            </div>
+                        </>
+                    ) : (
+                        <div className='order-emty'>
+                           
+                            <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/orderlist/5fafbb923393b712b964.png" alt="" />
+                            <div>No orders yet</div>
                         </div>
-                    ))}
+                    )}
                 </div>
             )}
             {isOpenModal && (

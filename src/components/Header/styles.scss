@@ -240,11 +240,14 @@
     }
 }
 
+.header-search-body-suggested{
+    width: 40%;
+}
+
 .header-body-suggested{
     display: flex;
 
     .popular-search-terms{
-        width: 40%;
         margin-right: 20px;
         .title-body-item{
             margin-top: 10px;
@@ -303,4 +306,33 @@
     height: 50px;
     width: 100%;
     background-color: #373737;
+}
+
+.header-search-body-image-ctn{
+    display: flex;
+    justify-content: center;
+    width: 40%;
+    .header-search-body-image {
+        position: relative;
+        height: 500px;
+        width: 350px;
+        overflow: hidden;
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+}
+
+.loading{
+    background-color: rgb(132, 132, 132, 0.5) ;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

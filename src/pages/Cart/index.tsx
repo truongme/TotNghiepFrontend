@@ -6,6 +6,7 @@ import { formatPrice, hexToColorName } from '../../helpers';
 import { WebUrl } from '../../constants';
 import Modal from '../../components/Modal';
 import imgCartEmpry from '../../assets/images/empty-cart.png'
+import { useAuth } from '../../helpers/AuthContext';
 
 interface CartProps{
   id: string,
@@ -28,6 +29,7 @@ const Cart = () => {
   const [propsModal , setPropsModal] = useState<any>()
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const {setCart} = useAuth()
 
   const handleOpenModal = (obj: any) => {
     setIsOpenModalEdit(obj.productId)
@@ -51,6 +53,7 @@ const Cart = () => {
 
   const handleDeleteItem = async (id: string) => {
     try {
+      setCart(true)
       await axios.delete(`${WebUrl}/api/v1/order-item/${id}`, {
         headers: {
           'Content-Type': 'application/json',
@@ -63,6 +66,7 @@ const Cart = () => {
         .filter((item) => item.id !== id)
         .reduce((sum, item) => sum + item.total, 0);
       setTotalOrder(newTotalOrder);
+      setCart(false)
     } catch (error) {
       console.error('Error deleting item:', error);
     } finally {
@@ -144,7 +148,7 @@ const Cart = () => {
                   {orderArr.map((e: CartProps) => (
                     <div className='cart-item'>
                       <div className='row align-items-center'>
-                        <div className='col-4 cart-item-product d-flex'>
+                        <div className='col-4 cart-item-product d-flex'  onClick={() => navigate(`/product/${e.productId}`)}>
                           <img src={e.img} alt="product" className='cart-item-img' />
                           <div className='cart-item-details'>
                             <div className='cart-item-title'>{e.name}</div>

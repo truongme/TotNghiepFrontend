@@ -24,13 +24,38 @@ ChartJS.register(
 );
 
 const DashBoard = () => {
+    
+
+    const [listTopSell, setListTopSell] = useState<any>([])
+    const token = sessionStorage.getItem("token");
+    const [revenue, setRevenue] = useState<number>();
+    const [revenuePending, setRevenuePending] = useState<number>();
+    const [totalProduct, setTotalProduct] = useState<number>()
+    const [dataRenvenue, setDataRenvenue] = useState<number[]>([])
+    const [dataRenvenueProduct, setDataRenvenueProduct] = useState<number[]>([])
+
+    const generateLast31DaysLabels = (): string[] => {
+        const labels: string[] = [];
+        const today = new Date();
+
+        for (let i = 0; i < 31; i++) {
+            const date = new Date(today);
+            date.setDate(today.getDate() - (30 - i)); // Generate dates in order
+            const formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}`;
+            labels.push(formattedDate); // Push the formatted date in dd/mm format
+        }
+
+        return labels;
+    };
+
+
     const data: ChartData<'bar' | 'line'> = {
-        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+        labels: generateLast31DaysLabels(),
         datasets: [
         {
             type: 'line' as const,
             label: 'Số lượng Order',
-            data: [50, 65, 70, 60, 75, 80, 85, 90, 95, 100, 105, 20],
+            data: dataRenvenueProduct,
             borderColor: '#FFF27A',
             backgroundColor: '#FFF27A',
             tension: 0.4,
@@ -38,19 +63,9 @@ const DashBoard = () => {
             yAxisID: 'y1', 
         },
         {
-            type: 'line' as const,
-            label: 'Sản phẩm bán ra',
-            data: [30, 45, 55, 50, 60, 65, 75, 70, 85, 90, 95, 40],
-            borderColor: '#E16449',
-            backgroundColor: '#E16449',
-            tension: 0.4,
-            fill: false,
-            yAxisID: 'y1', 
-        },
-        {
             type: 'bar' as const,
             label: 'Doanh thu',
-            data: [11500000, 10700000, 12500000, 10000000, 13500000, 14000000, 17000000, 19050000, 21200000, 22500000, 21500000, 13500000],
+            data: dataRenvenue,
             backgroundColor: '#A5A7FE',
             borderColor: '#5351FA',
             borderWidth: 1,
@@ -86,34 +101,208 @@ const DashBoard = () => {
     },
   };
 
-    const [listTopSell, setListTopSell] = useState<any>([])
+    const getTopSell = async () => {
+        try{
+        const response = await axios.get(`${WebUrl}/api/v1/products/top-selling?limit=4`, {
+            headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'skip-browser-warning'
+            }
+        }) 
+        
+        const data = response.data.data.map((e: any, index: number) => ({
+            id: e.productId,  
+            img: e.images?.[0].imageURL,
+            name: e.name,
+            price: formatPrice(e.price),
+        }));
 
-  const getTopSell = async () => {
-    try{
-      const response = await axios.get(`${WebUrl}/api/v1/products/top-selling?limit=4`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'skip-browser-warning'
+        setListTopSell(data)
+
+        } catch (error) {
+        console.error('Error get top sell:', error);
         }
-      }) 
-      
-      const data = response.data.data.map((e: any, index: number) => ({
-        id: e.productId,  
-        img: e.images?.[0].imageURL,
-        name: e.name,
-        price: formatPrice(e.price),
-      }));
-
-      setListTopSell(data)
-
-    } catch (error) {
-      console.error('Error get top sell:', error);
     }
-  }
 
-  useEffect(() => {
-    getTopSell()
-  },[])
+    const getRevence = async () => {
+        const date = new Date(); 
+        const startDate = new Date(date); 
+        startDate.setMonth(startDate.getMonth() - 1); // Start date is one month ago
+        const endDate = new Date(date); 
+        endDate.setDate(endDate.getDate() + 1); // End date is tomorrow
+
+        try {
+            const response: any = await axios.post(`${WebUrl}/api/v1/statistics/get-revenue`, {
+                status: "PAID",
+                startDate: startDate.toISOString().slice(0, 10), // Format as YYYY-MM-DD
+                endDate: endDate.toISOString().slice(0, 10),     // Format as YYYY-MM-DD
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'skip-browser-warning',
+                    'Authorization': `Bearer ${token}`, 
+                }
+            });
+
+            setRevenue(response.data.totalAmount);
+
+        } catch (error) {
+            console.error('Error get top sell:', error);
+        }
+    };
+
+
+    const getRevencePending = async () => {
+        const date = new Date(); 
+        const startDate = new Date(date); 
+        startDate.setMonth(startDate.getMonth() - 1); 
+        const endDate = new Date(date); 
+        endDate.setDate(endDate.getDate() + 1);
+        try{
+            const response: any = await axios.post(`${WebUrl}/api/v1/statistics/get-revenue`, {
+                status: "PENDING",
+                startDate: startDate.toISOString().slice(0, 10),
+                endDate: endDate.toISOString().slice(0, 10),
+            } , {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'skip-browser-warning',
+                    'Authorization': `Bearer ${token}`, 
+                }
+            });
+            setRevenuePending(response.data.totalAmount)
+
+        } catch (error) {
+        console.error('Error get top sell:', error);
+        }
+    }
+
+    const getTotalProduct = async () => {
+        const date = new Date(); 
+        const startDate = new Date(date); 
+        startDate.setMonth(startDate.getMonth() - 1); 
+        const endDate = new Date(date); 
+        endDate.setDate(endDate.getDate() + 1);
+        try{
+            const response: any = await axios.post(`${WebUrl}/api/v1/statistics/get-total-products-sold`, {
+                startDate: startDate.toISOString().slice(0, 10),
+                endDate: endDate.toISOString().slice(0, 10),
+            } , {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'skip-browser-warning',
+                    'Authorization': `Bearer ${token}`, 
+                }
+            });
+            setTotalProduct(response.data.totalProductsSold)
+
+        } catch (error) {
+        console.error('Error get top sell:', error);
+        }
+    }
+
+    const getDataRenvueChart = async () => {
+        const date = new Date(); 
+        const startDate = new Date(date); 
+        startDate.setMonth(startDate.getMonth() - 1); 
+        const endDate = new Date(date); 
+        endDate.setDate(endDate.getDate() + 1);
+        try{
+            const response: any = await axios.post(`${WebUrl}/api/v1/statistics/get-revenue-by-day`, {
+                status: "PENDING",
+                startDate: startDate.toISOString().slice(0, 10),
+                endDate: endDate.toISOString().slice(0, 10),
+            } , {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'skip-browser-warning',
+                    'Authorization': `Bearer ${token}`, 
+                }
+            });
+
+            const groupedData: Record<string, number> = {};
+
+            response.data.forEach((entry: any) => {
+                const day = entry.date; // Format: YYYY-MM-DD
+                if (!groupedData[day]) {
+                    console.log(day)
+                    groupedData[day] = 0;
+                }
+                groupedData[day] += entry.totalAmount;
+            });
+
+            const resultArray: number[] = [];
+            const date = new Date();
+            const startDateLabel = new Date(date); 
+            startDateLabel.setMonth(startDateLabel.getMonth() - 1); 
+            startDateLabel.setDate(startDateLabel.getDate() );  
+
+            for (let d = new Date(startDateLabel); d <= date; d.setDate(d.getDate() + 1)) {
+                const formattedDate = d.toISOString().slice(0, 10); 
+                resultArray.push(groupedData[formattedDate] || 0);
+            }
+
+            setDataRenvenueProduct(resultArray);
+
+        } catch (error) {
+        console.error('Error get top sell:', error);
+        }
+    }
+
+    const getDataProductChart = async () => {
+        const date = new Date(); 
+        const startDate = new Date(date); 
+        startDate.setMonth(startDate.getMonth() - 1); 
+        const endDate = new Date(date); 
+        endDate.setDate(endDate.getDate() + 1);
+        try{
+            const response: any = await axios.post(`${WebUrl}/api/v1/statistics/get-products-sold-by-day`, {
+                status: "PAID",
+                startDate: startDate.toISOString().slice(0, 10),
+                endDate: endDate.toISOString().slice(0, 10),
+            } , {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'skip-browser-warning',
+                    'Authorization': `Bearer ${token}`, 
+                }
+            });
+
+            const groupedData: Record<string, number> = {};
+
+            response.data.forEach((entry: any) => {
+                const day = entry.date; // Format: YYYY-MM-DD
+                if (!groupedData[day]) {
+                    groupedData[day] = 0;
+                }
+                groupedData[day] += entry.totalProductsSold;
+            });
+
+           const resultArray: number[] = [];
+            const date = new Date();
+            const startDateLabel = new Date(date); 
+            startDateLabel.setMonth(startDateLabel.getMonth() - 1); 
+            startDateLabel.setDate(startDateLabel.getDate() );  
+
+            for (let d = new Date(startDateLabel); d <= date; d.setDate(d.getDate() + 1)) {
+                const formattedDate = d.toISOString().slice(0, 10); 
+                resultArray.push(groupedData[formattedDate] || 0);
+            }
+            setDataRenvenue(resultArray);
+
+        } catch (error) {
+        console.error('Error get top sell:', error);
+        }
+    }
+
+    useEffect(() => {
+        getTopSell();
+        getRevence();
+        getTotalProduct();
+        getRevencePending();
+        getDataRenvueChart();
+        getDataProductChart()
+    },[])
 
     return (
         <div className='container dashboard-container pt-3 pb-3'>
@@ -125,8 +314,8 @@ const DashBoard = () => {
                             <FaBoxOpen />
                         </div>
                         <div className='dashboard-main-item-title'>
-                            <div>Total Sales</div>
-                            <p>{formatPrice(13500000)}</p>
+                            <div>Total Revenue</div>
+                            <p>{formatPrice(revenue || 1000000)}</p>
                         </div>
                     </div>
                     <div className='dashboard-main-item'>
@@ -134,8 +323,8 @@ const DashBoard = () => {
                             <FaChartLine />
                         </div>
                         <div className='dashboard-main-item-title'>
-                            <div>Total Order</div>
-                            <p>20</p>
+                            <div>Total Sales</div>
+                           <p>{formatPrice(revenuePending || 1000000)}</p>
                         </div>
                     </div>
                     <div className='dashboard-main-item'>
@@ -144,7 +333,7 @@ const DashBoard = () => {
                         </div>
                         <div className='dashboard-main-item-title'>
                             <div>Total Product</div>
-                            <p>40</p>
+                            <p>{totalProduct}</p>
                         </div>
                     </div>
                     <div className='dashboard-main-item'>
@@ -153,7 +342,7 @@ const DashBoard = () => {
                         </div>
                         <div className='dashboard-main-item-title'>
                             <div>Total Client</div>
-                            <p>10</p>
+                            <p>2</p>
                         </div>
                     </div>
                 </div>
@@ -161,7 +350,7 @@ const DashBoard = () => {
             </div>
             <div className='dashboard-main-chart-container'>
                 <div className='dashboard-main-chart'>
-                    <div className='mb-2 dashboard-main-chart-title'>Thống kê doanh thu trong 12 tháng</div>
+                    <div className='mb-2 dashboard-main-chart-title'>Revenue statistics for the last 30 days</div>
                     <Chart type='bar' data={data} options={options} />
                 </div>
                 <div className='dashboard-top-sale'>

@@ -198,7 +198,7 @@ const Information: React.FC<InformationProps> = ({ onSaveComplete }) => {
               style={{ display: "none" }}
             />
             {errorMessage && <div className="error-message">{errorMessage}</div>}
-            <button disabled={isDisableButton} onClick={() => fileInputRef.current?.click()} type='button' className='btn-primary'>
+            <button style={{width:"140px"}} disabled={isDisableButton} onClick={() => fileInputRef.current?.click()} type='button' className='btn-primary'>
               Select photo
             </button>
             <div>Maximum file size 1 MB</div>

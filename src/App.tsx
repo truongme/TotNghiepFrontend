@@ -6,17 +6,18 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import { ROLE } from './constants';
 import NavAdmin from './components/NavAdmin';
+import { useAuth } from './helpers/AuthContext';
 
 function App() {
 
   const [roleUser, setRoleUser] = useState<any>()
   const [router, setRouter] = useState<any>()
+  const { role } = useAuth();
 
   useEffect(() => {
-    const role = sessionStorage.getItem("role");
     setRoleUser(role)
     role === ROLE.ADMIN ? setRouter(adminRoutes) : setRouter(userRoutes)
-  },[roleUser])
+  },[role])
 
   return (
     <div className='body-container'>

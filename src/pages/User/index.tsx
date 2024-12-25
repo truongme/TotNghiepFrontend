@@ -71,8 +71,8 @@ const User = () => {
                 <img src={profileUser?.avatar || avatar} alt="" />
               </div>
               <div>
-                <h6>{profileUser?.firstName || "Ngo Quang"} {profileUser?.lastName || "Truong"}</h6>
-                <div>{profileUser?.email || "TruongNgo@gmail.com"}</div>
+                <h6>{profileUser?.firstName} {profileUser?.lastName}</h6>
+                <div>{profileUser?.email}</div>
               </div>
             </div>
             <hr />

@@ -4,7 +4,7 @@
 .order-status{
     margin-bottom: 24px ;
     position: sticky;
-    top: 60px;
+    top: 55px;
     left: 0;
     box-shadow: rgba(14, 63, 126, 0.04) 0px 0px 0px 1px, rgba(42, 51, 69, 0.04) 0px 1px 1px -0.5px, rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px, rgba(42, 51, 70, 0.04) 0px 6px 6px -3px, rgba(14, 63, 126, 0.04) 0px 12px 12px -6px, rgba(14, 63, 126, 0.04) 0px 24px 24px -12px;
     .order-status-list {
@@ -139,4 +139,19 @@
 
 .order-item-time{
     color: $primary-color;
+}
+
+.order-emty{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: #F3F3F3;
+    align-items: center;
+    height: 228px;
+    flex-direction: column;
+    img{
+        margin-bottom: 10px;
+        width: 100px;
+        height: 100px;
+    }
 }

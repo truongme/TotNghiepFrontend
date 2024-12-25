@@ -6,8 +6,11 @@
     text-align: center;
     display: flex;
     justify-content: space-between;
+    letter-spacing: .08em;
 
     .order-header-item{
+        background-color: $gray-color;
+        color: rgb(93, 93, 93);
         text-align: center;
         width: 100%;
         padding: 10px 0px;
@@ -26,12 +29,11 @@
 }
 
 .order-admin-container{
-    position: relative;
     .panel-order-details-container{
         transition: 0.15s all ease-in-out;
         top:0;
         right: 0;
-        position: absolute;
+        position: fixed;
         z-index: 2000;
         width: 100vw;
         height: 100vh;
@@ -126,4 +128,55 @@
  .img-product-order {
      width: 100px !important;
      height: auto;
+ }
+
+ .order-table{
+    width: 100%;
+    margin-top: 5px;
+    th{
+        background-color: $gray-color;
+        padding: 10px;
+    }
+    td {
+        cursor: pointer;
+        background-color: $gray-color;
+        padding: 10px;
+        border-bottom: 1px solid #d3d3d3;
+    }
+ }
+
+ .pagination-list {
+     display: flex;
+
+     .page-item {
+         border-radius: 30px;
+         width: 30px;
+         height: 30px;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         margin: 0px 5px;
+         background-color: #e8e8e8;
+
+         &:hover {
+             background-color: #0074d3;
+             color: white !important;
+         }
+     }
+ }
+
+ .pagination-container {
+     background-color: $gray-color;
+     display: flex;
+     margin-top: 5px;
+     align-items: center;
+     justify-content: end;
+     letter-spacing: .08em;
+     padding: 10px;
+ }
+ .color-status{
+    width: 10px;
+    height: 10px;
+    border-radius: 10px;
+    margin-right: 10px;
  }

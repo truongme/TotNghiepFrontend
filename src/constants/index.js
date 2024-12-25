@@ -1,5 +1,4 @@
-export const WebUrl =
-  "https://a7c7-2001-ee0-8205-802d-4d7c-e6c5-caf9-de4e.ngrok-free.app";
+export const WebUrl = "https://ad56-14-191-166-237.ngrok-free.app";
 
 export const IMG_BB_API_KEY = "c627df5eb679876997e90f0c2dba1f44";
 

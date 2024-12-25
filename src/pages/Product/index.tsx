@@ -7,6 +7,7 @@ import { formatPrice } from '../../helpers';
 import { WebUrl } from '../../constants';
 import ModalMain from '../../components/Modal/Modal';
 import ImageZoom from '../../components/ZoomImg/ZoomImg';
+import { useAuth } from '../../helpers/AuthContext';
 
 interface ProductProps {
   id: string;
@@ -83,6 +84,7 @@ const Product = () => {
   const token = sessionStorage.getItem("token");
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [urlImageHover, setUrlImageHover] = useState<string>("")
+  const {setCart} = useAuth()
 
   const handleCloseModalImg = () => {
     setUrlImageHover("");
@@ -91,6 +93,12 @@ const Product = () => {
   const handleCloseModal = () => {
     setIsOpenModal(false);
   };
+
+  const handleCloseModalCheckout = () => {
+    setIsOpenModal(false);
+     navigate('/cart')
+  };
+  
   
   const getValidColors = (size: string) => {
     return projectVariants.filter(item => item.size === size).map(item => item.color);
@@ -120,7 +128,7 @@ const Product = () => {
     } else {
       const product = projectVariants.find(x => x.color === selectedColor && x.size === selectedSize)
       try {
-        setIsOpenModal(true)
+        setCart(true)
         await axios.post(`${WebUrl}/api/v1/order-item`, {
           quantity: quantity,
           productVariantId: product?.id,
@@ -131,6 +139,8 @@ const Product = () => {
             'Authorization': `Bearer ${token}`, 
           }
         });
+        setIsOpenModal(true)
+        setCart(false)
       } catch (error) {
         console.error("Error post item cart", error)
       }
@@ -271,7 +281,7 @@ const Product = () => {
         </div>
       </div>
       {isOpenModal && (
-        <ModalMain title='Notification' content='Item has been added to cart' btn2='Ok' onSave={handleCloseModal}/>
+        <ModalMain title='Notification' content='Item has been added to cart' btn1='Ok' onSave={handleCloseModalCheckout} btn2='Checkout' onClose={handleCloseModal}/>
       )}
       {urlImageHover && (
         <ModalMain title='Image Product' content={<ImageZoom src={urlImageHover}/>} btn2='Ok' onSave={handleCloseModalImg} btn1='Close' onClose={handleCloseModalImg}/>

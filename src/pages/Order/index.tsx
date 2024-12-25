@@ -8,6 +8,7 @@ import { formatPrice } from '../../helpers';
 import { Controller, useForm } from 'react-hook-form';
 import ModalMain from '../../components/Modal/Modal';
 import { FaCheck } from "react-icons/fa6";
+import { useAuth } from '../../helpers/AuthContext';
 
 export interface User {
   avatar: string | null;
@@ -53,6 +54,8 @@ const Order = () => {
   const navigate = useNavigate()
   const [arrMyAddresses, setArrMyAddresses] = useState<any[]>([])
   const [addressIdSelect, setAddressIdSelect] = useState<any>()
+  const {setCart} = useAuth()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const handleCloseModal = () => {
     setIsOpenModal(false)
@@ -118,7 +121,7 @@ const Order = () => {
 
   const onSubmit = async (data: OrderForm) => {
     try {
-      console.log(addressIdSelect)
+       setCart(true)
       await axios.put(`${WebUrl}/api/v1/orders/complete-order`, {
         addressId: addressIdSelect,
         addressDetail: data.addressDetail,
@@ -126,7 +129,7 @@ const Order = () => {
         district: data.district,
         ward: data.ward,
         shipmentMethod:  data.shipmentMethod,
-        paymentMethod: data.paymentMethod,
+        paymentMethod: "COD",
       }, {
         headers: {
           'Content-Type': 'application/json',
@@ -135,6 +138,7 @@ const Order = () => {
         }
       });
       setIsOpenModal(true)
+      setCart(false)
     } catch (error) {
       console.error("Error post item cart", error)
     }
@@ -191,17 +195,54 @@ const Order = () => {
         'Authorization': `Bearer ${token}`, 
         }
       });
-      setArrMyAddresses(response.data)
+      fetchAddressDetails(response.data)
+    } catch (error) {
+      console.error("Error fetching address details", error);
+    }
+  };
+
+  const fetchAddressDetails = async (data: any) => {
+    try {
+      const city = await axios.get('https://open.oapi.vn/location/provinces?size=1000')
+      const response = await Promise.all(
+        data.map(async (item: any) => {
+            const arr = item.fullAddress.split(', ');
+            const province = city.data.data.find((city: any) => city.id == arr[3])?.name;
+
+            if (!province) return null; 
+
+            const dataDistrict = await axios.get(`https://open.oapi.vn/location/districts/${arr[3]}?size=1000`);
+            const district = dataDistrict.data.data.find((city: any) => city.id == arr[2])?.name;
+
+            if (!district) return null; 
+
+            const dataWard = await axios.get(`https://open.oapi.vn/location/wards/${arr[2]}?size=1000`);
+            const ward = dataWard.data.data.find((city: any) => city.id == arr[1])?.name;
+
+
+            if (!ward) return null; 
+
+            const addressDetails = `${item.addressDetail}, ${ward}, ${district}, ${province}`;
+            return {
+                addressDetails: addressDetails,
+                ...item
+            };
+        })
+      );
+      console.log('arrAdress', response.filter((item) => item !== null))
+      setArrMyAddresses(response.filter((item) => item !== null));
     } catch (error) {
       console.error("Error fetching address details", error);
     }
   };
 
   useEffect(() => {
+    setIsLoading(true)
     getProfile();
     fetchData();
     fetchAddress()
     fetchMyAddress();
+    setIsLoading(false)
   }, []);
 
   return (
@@ -229,12 +270,19 @@ const Order = () => {
                   <p>{profileUser?.email}</p>
                 </div>
               </div>
-              <div className='row'>
+              {isLoading ? (
+                <div className='text-center mt-3'>
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              ) : (
+                 <div className='row'>
                 <div className="mb-3 col-12">
                   <label className="form-label">Your shipping address</label>
                   <select className="form-select" onChange={handleAddressChange}>
                     {arrMyAddresses?.map((address: any) => (
-                      <option key={address.addressId} value={address.addressId}>{address.fullAddress}</option>
+                      <option key={address.addressId} value={address.addressId}>{address.addressDetails}</option>
                     ))}
                     <option value="new">Create shipping address</option>
                   </select>
@@ -378,37 +426,11 @@ const Order = () => {
                         <div className="form-check">
                           <input
                             {...field}
-                            id="MOMO"
-                            type="radio"
-                            className="form-check-input"
-                            value="MOMO"
-                            checked={field.value === 'MOMO'}
-                          />
-                          <label htmlFor="paymentOnline" className="form-check-label">
-                            Momo
-                          </label>
-                        </div>
-                         <div className="form-check">
-                          <input
-                            {...field}
-                            id="ZALO"
-                            type="radio"
-                            className="form-check-input"
-                            value="ZALO"
-                            checked={field.value === 'ZALO'}
-                          />
-                          <label htmlFor="paymentOnline" className="form-check-label">
-                            Zalo
-                          </label>
-                        </div>
-                        <div className="form-check">
-                          <input
-                            {...field}
                             id="paymentCOD"
                             type="radio"
                             className="form-check-input"
                             value="COD"
-                            checked={field.value === 'COD'}
+                            checked
                           />
                           <label htmlFor="paymentCOD" className="form-check-label">
                             Cash on Delivery
@@ -420,6 +442,8 @@ const Order = () => {
                 </div>
 
               </div>
+              )}
+              
             </div>
           </div>
           <div className='col-5'>

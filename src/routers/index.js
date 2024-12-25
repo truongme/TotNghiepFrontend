@@ -11,6 +11,7 @@ import DashBoard from "../pages/Dashboard";
 import ProductAdmin from "../pages/ProductEdit";
 import Signup from "../pages/Signup";
 import ForgetPassword from "../pages/ForgetPassword";
+import Search from "../pages/Search";
 
 export const adminRoutes = [
   { path: "/", element: <DashBoard /> },
@@ -30,4 +31,5 @@ export const userRoutes = [
   { path: "/cart", element: <Cart /> },
   { path: "/pay", element: <Order /> },
   { path: "/user", element: <User /> },
+  { path: "/search", element: <Search /> },
 ];

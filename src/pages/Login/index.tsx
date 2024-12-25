@@ -6,6 +6,7 @@ import ImageLogin from '../../assets/images/image-login.png';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { WebUrl } from '../../constants';
+import { useAuth } from '../../helpers/AuthContext';
 
 interface LoginForm {
   email: string;
@@ -13,6 +14,7 @@ interface LoginForm {
 }
 
 const Login = () => {
+  const { setRole } = useAuth();
 
   const navigate = useNavigate()
 
@@ -36,8 +38,8 @@ const Login = () => {
 
       sessionStorage.setItem('token', accessToken);
       sessionStorage.setItem('role', role);
-      navigate('/')
-      window.location.reload();
+      setRole(role); 
+      navigate('/');
       
     } catch (error) {
       setLoginFail(true)
@@ -117,12 +119,6 @@ const Login = () => {
               <Link to={"/signup"} className='link-style'>
                 <span style={{paddingLeft:"10px"}} className='item-form-action'>Create account</span>
               </Link>
-            </div>
-            <div className='mt-3 mb-1'>
-              <ButtonCustom label='Sign in with Google'/>
-            </div>
-            <div className='mt-1'>  
-              <ButtonCustom label='Sign in with facebook'/>
             </div>
           </div>
         </div>

@@ -84,21 +84,22 @@
                 }
 
                 .dashboard-top-sale-cotainer{
-                    height: calc(100% - 35px);
+                    height: calc(100% - 45px);
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
                     
-
                     .dashboard-top-sale-item {
                         display: flex;
                         align-items: center;
                         background-color: #EFEEFE;
-                        padding: 10px;
+                        padding: 5px;
                         border-radius: 20px;
+                        margin: 2px 0px;
                 
                         .dashboard-top-sale-item-img {
-                            width: 40% !important;
+                            margin-left: 3px;
+                            width: 35% !important;
                             overflow: hidden;
                             margin-right: 10px;
                             border-radius: 16px;
