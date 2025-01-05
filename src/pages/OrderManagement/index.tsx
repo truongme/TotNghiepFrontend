@@ -48,7 +48,10 @@ const OrderManagement = () => {
     if (status === "") {
       setListOrder(listOrderPrev);
     } else {
-      const listOrderFilter = listOrderPrev.filter((x) => x.status === status);
+      const listOrderFilter = listOrderPrev.filter(
+        (x) =>
+          x.status === status.toLowerCase().replace(/^\w/, (c: string) => c.toUpperCase())
+      );
       setListOrder(listOrderFilter);
     }
   };
