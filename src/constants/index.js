@@ -4,7 +4,7 @@ import imgJoggers from "../assets/images/jogger.png";
 import imgBag from "../assets/images/bags.png";
 
 export const WebUrl =
-  "https://4f43-2001-ee0-8206-be24-d1f3-adb4-7985-4c84.ngrok-free.app";
+  "https://f826-2001-ee0-8206-be24-c0c3-f1e1-3f39-bf66.ngrok-free.app";
 
 export const IMG_BB_API_KEY = "c627df5eb679876997e90f0c2dba1f44";
 
