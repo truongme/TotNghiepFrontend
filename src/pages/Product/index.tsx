@@ -213,7 +213,7 @@ const Product = () => {
             <div className='product-name'>
               {productDetail?.name}
             </div>
-            <div className='product-size-title'>{productDetail?.description}</div>
+            <div dangerouslySetInnerHTML={{ __html: productDetail?.description || "" }} className='product-size-title'></div>
             <div className='product-price pb-1'>{productDetail?.price}</div>
             <div className='product-size-title pb-1'>Color</div>
             <div className='product-color  pb-1'>

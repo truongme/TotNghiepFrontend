@@ -211,7 +211,7 @@ const OrderUser = () => {
                                     ))}
                                     <div className='order-item-footer'>
                                         <div>
-                                            <button className='primary'>Buy Again</button>
+                                            {/* <button className='primary' onClick={() => navigate('/product/')}>Buy Again</button> */}
                                             {/* <button className='secondary'>Contact Seller</button> */}
                                             {e.status === 'PENDING' && (
                                                 <button className='cancel' onClick={() => handleOpenModalCancelOrder(e.id)}>Cancel</button>

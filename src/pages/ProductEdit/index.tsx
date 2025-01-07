@@ -8,8 +8,9 @@ import { IMG_BB_API_KEY, WebUrl } from "../../constants";
 import { IoMdAdd } from "react-icons/io";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getValue } from "@testing-library/user-event/dist/utils";
+import ModalMain from "../../components/Modal/Modal";
 
 interface ProductForm {
   id?: string;
@@ -36,6 +37,14 @@ const ProductAdmin = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const token = sessionStorage.getItem("token");
   const [arrColor, setArrColor] = useState<any[]>([]);
+  const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const [arrImg, setArrImg] = useState<string[]>([]);
+
+  const handleCloseModal = () => {
+    setIsSubmit(false);
+    navigate("/productManagement");
+  };
 
   const {
     control,
@@ -121,30 +130,52 @@ const ProductAdmin = () => {
 
   const onSubmit = async (data: ProductForm) => {
     try {
-      await axios.post(
-        `${WebUrl}/api/v1/products/create-with-variants`,
-        {
-          name: data.name,
-          description: data.description,
-          price: Number(data.price),
-          categoryId: data.category,
-          subCategoryId: data.subCategory,
-          images: data.images,
-          brandId: "mlb",
-          variants: data.variants.map((e) => ({
-            colorId: e.color,
-            sizeId: "xl",
-            stock: Number(e.stock),
-          })),
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "ngrok-skip-browser-warning": "skip-browser-warning",
-            Authorization: `Bearer ${token}`,
+      if(id === "new"){
+         await axios.post(
+           `${WebUrl}/api/v1/products/create-with-variants`,
+           {
+             name: data.name,
+             description: data.description,
+             price: Number(data.price),
+             categoryId: data.category,
+             subCategoryId: data.subCategory,
+             images: data.images,
+             brandId: "mlb",
+             variants: data.variants.map((e) => ({
+               colorId: e.color,
+               sizeId: "xl",
+               stock: Number(e.stock),
+             })),
+           },
+           {
+             headers: {
+               "Content-Type": "application/json",
+               "ngrok-skip-browser-warning": "skip-browser-warning",
+               Authorization: `Bearer ${token}`,
+             },
+           }
+         );
+      } else {
+        await axios.put(
+          `${WebUrl}/api/v1/products/${id}`,
+          {
+            name: data.name,
+            description: data.description,
+            price: Number(data.price),
+            categoryId: data.category,
+            subCategoryId: data.subCategory,
           },
-        }
-      );
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "ngrok-skip-browser-warning": "skip-browser-warning",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
+     
+      setIsSubmit(true);
     } catch (error) {
       console.error("Error uploading avatar to imgBB:", error);
       throw error;
@@ -161,7 +192,6 @@ const ProductAdmin = () => {
       });
 
       const result = response.data;
-      console.log(result);
 
       const product: ProductForm = {
         id: result.productId,
@@ -170,7 +200,7 @@ const ProductAdmin = () => {
         subCategory: result.subCategory.subCategoryId,
         price: formatPrice(result.price),
         description: result.description,
-        images: result.images.map((e: any) => e.imageURL),
+        images: result.images,
         variants: result.productVariants.map((e: any) => ({
           id: e.productVariantId,
           color: e.color.hexCode[0],
@@ -178,7 +208,7 @@ const ProductAdmin = () => {
           stock: e.stock,
         })),
       };
-
+      console.log(product);
       setValue("name", product.name);
       setValue("price", product.price);
       setValue("category", product.category);
@@ -187,6 +217,7 @@ const ProductAdmin = () => {
       setValue("images", product.images);
       setValue("variants", product.variants);
       setPreviews(product.images);
+      setArrImg(product.images);
     } catch (error) {
       console.error("Error get product details", error);
     }
@@ -274,10 +305,6 @@ const ProductAdmin = () => {
             />
             {errors.price && <p className="error">{errors.price.message}</p>}
           </div>
-          <div className="col-12 mb-3">
-            <label className="label-new-product">Product Image</label>
-          </div>
-
           <div className="col-12">
             <label className="label-new-product">Description</label>
             <Controller
@@ -362,179 +389,198 @@ const ProductAdmin = () => {
               <p className="error">{errors.subCategory.message}</p>
             )}
           </div>
-          <div className="col-12 mb-3">
-            <label className="label-new-product">Product Variant</label>
-            <table className="table table-bordered">
-              <thead>
-                <tr className="table-primary">
-                  <th style={{ width: "25%" }}>Size</th>
-                  <th style={{ width: "35%" }}>Color</th>
-                  <th style={{ width: "30%" }}>Quantity</th>
-                  <th style={{ width: "10%" }}>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {fields.map((item, index) => (
-                  <>
-                    <tr key={item.id}>
-                      <td>
-                        <Controller
-                          name={`variants.${index}.size`}
-                          control={control}
-                          defaultValue="S"
-                          rules={{ required: "Size is required" }}
-                          render={({ field }) => (
-                            <select {...field} className="form-select">
-                              <option value="">Select size</option>
-                              <option value="S">S</option>
-                              <option value="M">M</option>
-                              <option value="L">L</option>
-                              <option value="XL">XL</option>
-                            </select>
-                          )}
-                        />
-                        {errors?.variants?.[index]?.size?.message && (
-                          <p className="error">
-                            {errors.variants[index]?.size?.message}
-                          </p>
-                        )}
-                      </td>
-                      <td>
-                        <Controller
-                          name={`variants.${index}.color`}
-                          control={control}
-                          defaultValue="White"
-                          rules={{ required: "Color is required" }}
-                          render={({ field }) => (
-                            <select {...field} className="form-select">
-                              <option value="">Select color</option>
-                              {arrColor.map((color) => (
-                                <option
-                                  key={color.colorId}
-                                  value={color.colorId}
-                                >
-                                  {color.name[0].charAt(0).toUpperCase() +
-                                    color.name[0].slice(1).toLowerCase()}
-                                </option>
-                              ))}
-                            </select>
-                          )}
-                        />
-                        {errors?.variants?.[index]?.color?.message && (
-                          <p className="error">
-                            {errors.variants[index]?.color?.message}
-                          </p>
-                        )}
-                      </td>
-                      <td>
-                        <Controller
-                          name={`variants.${index}.stock`}
-                          control={control}
-                          defaultValue={0}
-                          rules={{
-                            required: "Quantity is required",
-                          }}
-                          render={({ field }) => (
-                            <input
-                              {...field}
-                              className="form-control"
-                              onChange={(event) => {
-                                const onlyNumbers = event.target.value.replace(
-                                  /[^0-9]/g,
-                                  ""
-                                );
-                                field.onChange(onlyNumbers);
-                              }}
-                            />
-                          )}
-                        />
-                      </td>
-                      <td>
-                        <button
-                          type="button"
-                          className="delete"
-                          onClick={() => remove(index)}
-                          disabled={fields.length === 1}
-                        >
-                          Remove
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colSpan={4}>
-                        <div className="col-12">
+          {id === "new" ? (
+            <div className="col-12 mb-3">
+              <label className="label-new-product">Product Variant</label>
+              <table className="table table-bordered">
+                <thead>
+                  <tr className="table-primary">
+                    <th style={{ width: "25%" }}>Size</th>
+                    <th style={{ width: "35%" }}>Color</th>
+                    <th style={{ width: "30%" }}>Quantity</th>
+                    <th style={{ width: "10%" }}>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {fields.map((item, index) => (
+                    <>
+                      <tr key={item.id}>
+                        <td>
                           <Controller
-                            name="images"
+                            name={`variants.${index}.size`}
                             control={control}
-                            defaultValue={[] as any}
+                            defaultValue="S"
+                            rules={{ required: "Size is required" }}
+                            render={({ field }) => (
+                              <select {...field} className="form-select">
+                                <option value="">Select size</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                              </select>
+                            )}
+                          />
+                          {errors?.variants?.[index]?.size?.message && (
+                            <p className="error">
+                              {errors.variants[index]?.size?.message}
+                            </p>
+                          )}
+                        </td>
+                        <td>
+                          <Controller
+                            name={`variants.${index}.color`}
+                            control={control}
+                            defaultValue="White"
+                            rules={{ required: "Color is required" }}
+                            render={({ field }) => (
+                              <select {...field} className="form-select">
+                                <option value="">Select color</option>
+                                {arrColor.map((color) => (
+                                  <option
+                                    key={color.colorId}
+                                    value={color.colorId}
+                                  >
+                                    {color.name[0].charAt(0).toUpperCase() +
+                                      color.name[0].slice(1).toLowerCase()}
+                                  </option>
+                                ))}
+                              </select>
+                            )}
+                          />
+                          {errors?.variants?.[index]?.color?.message && (
+                            <p className="error">
+                              {errors.variants[index]?.color?.message}
+                            </p>
+                          )}
+                        </td>
+                        <td>
+                          <Controller
+                            name={`variants.${index}.stock`}
+                            control={control}
+                            defaultValue={0}
+                            rules={{
+                              required: "Quantity is required",
+                            }}
                             render={({ field }) => (
                               <input
+                                {...field}
                                 className="form-control"
-                                ref={fileInputRef}
-                                type="file"
-                                multiple
-                                style={{ display: "none" }}
-                                accept="image/*"
-                                onChange={(e) => {
-                                  const files = e.target.files as FileList;
-                                  handlePreview(
-                                    files,
-                                    watch(`variants.${index}.color`)
-                                  );
+                                onChange={(event) => {
+                                  const onlyNumbers =
+                                    event.target.value.replace(/[^0-9]/g, "");
+                                  field.onChange(onlyNumbers);
                                 }}
                               />
                             )}
                           />
-                        </div>
-                        <div className="input-img-ctn">
-                          <div
-                            className="input-img-import"
-                            onClick={handleAddClick}
+                        </td>
+                        <td>
+                          <button
+                            type="button"
+                            className="delete"
+                            onClick={() => remove(index)}
+                            disabled={fields.length === 1}
                           >
-                            <IoMdAdd />
-                          </div>
-                          {previews
-                            .filter(
-                              (preview) =>
-                                preview.colorName ===
-                                watch(`variants.${index}.color`)
-                            )
-                            .map((preview, idx) => (
-                              <div key={idx} className="input-img-item">
-                                <img
-                                  src={preview.file}
-                                  alt={`Preview ${idx}`}
+                            Remove
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colSpan={4}>
+                          <div className="col-12">
+                            <Controller
+                              name="images"
+                              control={control}
+                              defaultValue={[] as any}
+                              render={({ field }) => (
+                                <input
+                                  className="form-control"
+                                  ref={fileInputRef}
+                                  type="file"
+                                  multiple
+                                  style={{ display: "none" }}
+                                  accept="image/*"
+                                  onChange={(e) => {
+                                    const files = e.target.files as FileList;
+                                    handlePreview(
+                                      files,
+                                      watch(`variants.${index}.color`)
+                                    );
+                                  }}
                                 />
-                                <div
-                                  className="input-img-btn"
-                                  onClick={() => handleDeleteImage(idx)}
-                                >
-                                  <MdCancel />
+                              )}
+                            />
+                          </div>
+                          <div className="input-img-ctn">
+                            <div
+                              className="input-img-import"
+                              onClick={handleAddClick}
+                            >
+                              <IoMdAdd />
+                            </div>
+                            {previews
+                              .filter(
+                                (preview) =>
+                                  preview.colorName ===
+                                  watch(`variants.${index}.color`)
+                              )
+                              .map((preview, idx) => (
+                                <div key={idx} className="input-img-item">
+                                  <img
+                                    src={preview.file}
+                                    alt={`Preview ${idx}`}
+                                  />
+                                  <div
+                                    className="input-img-btn"
+                                    onClick={() => handleDeleteImage(idx)}
+                                  >
+                                    <MdCancel />
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
-                        </div>
-                      </td>
-                    </tr>
-                  </>
-                ))}
-              </tbody>
-            </table>
-            <button
-              type="button"
-              className="primary"
-              onClick={() => append({ size: "", color: "", stock: 1 })}
-            >
-              Add Variant
-            </button>
-          </div>
+                              ))}
+                          </div>
+                        </td>
+                      </tr>
+                    </>
+                  ))}
+                </tbody>
+              </table>
+              <button
+                type="button"
+                className="primary"
+                onClick={() => append({ size: "", color: "", stock: 1 })}
+              >
+                Add Variant
+              </button>
+            </div>
+          ) : (
+            <div className="input-img-ctn mt-3">
+              {arrImg.map((e: any) => (
+                <div className="input-img-item">
+                  <img src={e.imageURL} />
+                </div>
+              ))}
+            </div>
+          )}
+
           <div className="col-12 mt-3">
             <button className="btn btn-success col-12 mb-3" type="submit">
-              Add Product
+              {id === "new" ? "Add Product" : "Update Product"}
             </button>
           </div>
         </div>
       </form>
+      {isSubmit && (
+        <ModalMain
+          title="Notification"
+          content={"Create new products successfully."}
+          btn1="Close"
+          btn2="OK"
+          onClose={handleCloseModal}
+          onSave={handleCloseModal}
+        />
+      )}
     </div>
   );
 };

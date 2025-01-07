@@ -26,12 +26,15 @@ const ProductManagement = () => {
   const limit = 10;
   const totalPages = Math.ceil(totalProduct / limit);
   const navigate = useNavigate();
+  const token = sessionStorage.getItem("token");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
   const fetchListProduct = async (page: number) => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         `${WebUrl}/api/v1/products/all?limit=${limit}&page=${page}`,
@@ -53,6 +56,23 @@ const ProductManagement = () => {
       }));
       setTotalProduct(response.data.meta.total);
       setListProduct(data);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error fetching products", error);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const response = await axios.delete(`${WebUrl}/api/v1/products/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "skip-browser-warning",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      fetchListProduct(currentPage);
     } catch (error) {
       console.error("Error fetching products", error);
     }
@@ -67,7 +87,6 @@ const ProductManagement = () => {
       <div className="product-management-header">
         <div className="product-table-header">Product</div>
         <div className="d-flex align-items-center">
-         
           <div className="btn-product" onClick={() => navigate("/product/new")}>
             Add Product
           </div>
@@ -85,30 +104,47 @@ const ProductManagement = () => {
       </table>
       <table className="table-product">
         <tbody>
-          {listProduct.map((e: TableProduct, index: number) => (
-            <tr key={e.id} onClick={() => navigate(`/product/${e.id}`)}>
-              <td style={{ width: "50%" }}>
-                <div className="product-img">
-                  <img src={e.img} alt="" />
-                  <div>{e.name}</div>
+          {isLoading ? (
+            <tr aria-colspan={4}>
+              <div>
+                <div className="loading-container">
+                  <div className="loader"></div>
                 </div>
-              </td>
-              <td style={{ width: "20%" }}>{formatPrice(e.price)}</td>
-              <td style={{ width: "20%" }}>{formatPrice(e.price)}</td>
-              <td style={{ width: "10%" }}>
-                <div className="d-flex justify-content-around">
-                  <Link to={`/product/${e.id}`}>
-                    <div className="icon-product edit">
-                      <MdModeEdit />
-                    </div>
-                  </Link>
-                  <div className="icon-product delete">
-                    <RiDeleteBin2Fill />
-                  </div>
-                </div>
-              </td>
+              </div>
             </tr>
-          ))}
+          ) : (
+            <>
+              {listProduct.map((e: TableProduct, index: number) => (
+                <tr key={e.id}>
+                  <td style={{ width: "50%" }}>
+                    <div className="product-img">
+                      <img src={e.img} alt="" />
+                      <div>{e.name}</div>
+                    </div>
+                  </td>
+                  <td style={{ width: "20%" }}>{formatPrice(e.price)}</td>
+                  <td style={{ width: "20%" }}>
+                    {e.category.charAt(0).toUpperCase() + e.category.slice(1)}
+                  </td>
+                  <td style={{ width: "10%" }}>
+                    <div className="d-flex justify-content-around">
+                      <Link to={`/product/${e.id}`}>
+                        <div className="icon-product edit">
+                          <MdModeEdit />
+                        </div>
+                      </Link>
+                      <div
+                        className="icon-product delete"
+                        onClick={() => handleDelete(e.id)}
+                      >
+                        <RiDeleteBin2Fill />
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </>
+          )}
         </tbody>
       </table>
       <div className="pagination-container">

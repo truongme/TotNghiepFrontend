@@ -83,6 +83,7 @@ const OrderManagement = () => {
         totalPrice: e.totalPrice,
         orderItems: e.orderItems,
       }));
+      const result = 
 
       console.log(data);
 

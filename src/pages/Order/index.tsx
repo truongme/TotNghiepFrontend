@@ -456,7 +456,7 @@ const Order = () => {
                   </div>
                   <div>
                     <h6>{item.name}</h6>
-                    <div className='d-flex justify-content-between'>
+                    <div>
                       <p>{item.price.toLocaleString('vi-VN')}đ</p>
                       <p>Quantity: {item.quantity}</p>
                     </div>

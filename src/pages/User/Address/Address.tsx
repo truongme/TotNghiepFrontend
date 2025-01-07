@@ -157,7 +157,7 @@ const Address = () => {
           },
         }
       );
-      fetchAddressDetails(response.data);
+      fetchMyAddress();
     } catch (error) {
       console.error("Error fetching address details", error);
     }
@@ -468,29 +468,35 @@ const Address = () => {
           </div>
         ) : (
           <div>
-            {arrMyAddresses.map((addr) => (
-              <div className="address-item-ctn mt-3" key={addr.addressId}>
-                <div className="address-item">
-                  <div>{addr.addressDetails}</div>
-                  <div className="d-flex">
-                    <button
-                      style={{ width: "100px" }}
-                      className="btn-primary"
-                      onClick={() => handleEdit(addr.addressId)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      style={{ width: "100px" }}
-                      className="btn-secondary"
-                      onClick={() => handleDelete(addr.addressId)}
-                    >
-                      Delete
-                    </button>
+            {arrMyAddresses?.length > 0 ? (
+              <div>
+                {arrMyAddresses.map((addr) => (
+                  <div className="address-item-ctn mt-3" key={addr.addressId}>
+                    <div className="address-item">
+                      <div>{addr.addressDetails}</div>
+                      <div className="d-flex">
+                        <button
+                          style={{ width: "100px" }}
+                          className="btn-primary"
+                          onClick={() => handleEdit(addr.addressId)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          style={{ width: "100px" }}
+                          className="btn-secondary"
+                          onClick={() => handleDelete(addr.addressId)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
-            ))}
+            ) : (
+              <div>No Data</div>
+            )}
           </div>
         )}
       </div>

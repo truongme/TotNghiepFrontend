@@ -235,7 +235,7 @@ const DashBoard = () => {
             const date = new Date();
             const startDateLabel = new Date(date); 
             startDateLabel.setMonth(startDateLabel.getMonth() - 1); 
-            startDateLabel.setDate(startDateLabel.getDate() );  
+            startDateLabel.setDate(startDateLabel.getDate() + 1);  
 
             for (let d = new Date(startDateLabel); d <= date; d.setDate(d.getDate() + 1)) {
                 const formattedDate = d.toISOString().slice(0, 10); 
@@ -250,7 +250,9 @@ const DashBoard = () => {
     }
 
     const getDataProductChart = async () => {
+        
         const date = new Date(); 
+
         const startDate = new Date(date); 
         startDate.setMonth(startDate.getMonth() - 1); 
         const endDate = new Date(date); 
@@ -271,7 +273,7 @@ const DashBoard = () => {
             const groupedData: Record<string, number> = {};
 
             response.data.forEach((entry: any) => {
-                const day = entry.date; // Format: YYYY-MM-DD
+                const day = entry.date;
                 if (!groupedData[day]) {
                     groupedData[day] = 0;
                 }
@@ -282,7 +284,7 @@ const DashBoard = () => {
             const date = new Date();
             const startDateLabel = new Date(date); 
             startDateLabel.setMonth(startDateLabel.getMonth() - 1); 
-            startDateLabel.setDate(startDateLabel.getDate() );  
+            startDateLabel.setDate(startDateLabel.getDate() + 1);  
 
             for (let d = new Date(startDateLabel); d <= date; d.setDate(d.getDate() + 1)) {
                 const formattedDate = d.toISOString().slice(0, 10); 
@@ -309,15 +311,7 @@ const DashBoard = () => {
             <div className='dashboard-main p-3 mb-3'>
                 <div className='dashboard-main-title'>Sales Distribution</div>
                 <div className='dashboard-main-content'>
-                    <div className='dashboard-main-item'>
-                        <div className='dashboard-main-icon'>
-                            <FaBoxOpen />
-                        </div>
-                        <div className='dashboard-main-item-title'>
-                            <div>Total Revenue</div>
-                            <p>{formatPrice(revenue || 1000000)}</p>
-                        </div>
-                    </div>
+                   
                     <div className='dashboard-main-item'>
                         <div className='dashboard-main-icon'>
                             <FaChartLine />
