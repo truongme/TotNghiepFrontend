@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import "./styles.scss";
-import { WebUrl } from "../../constants";
+import { flaskUrl, WebUrl } from "../../constants";
 import Cart from "../Cart";
 import { CardProps } from "../Home";
 import Card from "../../components/Card";
@@ -15,9 +15,9 @@ const Search = () => {
   const handleSearchImage = async (file: any) => {
     try {
       const response = await axios.post(
-        `${WebUrl}/search-image`,
+        `${flaskUrl}/search-image`,
         {
-          url: "https://fearofgod.com/cdn/shop/files/125AL244301_KNICKS_ESSENTIALS_TEE-LIGHT_HEATHER_1_900x.jpg?v=1731638100",
+          url: url,
         },
         {
           headers: {
@@ -29,7 +29,7 @@ const Search = () => {
       );
       const nearestImages = response.data.nearest_images;
       const data = nearestImages.map((e: any) => ({
-        id: e.productId,
+        id: e.id,
         name: e.name,
         price: e.price,
         img: e.url,
