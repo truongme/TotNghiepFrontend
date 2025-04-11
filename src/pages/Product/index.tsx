@@ -215,7 +215,7 @@ const Product = () => {
             </div>
             <div dangerouslySetInnerHTML={{ __html: productDetail?.description || "" }} className='product-size-title'></div>
             <div className='product-price pb-1'>{productDetail?.price}</div>
-            <div className='product-size-title pb-1'>Color</div>
+            <div className='product-size-title pb-1'>Màu sắc</div>
             <div className='product-color  pb-1'>
               {projectVariantsColor.map((color: any) =>(
                 <div className={`color-option-border ${selectedColor === color ? 'selected' : ''}`}>
@@ -244,7 +244,7 @@ const Product = () => {
               ))}
             </div>
             <div className='d-flex pb-1 pt-1 align-items-center'>
-              <div className='product-size-title'>Quantity</div>
+              <div className='product-size-title'>Giá</div>
               <div className="quantity-input-container">
                 <button onClick={() => quantity>=2 && setQuantity(prevQuantity => prevQuantity - 1)} className="quantity-btn">-</button>
                 <input
@@ -268,8 +268,8 @@ const Product = () => {
               </div>
             </div> */}
             <div className='product-order-btn'>
-              <button className='btn-add-cart' onClick={e => {handleAddToCart()}}>add to bag</button>
-              <button className='btn-order' onClick={() => handleBuy()}>check out</button>
+              <button className='btn-add-cart' onClick={e => {handleAddToCart()}}>thêm vào giỏ hàng</button>
+              <button className='btn-order' onClick={() => handleBuy()}>mua ngay</button>
               
             </div>
             <div><div className='product-promotion'>

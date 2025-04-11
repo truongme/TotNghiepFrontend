@@ -114,25 +114,25 @@ const Cart = () => {
   return (
     <div className="cart-container container">
       <div className='cart-breadcrumb mb-3'>
-        <Link to={'/'} className='link-style cart-breadcrumb-item'>home</Link>
+        <Link to={'/'} className='link-style cart-breadcrumb-item'>Trang chủ</Link>
         <div className='cart-breadcrumb-item'>/</div>
-        <div className='cart-breadcrumb-active'>CART</div>
+        <div className='cart-breadcrumb-active'>Giỏ hàng</div>
       </div>
       <div className="cart-content">
         <div className='cart-table'>
           <div className='cart-header'>
             <div className='row'>
-              <div className='col-4'>Product</div>
-              <div className='col-2'>price</div>
-              <div className='col-2'>quantity</div>
-              <div className='col-2'>Provisional</div>
-              <div className='col-2'>Action</div>
+              <div className='col-4'>Sản phẩm</div>
+              <div className='col-2'>giá</div>
+              <div className='col-2'>Số lượng</div>
+              <div className='col-2'>Tổng</div>
+              <div className='col-2'>Chinh sửa</div>
             </div>
           </div>
           {isLoading ? (
             <div className='text-center mt-3'>
               <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Loading...</span>
+                <span className="visually-hidden">Đang tải...</span>
               </div>
             </div>
           ) : (
@@ -140,8 +140,8 @@ const Cart = () => {
               {!orderArr || orderArr.length === 0 ? (
                 <div className='cart-empty'>
                   <img src={imgCartEmpry} alt="" className='img-cart-item'/>
-                  <div className='mb-2'>Your shopping cart is empty</div>
-                  <Link to={'/'}><button className='btn-primary'>Go Shopping Now</button></Link>
+                    <div className='mb-2'>Giỏ hàng của bạn đang trống</div>
+                    <Link to={'/'}><button className='btn-primary'>Hãy đi mua sắm nào</button></Link>
                 </div>
               ) : (
                 <div>
@@ -170,8 +170,8 @@ const Cart = () => {
                           <span>{formatPrice(e.total)}</span>
                         </div>
                         <div className='col-2 cart-item-action'>
-                          <button className='btn-secondary' onClick={() => handleOpenModal(e)}>Edit</button>
-                          <button className='btn-primary' onClick={() => handleDeleteItem(e.id)}>Delete</button>
+                          <button className='btn-secondary' onClick={() => handleOpenModal(e)}>Sửa</button>
+                          <button className='btn-primary' onClick={() => handleDeleteItem(e.id)}>Xoá</button>
                         </div>
                       </div>
                       
@@ -186,19 +186,19 @@ const Cart = () => {
         <div className="cart-summary-container">
           <div className="cart-summary">
             <h5>              
-              Order information
+              Thông tin đặt hàng
             </h5>
             <div className="cart-summary-item">
-              <span>Provisional</span>
+              <span>Tạm tính</span>
               <span>{formatPrice(totalOrder)}</span>
             </div>
             <div className="cart-summary-item">
-              <span>Total</span>
+              <span>Tổng tiền</span>
               <span>{formatPrice(totalOrder)}</span>
             </div>
             <div className='cart-btn'>
-              <button className='btn-secondary' onClick={() => navigate("/")}>Continue Shopping</button>
-              <button className='btn-primary' disabled={totalOrder === 0} onClick={() => navigate("/pay")}>Checkout</button>
+              <button className='btn-secondary' onClick={() => navigate("/")}>Tiếp tục mua sắm</button>
+              <button className='btn-primary' disabled={totalOrder === 0} onClick={() => navigate("/pay")}>Mua ngay</button>
             </div>
           </div>
         </div>

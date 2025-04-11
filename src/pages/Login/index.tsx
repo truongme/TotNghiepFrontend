@@ -61,8 +61,8 @@ const Login = () => {
         <div className='col-6 d-flex justify-content-center'>
           <div className='m-5 container'>
             <div className='text-center'> 
-              <h1 className='form-login-title'>login</h1>
-              <h6 style={{marginTop:"24px"}}>Sign up for membership and get 10% off your first order.</h6>
+              <h1 className='form-login-title'>Đăng nhập</h1>
+              <h6 style={{ marginTop: "24px" }}>Đăng ký làm thành viên và được giảm giá 10% cho đơn hàng đầu tiên của bạn.</h6>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div>
@@ -71,7 +71,7 @@ const Login = () => {
                   name="email"
                   control={control}
                   defaultValue=""
-                  rules={{ required: '* Email is required' }}
+                  rules={{ required: '* Email là bắt buộc' }}
                   render={({ field }) => (
                     <input
                       id="email"
@@ -85,12 +85,12 @@ const Login = () => {
                 {errors.email && <div className="error">{errors.email.message}</div>}
               </div>
               <div>
-                <label className='form-login-label'>Password</label>
+                <label className='form-login-label'>Mật khẩu</label>
                 <Controller
                   name="password"
                   control={control}
                   defaultValue=""
-                  rules={{ required: '* Password is required' }}
+                  rules={{ required: '* Mật khẩu là bắt buộc' }}
                   render={({ field }) => (
                     <input
                       id="password"
@@ -104,20 +104,20 @@ const Login = () => {
                 {errors.password && <div className="error">{errors.password.message}</div>}
               </div>
               {loginFail && (
-                <div className="error-login-fail">Incorrect account or password!</div>
+                <div className="error-login-fail">Tài khoản hoặc mật khẩu không đúng!</div>
               )}
               <div className='mt-3 mb-3'>
-                <ButtonCustom label='Login'/>
+                <ButtonCustom label='Đăng nhập'/>
               </div>
             </form>
             <div className='d-flex justify-content-center form-action'>
               <Link to={"/reset-password"} className='link-style'>
                 <span style={{paddingRight:"10px", borderRight:"2px black solid"}} className='item-form-action'>
-                  Forgot password?
+                  Quên mật khẩu?
                 </span>
               </Link>
               <Link to={"/signup"} className='link-style'>
-                <span style={{paddingLeft:"10px"}} className='item-form-action'>Create account</span>
+                <span style={{paddingLeft:"10px"}} className='item-form-action'>Tạo tài khoản</span>
               </Link>
             </div>
           </div>

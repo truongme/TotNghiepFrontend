@@ -232,7 +232,7 @@ const Address = () => {
       <div className="address-edit-form mt-2 w-100">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
-            <label>Detail Address</label>
+            <label>Địa chỉ chi tiết</label>
             <Controller
               name="detail"
               control={control}
@@ -241,14 +241,14 @@ const Address = () => {
                 <input
                   {...field}
                   className="form-control"
-                  placeholder="Enter detailed address"
+                  placeholder="Nhập địa chỉ chi tiết"
                 />
               )}
             />
           </div>
 
           <div className="mb-3">
-            <label>Province</label>
+            <label>Tỉnh / Thành phố</label>
             <Controller
               name="province"
               control={control}
@@ -263,7 +263,7 @@ const Address = () => {
                     fetchDistricts(Number(e.target.value));
                   }}
                 >
-                  <option value="">Select Province</option>
+                  <option value="">Chọn Tỉnh / Thành phố</option>
                   {provinces.map((p: any) => (
                     <option key={p.id} value={p.id}>
                       {p.name}
@@ -275,7 +275,7 @@ const Address = () => {
           </div>
 
           <div className="mb-3">
-            <label>District</label>
+            <label>Quận / Huyện</label>
             <Controller
               name="district"
               control={control}
@@ -289,7 +289,7 @@ const Address = () => {
                     fetchCommunes(Number(e.target.value));
                   }}
                 >
-                  <option value="">Select District</option>
+                  <option value="">Chọn Quận / Huyện</option>
                   {districts.map((d: any) => (
                     <option key={d.id} value={d.id}>
                       {d.name}
@@ -301,14 +301,14 @@ const Address = () => {
           </div>
 
           <div className="mb-3">
-            <label>Commune</label>
+            <label>Phường / Xã</label>
             <Controller
               name="commune"
               control={control}
               defaultValue={addr.ward}
               render={({ field }) => (
                 <select {...field} className="form-select">
-                  <option value="">Select Commune</option>
+                  <option value="">Chọn Phường / Xã</option>
                   {communes.map((c: any) => (
                     <option key={c.id} value={c.id}>
                       {c.name}
@@ -324,10 +324,10 @@ const Address = () => {
               className="btn-secondary"
               onClick={() => handleCloseModal()}
             >
-              Cancel
+              Huỷ
             </button>
             <button type="submit" className="btn-primary">
-              Save
+              Lưu
             </button>
           </div>
         </form>
@@ -340,7 +340,7 @@ const Address = () => {
       <div className="address-add-form mt-3 w-100">
         <form onSubmit={handleSubmit(onSubmitAddAddress)}>
           <div className="mb-3">
-            <label>Detail Address</label>
+            <label>Địa chỉ chi tiết</label>
             <Controller
               name="detail"
               control={control}
@@ -356,7 +356,7 @@ const Address = () => {
           </div>
 
           <div className="mb-3">
-            <label>Province</label>
+            <label>Tỉnh/Thành phố</label>
             <Controller
               name="province"
               control={control}
@@ -371,7 +371,7 @@ const Address = () => {
                     setValue("commune", "");
                   }}
                 >
-                  <option value="">Select Province</option>
+                  <option value="">Chọn Tỉnh / Thành phố</option>
                   {provinces.map((p: any) => (
                     <option key={p.id} value={p.id}>
                       {p.name}
@@ -383,7 +383,7 @@ const Address = () => {
           </div>
 
           <div className="mb-3">
-            <label>District</label>
+            <label>Chọn Quận / Huyện</label>
             <Controller
               name="district"
               control={control}
@@ -397,7 +397,7 @@ const Address = () => {
                     fetchCommunes(Number(e.target.value));
                   }}
                 >
-                  <option value="">Select District</option>
+                  <option value="">Chọn Quận / Huyện</option>
                   {districts.map((d: any) => (
                     <option key={d.id} value={d.id}>
                       {d.name}
@@ -409,14 +409,14 @@ const Address = () => {
           </div>
 
           <div className="mb-3">
-            <label>Commune</label>
+            <label>Chọn phường xã</label>
             <Controller
               name="commune"
               control={control}
               defaultValue=""
               render={({ field }) => (
                 <select {...field} className="form-select">
-                  <option value="">Select Commune</option>
+                  <option value="">Chọn phường xã</option>
                   {communes.map((c: any) => (
                     <option key={c.id} value={c.id}>
                       {c.name}
@@ -433,10 +433,10 @@ const Address = () => {
               className="btn-secondary"
               onClick={handleCancelAdd}
             >
-              Cancel
+              Huỷ
             </button>
             <button type="submit" className="btn-primary">
-              Save
+              Lưu
             </button>
           </div>
         </form>
@@ -453,9 +453,9 @@ const Address = () => {
     <div>
       <div className="address-container">
         <div className="address-header">
-          <h5>My Addresses</h5>
+          <h5>Địa chỉ của tôi</h5>
           <button className="btn-primary" onClick={() => handleAddNew()}>
-            Add New Address
+            Thêm Địa Chỉ Mới
           </button>
         </div>
       </div>
@@ -463,7 +463,7 @@ const Address = () => {
         {isLoading ? (
           <div className="text-center mt-3">
             <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Loading...</span>
+              <span className="visually-hidden">Đang tải...</span>
             </div>
           </div>
         ) : (
@@ -480,14 +480,14 @@ const Address = () => {
                           className="btn-primary"
                           onClick={() => handleEdit(addr.addressId)}
                         >
-                          Edit
+                          Chỉnh
                         </button>
                         <button
                           style={{ width: "100px" }}
                           className="btn-secondary"
                           onClick={() => handleDelete(addr.addressId)}
                         >
-                          Delete
+                          Xoá
                         </button>
                       </div>
                     </div>
@@ -495,29 +495,29 @@ const Address = () => {
                 ))}
               </div>
             ) : (
-              <div>No Data</div>
+              <div>Không có dữ liệu</div>
             )}
           </div>
         )}
       </div>
       {editingId && (
         <ModalMain
-          title="Edit Address"
+          title="Sửa Địa Chỉ"
           content={modalEditAddress()}
           onClose={handleCloseModal}
         />
       )}
       {isAddAddress && (
         <ModalMain
-          title="Add Address"
+          title="Thêm Địa Chỉ"
           content={modalAddAddress()}
           onClose={handleCloseModalAddAddress}
         />
       )}
       {idAddressDelete && (
         <ModalMain
-          title="Notification"
-          content="Do you want to delete this address?"
+          title="Thông báo"
+          content="Bạn có muốn xóa địa chỉ này không?"
           btn1="Cancel"
           btn2="Yes"
           onClose={handleCloseModalDelete}

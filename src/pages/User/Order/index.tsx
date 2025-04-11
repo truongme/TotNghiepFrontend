@@ -168,17 +168,17 @@ const OrderUser = () => {
         <div>
             <div className='order-status'>
                 <ul className='order-status-list'> 
-                    <li className={`${statusSelected === '' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("")}>All</li>
-                    <li className={`${statusSelected === 'PENDING' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("PENDING")}>Pending</li>
-                    <li className={`${statusSelected === 'SHIPPING' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("SHIPPING")}>To Ship</li>
-                    <li className={`${statusSelected === 'DELIVERED' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("DELIVERED")}>Delivered</li>
-                    <li className={`${statusSelected === 'CANCELLED' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("CANCELLED")}>Cancelled</li>
+                    <li className={`${statusSelected === '' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("")}>Tất cả</li>
+                    <li className={`${statusSelected === 'PENDING' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("PENDING")}>Chờ giao hàng</li>
+                    <li className={`${statusSelected === 'SHIPPING' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("SHIPPING")}>Đang giao hàng</li>
+                    <li className={`${statusSelected === 'DELIVERED' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("DELIVERED")}>Đã hoàn thành</li>
+                    <li className={`${statusSelected === 'CANCELLED' ? "active" : ""} order-status-item`} onClick={() => handleChangeStatus("CANCELLED")}>Đơn đã huỷ</li>
                 </ul>
             </div>
             {isLoading ? (
                 <div className='text-center mt-3'>
                     <div className="spinner-border text-primary" role="status">
-                        <span className="visually-hidden">Loading...</span>
+                        <span className="visually-hidden">Đang tải...</span>
                     </div>
                 </div>
             ) : (
@@ -188,7 +188,7 @@ const OrderUser = () => {
                              {orderUser.map((e: Order) => (
                                 <div className='order-item-container'>
                                     <div className='order-item-header'>
-                                        <div className='order-item-time'>Order Date: {formatDate(e.time)}</div>
+                                        <div className='order-item-time'>Ngày đặt hàng: {formatDate(e.time)}</div>
                                         <div className='order-item-status'>{e.status}</div>
                                     </div>
                                     {e?.items.map((x: OrderItem) => (
@@ -199,9 +199,9 @@ const OrderUser = () => {
                                                 </div>
                                                 <div>
                                                     <div>{x.name}</div>
-                                                    <div>Color: {x.color}</div>
+                                                    <div>Màu: {x.color}</div>
                                                     <div>Size: {x.size}</div>
-                                                    <div>Quantity: {x.quantity}</div>
+                                                    <div>Số lượng: {x.quantity}</div>
                                                 </div>
                                             </div>
                                             <div className='total-price'>
@@ -214,11 +214,11 @@ const OrderUser = () => {
                                             {/* <button className='primary' onClick={() => navigate('/product/')}>Buy Again</button> */}
                                             {/* <button className='secondary'>Contact Seller</button> */}
                                             {e.status === 'PENDING' && (
-                                                <button className='cancel' onClick={() => handleOpenModalCancelOrder(e.id)}>Cancel</button>
+                                                <button className='cancel' onClick={() => handleOpenModalCancelOrder(e.id)}>Huỷ</button>
                                             )}
                                         </div>
                                         <div className='d-flex'>
-                                            <div >Order Total: </div>
+                                            <div >Tổng tiền: </div>
                                             <div className='total-price'>{formatPrice(e.total)}</div>
                                         </div>
                                     </div>
@@ -229,13 +229,13 @@ const OrderUser = () => {
                         <div className='order-emty'>
                            
                             <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/orderlist/5fafbb923393b712b964.png" alt="" />
-                            <div>No orders yet</div>
+                            <div>Chưa có đơn hàng nào</div>
                         </div>
                     )}
                 </div>
             )}
             {isOpenModal && (
-                <ModalMain title='Notification' content={bodyModal()}  btn1='Cancel' btn2='Yes' onClose={handleCloseModalCancelOrder} onSave={handleCancelOrder}/>
+                <ModalMain title='Thông báo' content={bodyModal()}  btn1='Cancel' btn2='Yes' onClose={handleCloseModalCancelOrder} onSave={handleCancelOrder}/>
             )}
         </div>
     )

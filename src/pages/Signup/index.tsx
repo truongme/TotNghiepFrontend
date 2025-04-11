@@ -64,9 +64,9 @@ const Signup = () => {
         <div className="col-6 d-flex justify-content-center">
           <div className="m-5 container">
             <div className="text-center">
-              <h1 className="form-signup-title">Sign up for an account</h1>
+              <h1 className="form-signup-title">Đăng ký tài khoản</h1>
               <h6 style={{ marginTop: "24px" }} className="">
-                Sign up for membership and get 10% off your first order.
+                Đăng ký làm thành viên và được giảm giá 10% cho đơn hàng đầu tiên của bạn.
               </h6>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -76,7 +76,7 @@ const Signup = () => {
                   name="email"
                   control={control}
                   defaultValue=""
-                  rules={{ required: "* Email is required" }}
+                  rules={{ required: "* Email là bắt buộc" }}
                   render={({ field }) => (
                     <input
                       id="email"
@@ -98,15 +98,15 @@ const Signup = () => {
                   control={control}
                   defaultValue=""
                   rules={{
-                    required: "* Password is required",
+                    required: "* Mật khẩu là bắt buộc",
                     minLength: {
                       value: 6,
-                      message: "* Password must be at least 6 characters",
+                      message: "* Mật khẩu phải có ít nhất 6 ký tự",
                     },
                     pattern: {
                       value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
                       message:
-                        "* Password must include uppercase, lowercase letters, and numbers",
+                        "* Mật khẩu phải bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt",
                     },
                   }}
                   render={({ field }) => (
@@ -130,7 +130,7 @@ const Signup = () => {
                   control={control}
                   defaultValue=""
                   rules={{
-                    required: "* Confirm Password is required",
+                    required: "* Xác nhận mật khẩu là bắt buộc",
                     validate: (value) =>
                       value === getValues("password") ||
                       "* Confirm Passwords do not match",
@@ -151,11 +151,11 @@ const Signup = () => {
               </div>
               {signupFail && (
                 <div className="error-signup-fail">
-                  Account registration failed!
+                  Đăng ký tài khoản không thành công!
                 </div>
               )}
               <div className="mt-3 mb-3">
-                <ButtonCustom label="Create Account" />
+                <ButtonCustom label="Tạo tài khoản" />
               </div>
             </form>
             <div className="d-flex justify-content-center form-action">
@@ -167,7 +167,7 @@ const Signup = () => {
                   }}
                   className="item-form-action"
                 >
-                  Forgot password?
+                  Quên mật khẩu?
                 </span>
               </Link>
               <Link to={"/login"} className="link-style">
@@ -175,7 +175,7 @@ const Signup = () => {
                   style={{ paddingLeft: "10px" }}
                   className="item-form-action"
                 >
-                  Already have an account
+                  Đã có tài khoản
                 </span>
               </Link>
             </div>
@@ -186,7 +186,7 @@ const Signup = () => {
         <ModalMain
           title="Notification"
           content={
-            "You have successfully registered an account! Please log in to shop."
+            "Bạn đã đăng ký tài khoản thành công! Vui lòng đăng nhập để mua sắm."
           }
           btn1="Cancel"
           btn2="Yes"

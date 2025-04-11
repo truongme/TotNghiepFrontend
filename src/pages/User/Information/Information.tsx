@@ -136,19 +136,19 @@ const Information: React.FC<InformationProps> = ({ onSaveComplete }) => {
           <div className='user-inforation-value'>
             <ul>
               <li className='input-full-name'>
-                <div className='label-input'>First Name</div>
+                <div className='label-input'>Tên đệm</div>
                 <Controller
                   name='firstName'
                   control={control}
-                  render={({ field }) => <input className="form-control" {...field} placeholder='First Name' />}
+                  render={({ field }) => <input className="form-control" {...field} placeholder='Tên đệm' />}
                 />
               </li>
               <li className='input-full-name'>
-                 <div className='label-input'>Last Name</div>
+                 <div className='label-input'>Tên</div>
                 <Controller
                   name='lastName'
                   control={control}
-                  render={({ field }) => <input className="form-control" {...field} placeholder='Last Name' />}
+                  render={({ field }) => <input className="form-control" {...field} placeholder='Tên' />}
                 />
               </li>
               <li className='input-full-name'>
@@ -160,30 +160,30 @@ const Information: React.FC<InformationProps> = ({ onSaveComplete }) => {
                 />
               </li>
               <li className='input-full-name'>
-                <div className='label-input'>Phone Number</div>
+                <div className='label-input'>Số điện thoại</div>
                 <Controller
                   name='phoneNumber'
                   control={control}
-                  render={({ field }) => <input className="form-control" {...field} placeholder='Phone Number' />}
+                  render={({ field }) => <input className="form-control" {...field} placeholder='Số điện thoại' />}
                 />
               </li>
               <li className='input-full-name'>
-                <div className='label-input'>Gender</div>
+                <div className='label-input'>Giới tính</div>
                 <Controller
                   name='gender'
                   control={control}
                   render={({ field }) => (
                     <select className="form-select" {...field}>
-                      <option value='MALE'>Male</option>
-                      <option value='FEMALE'>Female</option>
-                      <option value='OTHER'>Other</option>
+                      <option value='MALE'>Name</option>
+                      <option value='FEMALE'>Nữ</option>
+                      <option value='OTHER'>Khác</option>
                     </select>
                   )}
                 />
               </li>
             </ul>
             <button className='btn-primary' type='submit' disabled={isDisableButton} style={{width:"200px"}}>
-              Save
+              Lưu
             </button>
           </div>
           <div className='user-inforation-avatar'>
@@ -199,10 +199,10 @@ const Information: React.FC<InformationProps> = ({ onSaveComplete }) => {
             />
             {errorMessage && <div className="error-message">{errorMessage}</div>}
             <button style={{width:"140px"}} disabled={isDisableButton} onClick={() => fileInputRef.current?.click()} type='button' className='btn-primary'>
-              Select photo
+              Chọn ảnh
             </button>
-            <div>Maximum file size 1 MB</div>
-            <div>Format: .JPEG, .PNG</div>
+            <div>Kích thước tệp tối đa 1 MB</div>
+            <div>Định dạng: .JPEG, .PNG</div>
           </div>
         </div>
       </form>

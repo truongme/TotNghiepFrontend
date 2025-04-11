@@ -80,19 +80,19 @@ const User = () => {
                 <ul>
                     <li className={`${itemActive === 'infor' ? "active" : ""} item-user`}>
                         <FaUserAlt />
-                        <a onClick={() => setItemActive('infor')}>My Account</a>
+                        <a onClick={() => setItemActive('infor')}>Tài khoản</a>
                     </li>
                     <li className={`${itemActive === 'address' ? "active" : ""} item-user`}>
                         <FaLocationDot />
-                        <a onClick={() => setItemActive('address')}>My Addresses</a>
+                        <a onClick={() => setItemActive('address')}>Địa chỉ</a>
                     </li>
                     <li className={`${itemActive === 'order' ? "active" : ""} item-user`}>
                         <FaBoxOpen />
-                        <a onClick={() => setItemActive('order')}>My Purchase</a>
+                        <a onClick={() => setItemActive('order')}>Đơn hàng</a>
                     </li>
                     <li className='item-user'>
                         <MdOutlineLogout />
-                        <a onClick={() => handleLogout()}>Logout</a>
+                        <a onClick={() => handleLogout()}>Đăng xuất</a>
                     </li>
                 </ul>
             </div>

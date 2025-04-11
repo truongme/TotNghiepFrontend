@@ -24,10 +24,10 @@ const Collections = () => {
 
     const arrSize = ["XS", "S", "M", "L", "XL", "XXL"]
     const arrFilterPrice = [
-        { name: "Under 500k", min: 0, max: 500000 },
-        { name: "500k - 1M", min: 500000, max: 1000000 },
-        { name: "1M - 2M", min: 1000000, max: 2000000 },
-        { name: "Above 2M", min: 2000000, max: Infinity },
+        { name: "Dưới 500 nghìn đồng", min: 0, max: 500000 },
+        { name: "500 nghìn đồng - 1 triệu đồng", min: 500000, max: 1000000 },
+        { name: "1 triệu đồng - 2 triệu đồng", min: 1000000, max: 2000000 },
+        { name: "Hơn 2 triệu đồng", min: 2000000, max: Infinity },
     ];
 
     const handleClearAllFilter = () => {
@@ -205,11 +205,11 @@ const Collections = () => {
         <div className="container">
           <div className="collections-breadcrumb">
             <Link to={"/"} className="link-style collections-breadcrumb-item">
-              Home
+              TRANG CHỦ
             </Link>
             <div className="collections-breadcrumb-item">/</div>
             <Link to={"/"} className="link-style collections-breadcrumb-item">
-              COLLECTIONS
+              BỘ SƯU TẬP
             </Link>
             <div className="collections-breadcrumb-item">/</div>
             <div className="collections-breadcrumb-active">{categoryId}</div>
@@ -251,17 +251,17 @@ const Collections = () => {
               className="collections-filter-button"
               onClick={() => setIsOpenPannel(true)}
             >
-              Filter +
+              Bộ lọc +
             </div>
             <div className="collections-actions-sort">
-              <div>Sort by</div>
+              <div>Sắp xếp theo</div>
               <button
                 className={`collections-sort-btn ${
                   btnSort === "popularity" && "active"
                 }  `}
                 onClick={() => sortProducts("popularity")}
               >
-                Best Seller
+                Bán chạy
               </button>
               <button
                 className={`collections-sort-btn ${
@@ -269,7 +269,7 @@ const Collections = () => {
                 }  `}
                 onClick={() => sortProducts("ascending")}
               >
-                Ascending
+                Giá giảm dần
               </button>
               <button
                 className={`collections-sort-btn ${
@@ -277,7 +277,7 @@ const Collections = () => {
                 }  `}
                 onClick={() => sortProducts("descending")}
               >
-                Descending
+                Giá tăng dần
               </button>
             </div>
           </div>
@@ -302,7 +302,7 @@ const Collections = () => {
             <div className={`pannel-filter ${isOpenPannel ? "open" : ""}`}>
               <div className="pannel-filter-container">
                 <div className="pannel-filter-header">
-                  <div className="pannel-filter-title">Filter</div>
+                  <div className="pannel-filter-title">Bộ lọc</div>
                   <div onClick={() => setIsOpenPannel(false)}>
                     <svg
                       width="20"
@@ -325,7 +325,7 @@ const Collections = () => {
                 <div className="pannel-filter-content">
                   {subCategory && (
                     <div>
-                      <div className="pannel-filter-title">SubCategory</div>
+                      <div className="pannel-filter-title">Danh mục sản phẩm</div>
                       <div className="pannel-filter-subCategory-ctn">
                         {subCategory.list.map((e) => (
                           <div
@@ -342,7 +342,7 @@ const Collections = () => {
                       </div>
                     </div>
                   )}
-                  <div className="pannel-filter-title">Sizes</div>
+                  <div className="pannel-filter-title">Kích thước</div>
                   <div className="pannel-filter-sizes">
                     {arrSize.map((x) => (
                       <div
@@ -357,7 +357,7 @@ const Collections = () => {
                       </div>
                     ))}
                   </div>
-                  <div className="pannel-filter-title">Color</div>
+                  <div className="pannel-filter-title">Màu sắc</div>
                   <div className="pannel-filter-colors">
                     {listColor.map((e) => (
                       <div
@@ -370,7 +370,7 @@ const Collections = () => {
                       ></div>
                     ))}
                   </div>
-                  <div className="pannel-filter-title">Price</div>
+                  <div className="pannel-filter-title">Giá</div>
                   <div className="pannel-filter-prices">
                     {arrFilterPrice.map((x) => (
                       <div
@@ -393,13 +393,13 @@ const Collections = () => {
                     className="btn-secondary"
                     onClick={() => handleClearAllFilter()}
                   >
-                    Clear All
+                    Xoá tất cả
                   </button>
                   <button
                     className="btn-primary"
                     onClick={() => setIsOpenPannel(false)}
                   >
-                    Apply
+                    Tìm kiếm
                   </button>
                 </div>
               </div>

@@ -24,66 +24,66 @@ export const OrderStatus = [
 
 export const arrCategory = [
   {
-    name: "TOP",
+    name: "Áo",
     id: "tops",
     img: "",
     list: [
       {
-        name: "T-shirts",
+        name: "Áo phông",
         link: "t-shirts",
         img: "https://www.stussy.com/cdn/shop/articles/Stussy-_-Eric-B.-_-Rakim-Cover.jpg?v=1639436915&width=1920",
       },
       {
-        name: "Outerwears",
+        name: "áo khoác",
         link: "outerwears",
         img: "https://www.stussy.com/cdn/shop/articles/Stussy-HO23---Lookbook---19.jpg?v=1698771378&width=1920",
       },
       {
-        name: "Sweatshirts",
+        name: "áo dài tay",
         link: "sweatshirts",
         img: "https://www.stussy.com/cdn/shop/articles/Popeye-Mailer-hp-feature-image.jpg?v=1572914951&width=1920",
       },
       {
-        name: "Hoodies",
+        name: " áo Hoodies",
         link: "hoodies",
         img: "https://www.stussy.com/cdn/shop/articles/1.jpg?v=1710370668&width=1920",
       },
     ],
   },
   {
-    name: "bottoms",
+    name: "Quần",
     id: "bottoms",
     img: "",
     list: [
       {
-        name: "shorts",
+        name: "quần shorts",
         link: "shorts",
         img: imgShorts,
       },
       {
-        name: "joggers",
+        name: "quần joggers",
         link: "joggers",
         img: imgJoggers,
       },
       {
-        name: "sweatpants",
+        name: "quần jeans",
         link: "sweatpants",
         img: imgPants,
       },
     ],
   },
   {
-    name: "footwears",
+    name: "Giày",
     id: "footwears",
     img: "footwears",
     list: [
       {
-        name: "sportswears",
+        name: "giày thể thao",
         link: "sportswears",
         img: "https://assets.adidas.com/images/w_383,h_383,f_auto,q_auto,fl_lossy,c_fill,g_auto/77e060a62ca5465f8d844615ec7f3a3d_9366/giay-da-bong-firm-ground-khong-day-predator-elite.jpg",
       },
       {
-        name: "sneakers",
+        name: "giày sneaker",
         link: "sneakers",
         img: "https://www.stussy.com/cdn/shop/articles/Ari_8.jpg?v=1679412668&width=1920",
       },
@@ -91,17 +91,17 @@ export const arrCategory = [
   },
 
   {
-    name: "accessories",
+    name: "Phụ kiện",
     id: "accessories",
     img: "",
     list: [
       {
-        name: "hats",
+        name: "mũ",
         link: "hats",
         img: "https://www.stussy.com/cdn/shop/articles/Harris-Tweed_Feature-Cover.jpg?v=1576698721&width=1920",
       },
       {
-        name: "crossbodybags",
+        name: "túi",
         link: "crossbodybags",
         img: imgBag,
       },

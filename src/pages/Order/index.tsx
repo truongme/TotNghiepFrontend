@@ -236,30 +236,37 @@ const Order = () => {
     }
   };
 
-  useEffect(() => {
+  const getData = async () => {
     setIsLoading(true)
-    getProfile();
-    fetchData();
-    fetchAddress()
-    fetchMyAddress();
+    await Promise.all([
+      getProfile(),
+      fetchData(),
+      fetchAddress(),
+      fetchMyAddress(),
+    ]);
     setIsLoading(false)
+  }
+
+
+  useEffect(() => {
+    getData()
   }, []);
 
   return (
     <div className='container mb-5'>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='order-breadcrumb' style={{ paddingTop: '20px' }}>
-          <Link to={'/'} className='link-style order-breadcrumb-item'>Home</Link>
+          <Link to={'/'} className='link-style order-breadcrumb-item'>Trang chủ</Link>
           <div className='order-breadcrumb-item'>/</div>
-          <Link to={'/cart'} className='link-style order-breadcrumb-item'>BAG</Link>
+          <Link to={'/cart'} className='link-style order-breadcrumb-item'>Giỏ hàng</Link>
           <div className='order-breadcrumb-item'>/</div>
-          <div className='order-breadcrumb-active'>ORDER</div>
+          <div className='order-breadcrumb-active'>Đơn hàng</div>
         </div>
         <div className='row' style={{ marginTop: '20px' }}>
           <div className='col-7'>
             <div className='order-user'>
               <div className='order-user-title'>
-                Recipient information
+                Thông tin người nhận
               </div>
               <div className='order-infor-user'>
                 <div className='order-avatar-user'>
@@ -273,33 +280,33 @@ const Order = () => {
               {isLoading ? (
                 <div className='text-center mt-3'>
                   <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
+                    <span className="visually-hidden">Đang tải...</span>
                   </div>
                 </div>
               ) : (
                  <div className='row'>
                 <div className="mb-3 col-12">
-                  <label className="form-label">Your shipping address</label>
+                <label className="form-label">Địa chỉ giao hàng của bạn</label>
                   <select className="form-select" onChange={handleAddressChange}>
                     {arrMyAddresses?.map((address: any) => (
                       <option key={address.addressId} value={address.addressId}>{address.addressDetails}</option>
                     ))}
-                    <option value="new">Create shipping address</option>
+                    <option value="new">Tạo địa chỉ giao hàng</option>
                   </select>
                 </div>
                 <div className="mb-3 col-6">
-                  <label className="form-label">Address</label>
+                  <label className="form-label">Địa chỉ</label>
                   <Controller
                     name="addressDetail"
                     control={control}
                     defaultValue=""
                     render={({ field }) => (
-                      <input {...field} className="form-control" placeholder="Enter specific address" />
+                      <input {...field} className="form-control" placeholder="Nhập địa chỉ cụ thể" />
                     )}
                   />
                 </div>
                 <div className="mb-3 col-6">
-                  <label className="form-label">City / Province</label>
+                  <label className="form-label">Thành phố / Tỉnh</label>
                   <Controller
                     name="city"
                     control={control}
@@ -308,7 +315,7 @@ const Order = () => {
                       <select 
                         {...field} 
                         className="form-select" 
-                        aria-label="Select city / province"
+                        aria-label="Chọn thành phố / tỉnh"
                         onChange={(e) => {
                           field.onChange(e);
                           if(Number(e.target.value)) {
@@ -323,7 +330,7 @@ const Order = () => {
                           fetchDistricts(Number(e.target.value));
                         }}
                       >
-                        <option selected>Select city / province</option>
+                        <option selected>Chọn thành phố / tỉnh</option>
                         {arrCity?.map((item: any) => (
                           <option value={item.id}>{item.name}</option>
                         ))}
@@ -333,7 +340,7 @@ const Order = () => {
                 </div>
 
                 <div className="mb-3 col-6">
-                  <label className="form-label">District</label>
+                      <label className="form-label">Quận / Huyện</label>
                   <Controller
                     name="district"
                     control={control}
@@ -342,13 +349,13 @@ const Order = () => {
                       <select 
                         {...field} 
                         className="form-select" 
-                        aria-label="Select district" 
+                        aria-label="Chọn quận" 
                         onChange={(e) => {
                           field.onChange(e);
                           fetchWard(Number(e.target.value));
                         }}
                       >
-                        <option selected>Select district</option>
+                        <option selected>Chọn quận</option>
                         {arrDistricts?.map((item: any) => (
                           <option value={item.id}>{item.name}</option>
                         ))}
@@ -358,7 +365,7 @@ const Order = () => {
                 </div>
 
                 <div className="mb-3 col-6">
-                  <label className="form-label">Ward / Commune</label>
+                  <label className="form-label">Phường/Xã</label>
                   <Controller
                     name="ward"
                     control={control} 
@@ -367,9 +374,9 @@ const Order = () => {
                       <select 
                         {...field} 
                         className="form-select" 
-                        aria-label="Select ward / commune" 
+                        aria-label="Chọn Phường/Xã" 
                       >
-                        <option selected>Select ward / commune</option>
+                        <option selected>Chọn Phường / Xã</option>
                         {arrWard?.map((item: any) => (
                           <option value={item.id}>{item.name}</option>
                         ))}
@@ -379,7 +386,7 @@ const Order = () => {
                 </div>
 
                <div className="mb-3 col-12">
-                  <label className="form-label">Shipping method</label>
+                  <label className="form-label">Phương thức vận chuyển</label>
                   <Controller
                     name="shipmentMethod"
                     defaultValue=""
@@ -394,20 +401,20 @@ const Order = () => {
                             onClick={() => {setValue('shipmentMethod', 'SHIPMENT'); setShippingCost(city === "1" ? 15000 : 30000)}}
                           >
                             <div className='ship-method-header'>
-                              <div>Standard</div>
+                              <div>Tiêu chuẩn</div>
                               <div>{formatPrice(city === "1" ? 15000 : 30000)}</div>
                             </div>
-                            <div className='ship-method-detail'>Guaranteed delivery within 2 to 3 days</div>
+                            <div className='ship-method-detail'>Đảm bảo giao hàng trong vòng 2 đến 3 ngày</div>
                           </div>
                           <div
                             className={`form-check-ship ${value === 'EXPRESS' ? 'selected' : ''}`}
                             onClick={() => {setValue('shipmentMethod', 'EXPRESS'); setShippingCost(50000)}}
                           >
                             <div className='ship-method-header'>
-                              <div>Express</div>
+                              <div>Hoả tốc</div>
                               <div>{formatPrice(50000)}</div>
                             </div>
-                            <div className='ship-method-detail'>Guaranteed delivery tomorrow</div>
+                            <div className='ship-method-detail'>Đảm bảo giao hàng vào ngày mai</div>
                           </div>
                           
                         </div>
@@ -416,7 +423,7 @@ const Order = () => {
                   />
                 </div>
                 <div className="mb-3 col-12">
-                  <label className="form-label">Payment method</label>
+                  <label className="form-label">Phương thức thanh toán</label>
                   <Controller
                     name="paymentMethod"
                     control={control}
@@ -433,7 +440,7 @@ const Order = () => {
                             checked
                           />
                           <label htmlFor="paymentCOD" className="form-check-label">
-                            Cash on Delivery
+                            Thanh toán khi nhận hàng
                           </label>
                         </div>
                       </div>
@@ -447,7 +454,7 @@ const Order = () => {
             </div>
           </div>
           <div className='col-5'>
-            <h6 className='order-user-title'>Order</h6>
+            <h6 className='order-user-title'>Đơn hàng</h6>
             <div className='order-items'>
               {orderArr.map((item) => (
                 <div className='order-cart-item' key={item.id}>
@@ -458,36 +465,36 @@ const Order = () => {
                     <h6>{item.name}</h6>
                     <div>
                       <p>{item.price.toLocaleString('vi-VN')}đ</p>
-                      <p>Quantity: {item.quantity}</p>
+                      <p>Số lượng: {item.quantity}</p>
                     </div>
                   </div>
                 </div>
               ))}
               <hr />
               <div className='d-flex justify-content-between mb-2'>
-                <span>Shipping fee</span>
+                <span>Phí vận chuyển</span>
                 <span>{formatPrice(shippingCost)}</span>
               </div>
               <div className='d-flex justify-content-between'>
                 <div >
-                  Total amount
+                  Tổng tiền
                 </div>
                 <p className='m-0 p-0'>{formatPrice(totalOrder + shippingCost)}</p>
               </div>
               <hr />
               <div className='d-flex justify-content-between order-checkout'>
-                <button className='btn-secondary' onClick={() => setIsOpenModalExit(true)}>Back to cart</button>
-                <button type="submit" className='btn-primary'>Order Confirmation</button>
+                <button className='btn-secondary' onClick={() => setIsOpenModalExit(true)}>Quay lại giở hàng</button>
+                <button type="submit" className='btn-primary'>Xác nhận mua hàng</button>
               </div>
             </div>
           </div>
         </div>
       </form>
       {isOpenModal && (
-        <ModalMain title='Notification' content='You have successfully placed your order.' btn1='Close' btn2='Continue Shopping' onSave={handleCloseModal} onClose={handleCloseModal}/>
+        <ModalMain title='Thông báo' content='Bạn đã đặt hàng thành công.' btn1='Close' btn2='Continue Shopping' onSave={handleCloseModal} onClose={handleCloseModal}/>
       )}
       {isOpenModalExit && (
-        <ModalMain title='Notification' content='Do you want to exit the order checkout page?' btn1='No' btn2='Yes' onClose={handleCancelCloseModalExit} onSave={handleCloseModalExit}/>
+        <ModalMain title='Thông báo' content='Bạn có muốn thoát khỏi trang thanh toán đơn hàng không?' btn1='No' btn2='Yes' onClose={handleCancelCloseModalExit} onSave={handleCloseModalExit}/>
       )}
     </div>
   );

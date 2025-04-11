@@ -92,7 +92,7 @@ const ForgetPassword = () => {
         <div className="col-6 d-flex justify-content-center">
           <div className="m-5 container">
             <div className="text-center">
-              <h1 className="form-login-title">Reset Password</h1>
+              <h1 className="form-login-title">Đặt lại mật khẩu</h1>
             </div>
             {!token ? (
               <div>
@@ -104,27 +104,27 @@ const ForgetPassword = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <div className="mt-3 mb-3" onClick={() => handleSendEmail()}>
-                  <ButtonCustom label="Send Email" />
+                  <ButtonCustom label="Gửi Email" />
                 </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
-                  <label className="form-login-label">New Password</label>
+                  <label className="form-login-label">Mật khẩu mới</label>
                   <Controller
                     name="newPassword"
                     control={control}
                     defaultValue=""
                     rules={{
-                      required: "* Password is required",
+                      required: "* Mật khẩu là bắt buộc",
                       minLength: {
                         value: 6,
-                        message: "* Password must be at least 6 characters",
+                        message: "* Mật khẩu phải có ít nhất 6 ký tự",
                       },
                       pattern: {
                         value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
                         message:
-                          "* Password must include uppercase, lowercase letters, and numbers",
+                          "* Mật khẩu phải bao gồm chữ hoa, chữ thường và số",
                       },
                     }}
                     render={({ field }) => (
@@ -150,10 +150,10 @@ const ForgetPassword = () => {
                     control={control}
                     defaultValue=""
                     rules={{
-                      required: "* Confirm Password is required",
+                      required: "* Xác nhận mật khẩu là bắt buộc",
                       validate: (value) =>
                         value === getValues("newPassword") ||
-                        "* Confirm Passwords do not match",
+                        "* Xác nhận mật khẩu không khớp",
                     }}
                     render={({ field }) => (
                       <input
@@ -173,11 +173,11 @@ const ForgetPassword = () => {
                 </div>
                 {resetPasswordFail && (
                   <div className="error-login-fail">
-                    Incorrect account or confirmPassword!
+                    Tài khoản không đúng hoặc xác nhận mật khẩu!
                   </div>
                 )}
                 <div className="mt-3 mb-3">
-                  <ButtonCustom label="Reset Password" />
+                    <ButtonCustom label="Đặt lại mật khẩu" />
                 </div>
               </form>
             )}
@@ -191,7 +191,7 @@ const ForgetPassword = () => {
                   }}
                   className="item-form-action"
                 >
-                  Login
+                  Đăng nhập
                 </span>
               </Link>
               <Link to={"/signup"} className="link-style">
@@ -199,7 +199,7 @@ const ForgetPassword = () => {
                   style={{ paddingLeft: "10px" }}
                   className="item-form-action"
                 >
-                  Create account
+                  Tạo tài khoản
                 </span>
               </Link>
             </div>
