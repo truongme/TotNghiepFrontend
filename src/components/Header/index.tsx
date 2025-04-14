@@ -231,7 +231,8 @@ const Header = () => {
               </div>
               <div
                 className="header-link"
-                onClick={() => navigate(role ? "/user" : "/login")}
+                // onClick={() => navigate(role ? "/user" : "/login")}
+                onClick={() => navigate("/user")}
               >
                 <div className="header-link-ctn">Tài khoản</div>
               </div>

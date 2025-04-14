@@ -6,6 +6,8 @@ import { WebUrl } from '../../../constants'
 import ModalMain from '../../../components/Modal/Modal'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../helpers/AuthContext'
+import { FaRegStar } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 
 interface Order{
     id: string,
@@ -23,15 +25,91 @@ interface OrderItem{
     price: number,
     color: string,
     size: string,
+    rating?: number;
+    reviewText?: string;
+    isRating?: boolean;
 }
 
+const fakeOrder: Order[] = [
+    {
+        id: "order_0001",
+        status: 'PENDING',
+        total: 199000 * 2 + 349000 + 599000,
+        time: new Date().toISOString(),
+        items: [
+            {
+                id: "item_001",
+                name: "Áo thun nam cổ tròn",
+                image: "https://media3.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85/uploads/December2024/24CMCW.SM009_-_Xanh_Dark_Blue_2.JPG",
+                quantity: 2,
+                price: 199000,
+                color: "Trắng",
+                size: "L",
+            },
+            {
+                id: "item_002",
+                name: "Quần jean nữ ống rộng",
+                image: "https://media3.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85/uploads/December2024/24CMCW.SM009_-_Xanh_Dark_Blue_2.JPG",
+                quantity: 1,
+                price: 349000,
+                color: "Xanh đậm",
+                size: "M",
+            },
+            {
+                id: "item_003",
+                name: "Giày sneaker nam",
+                image: "https://media3.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85/uploads/December2024/24CMCW.SM009_-_Xanh_Dark_Blue_2.JPG",
+                quantity: 1,
+                price: 599000,
+                color: "Đen",
+                size: "42",
+            }
+        ]
+    },
+    {
+        id: "order_0002",
+        status: 'PENDING',
+        total: 259000 + 399000 * 2 + 129000,
+        time: new Date(Date.now() - 86400000).toISOString(), // hôm qua
+        items: [
+            {
+                id: "item_004",
+                name: "Áo sơ mi nam tay dài",
+                image: "https://media3.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85/uploads/February2025/ao-so-mi-dai-tay-co-tau-premium-poplin-mau-xanh-blue-night_(4).jpg",
+                quantity: 1,
+                price: 259000,
+                color: "Xanh da trời",
+                size: "M",
+            },
+            {
+                id: "item_005",
+                name: "Đầm maxi nữ đi biển",
+                image: "https://media3.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85/uploads/February2025/ao-so-mi-dai-tay-co-tau-premium-poplin-mau-xanh-blue-night_(4).jpg",
+                quantity: 2,
+                price: 399000,
+                color: "Hồng pastel",
+                size: "S",
+            },
+            {
+                id: "item_006",
+                name: "Nón bucket unisex",
+                image: "https://media3.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85/uploads/February2025/ao-so-mi-dai-tay-co-tau-premium-poplin-mau-xanh-blue-night_(4).jpg",
+                quantity: 1,
+                price: 129000,
+                color: "Be",
+                size: "Free size",
+            }
+        ]
+    }
+];
+
 const OrderUser = () => {
-    
     const [statusSelected, setStatusSelected] = useState<string>("")
-    const [orderUser, setOrderUser] = useState<Order[]>([])
-    const [orderUserPrev, setOrderUserPrev] = useState<Order[]>([])
+    const [orderUser, setOrderUser] = useState<Order[]>(fakeOrder)
+    const [orderUserPrev, setOrderUserPrev] = useState<Order[]>(fakeOrder)
     const token = sessionStorage.getItem("token");
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+    const [idOpenAssessModal, setIdOpenAssessModal] = useState<string>('')
     const [idOrderCancel, setIdOrderCancel] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [selectedReason, setSelectedReason] = useState<string>();
@@ -84,6 +162,100 @@ const OrderUser = () => {
         );
     };
 
+    const bodyModalAssess = () => {
+        const data = orderUser.find((item: Order) => item.id === idOpenAssessModal)
+        const items: any = data?.items
+        return (
+            <div style={{ width: '100%', height: '600px', overflowY: 'auto', paddingRight: "5px" }}>
+                {items.map((e : any) => (
+                    <div style={{width: '100%'}}>
+                        <div className='modal-assess-header'>
+                            <div className='modal-assess-img'>
+                                <img src={e?.image} alt="" />
+                            </div>
+                            <div className='modal-assess-name'>
+                                <div>{e.name}</div>
+                                <div>Màu: {e.color}</div>
+                                <div>Size: {e.size}</div>
+                            </div>
+                        </div>
+                        <div>
+                            {Array.from({ length: 5 }, (_, index) => (
+                                <>
+                                    {e.rating >= index ?  (
+                                        <FaStar key={index} className='icon-star' onClick={() => onChangeRating(e.id, index)} />
+                                    ) : (
+                                        <FaRegStar key={index} className='icon-star' onClick={() => onChangeRating(e.id, index)} />
+                                    )}
+                                </>
+                            ))}
+                        </div>
+                        <div className='input-review'>
+                            <textarea value={e.reviewText} rows={4} placeholder="Viết đánh giá của bạn..." onChange={(event) => onChangeReviewText(e.id, event.target.value)}/>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        );
+    };
+
+    const onChangeReviewText = (id: string, value: string) => {
+        const updatedOrders = orderUser.map((order) => {
+            if (order.id === idOpenAssessModal) {
+                return {
+                    ...order,
+                    items: order.items.map((item) => {
+                        if (item.id === id) {
+                            return {
+                                ...item,
+                                reviewText: value
+                            };
+                        }
+                        return item;
+                    })
+                };
+            }
+            return order;
+        });
+
+        setOrderUser(updatedOrders); 
+    };
+
+    const onChangeRating = (id: string, value: number) => {
+        const updatedOrders = orderUser.map((order) => {
+            if (order.id === idOpenAssessModal) {
+                return {
+                    ...order,
+                    items: order.items.map((item) => {
+                        if (item.id === id) {
+                            return {
+                                ...item,
+                                rating: value
+                            };
+                        }
+                        return item;
+                    })
+                };
+            }
+            return order;
+        });
+
+        setOrderUser(updatedOrders); 
+    }
+
+
+    const handleOpenModalAssessOrder = (id: string) => {
+        setIdOpenAssessModal(id)
+    }
+
+    const handleCloseModalAssessOrder = () => {
+        setIdOpenAssessModal("")
+    }
+
+    const handleAssessOrder = () => {
+        setIdOpenAssessModal("")
+    }
+
     const handleOpenModalCancelOrder = (id: string) => {
         setIsOpenModal(true)
         setIdOrderCancel(id)
@@ -107,7 +279,6 @@ const OrderUser = () => {
     }
 
     const putStatusOrder = async (id: string) => {
-        console.log(selectedOtherReason ? valueOtherReason : selectedReason)
         try {
             await axios.put(`${WebUrl}/api/v1/orders/cancel-by-user/${id}`, {
                 note: selectedOtherReason ? valueOtherReason : selectedReason
@@ -152,10 +323,12 @@ const OrderUser = () => {
             })).sort((a: any, b: any) => new Date(b.time).getTime() - new Date(a.time).getTime());
 
 
-            setOrderUser(data)
-            setOrderUserPrev(data)
+           
+            // setOrderUser(data)
+            // setOrderUserPrev(data)
             setIsLoading(false)
         } catch (error) {
+            setIsLoading(false)
             console.error('Unexpected Error:', error);
         }
     }
@@ -211,10 +384,11 @@ const OrderUser = () => {
                                     ))}
                                     <div className='order-item-footer'>
                                         <div>
-                                            {/* <button className='primary' onClick={() => navigate('/product/')}>Buy Again</button> */}
-                                            {/* <button className='secondary'>Contact Seller</button> */}
                                             {e.status === 'PENDING' && (
-                                                <button className='cancel' onClick={() => handleOpenModalCancelOrder(e.id)}>Huỷ</button>
+                                                <button className='primary' onClick={() => handleOpenModalAssessOrder(e.id)}>Đánh giá</button>
+                                            )}
+                                            {e.status === 'PENDING' && (
+                                                <button className='secondary' onClick={() => handleOpenModalCancelOrder(e.id)}>Huỷ</button>
                                             )}
                                         </div>
                                         <div className='d-flex'>
@@ -236,6 +410,9 @@ const OrderUser = () => {
             )}
             {isOpenModal && (
                 <ModalMain title='Thông báo' content={bodyModal()}  btn1='Cancel' btn2='Yes' onClose={handleCloseModalCancelOrder} onSave={handleCancelOrder}/>
+            )}
+            {idOpenAssessModal && (
+                <ModalMain title='Đánh giá' content={bodyModalAssess()} btn1='Đóng' btn2='Gửi' onClose={handleCloseModalAssessOrder} onSave={handleAssessOrder} />
             )}
         </div>
     )

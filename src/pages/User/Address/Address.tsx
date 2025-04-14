@@ -495,7 +495,7 @@ const Address = () => {
                 ))}
               </div>
             ) : (
-              <div>Không có dữ liệu</div>
+              <div className="address-nodata">Không có địa chỉ</div>
             )}
           </div>
         )}

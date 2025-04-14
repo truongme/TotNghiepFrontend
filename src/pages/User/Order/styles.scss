@@ -155,3 +155,41 @@
         height: 100px;
     }
 }
+
+.modal-assess-header{
+    display: flex;
+    margin-bottom: 10px;
+    .modal-assess-img{
+        width: 150px;
+        height: 200px;
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+    .modal-assess-name{
+        margin-left: 15px;
+    }
+}
+
+.icon-star{
+    margin-right: 5px;
+    cursor: pointer;
+    color: #EE4D2D;
+}
+
+.input-review{
+    width: 100%;
+    margin-top: 5px;
+    textarea{
+        width: 100%;
+        padding: 6px 8px;
+        resize: none;
+        border: 1px solid #067cdc !important;
+        outline: none;
+        &:focus-visible{
+            border: 1px solid #067cdc !important;
+        }
+    }
+}

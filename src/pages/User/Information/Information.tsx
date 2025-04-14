@@ -129,7 +129,7 @@ const Information: React.FC<InformationProps> = ({ onSaveComplete }) => {
 
   return (
     <div className='user-inforation-container w-100 p-3 mb-3'>
-      <div>My Account</div>
+      <div>Tài khoản</div>
       <hr />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='d-flex'>
