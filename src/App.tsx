@@ -12,7 +12,7 @@ function App() {
 
   const [roleUser, setRoleUser] = useState<any>()
   const [router, setRouter] = useState<any>()
-  const { role } = useAuth();
+  const  role = 'ADMIN'
 
   useEffect(() => {
     setRoleUser(role)

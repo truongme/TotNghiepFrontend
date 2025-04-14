@@ -12,9 +12,13 @@ import ProductAdmin from "../pages/ProductEdit";
 import Signup from "../pages/Signup";
 import ForgetPassword from "../pages/ForgetPassword";
 import Search from "../pages/Search";
+import Import from "../pages/Import";
+import Export from "../pages/Export";
 
 export const adminRoutes = [
   { path: "/", element: <DashBoard /> },
+  { path: "/import", element: <Import /> },
+  { path: "/export", element: <Export /> },
   { path: "/product/:id", element: <ProductAdmin /> },
   { path: "/login", element: <Login /> },
   { path: "/productManagement", element: <ProductManagement /> },
