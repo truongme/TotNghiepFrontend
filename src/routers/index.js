@@ -15,7 +15,7 @@ import Search from "../pages/Search";
 import Import from "../pages/Import";
 import Export from "../pages/Export";
 
-export const adminRoutes = [
+export const userRoutes = [
   { path: "/", element: <DashBoard /> },
   { path: "/import", element: <Import /> },
   { path: "/export", element: <Export /> },
@@ -25,7 +25,7 @@ export const adminRoutes = [
   { path: "/orderManagement", element: <OrderManagement /> },
 ];
 
-export const userRoutes = [
+export const adminRoutes = [
   { path: "/", element: <Home /> },
   { path: "/reset-password", element: <ForgetPassword /> },
   { path: "/login", element: <Login /> },
