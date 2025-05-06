@@ -3,8 +3,7 @@ import imgShorts from "../assets/images/shorts.png";
 import imgJoggers from "../assets/images/jogger.png";
 import imgBag from "../assets/images/bags.png";
 
-export const WebUrl =
-  "https://6b5a-2001-ee0-48cf-2780-755a-fa19-a81a-f24c.ngrok-free.app";
+export const WebUrl = "https://aef1-14-166-182-205.ngrok-free.app";
 export const flaskUrl = "http://127.0.0.1:5000";
 export const IMG_BB_API_KEY = "c627df5eb679876997e90f0c2dba1f44";
 

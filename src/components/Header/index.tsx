@@ -31,6 +31,7 @@ export interface CardProps {
 
 const Header = () => {
   const role = sessionStorage.getItem("role");
+  console.log("role", role);
   const token = sessionStorage.getItem("token");
   const navigate = useNavigate();
   const [hiddenSearch, setHiddenSearch] = useState<Boolean>(true);
@@ -231,8 +232,7 @@ const Header = () => {
               </div>
               <div
                 className="header-link"
-                // onClick={() => navigate(role ? "/user" : "/login")}
-                onClick={() => navigate("/user")}
+                onClick={() => navigate(role ? "/user" : "/login")}
               >
                 <div className="header-link-ctn">Tài khoản</div>
               </div>
